@@ -13,7 +13,7 @@ public class IMGProcessor {
 
 	public char[][] convert() {
 		char[][] ret = new char[img.getWidth()][img.getHeight()];
-
+		//TODO VERMEIDEN VON MEHREREN STARTS/ZIELEN
 		int wall = new Color(255, 0, 0).getRGB();
 		int street = new Color(0, 255, 0).getRGB();
 
