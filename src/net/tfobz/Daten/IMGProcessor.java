@@ -27,6 +27,14 @@ public class IMGProcessor {
 				}
 			}
 		}
+		
+		for (int x = 0; x < img.getWidth(); x++) {
+			for (int y = 0; y < img.getHeight(); y++) {
+				System.out.print(ret[x][y]+ " ");
+			}
+			System.out.println();
+		}
+	
 		return ret;
 	}
 }
