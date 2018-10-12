@@ -6,4 +6,12 @@ public class WindowController {
 	public static void main(String[] args) {
 		DisplayWindow w = new DisplayWindow();
 	}
+	
+	public void einlesen() {
+		
+	}
+	
+	public void einlesenStep() {
+		
+	}
 }
