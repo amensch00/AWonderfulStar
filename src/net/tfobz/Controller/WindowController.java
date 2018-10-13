@@ -22,6 +22,13 @@ public class WindowController {
 		w.setVisible(true);
 	}
 	
+	
+	/**
+	 * Liest eine Datei ein und  stellt sie
+	 * in einem DisplayWindow dar
+	 * Lesbare Dateiendungen sind :
+	 *     .png
+	 */
 	public static void einlesen() {
 		JFileChooser j = new JFileChooser();
 		j.setDialogTitle("Bild Datei auswählen");

@@ -25,6 +25,8 @@ public class DisplayWindow extends JFrame {
 		this.map = map;
 		
 		Algorithm alg = new Algorithm(map);
+		
+		// Die solve funnkt no nt wirklich
 		char[][] test = alg.solve();
 		
 		for (int x = 0; x < test.length; x++) {
@@ -34,9 +36,13 @@ public class DisplayWindow extends JFrame {
 			System.out.println();
 		}
 		
+		// I hon mi no nt gonz entschieden ob mir des
+		// spater vlleicht no brauchen
 		grid = new Rectangle[map.length][map[1].length];
 
 
+		// I woas nt ob man des bracuht
+		// Hon no nt ohne ausprobierrt
 		repaint();
 	}
 	
@@ -46,12 +52,19 @@ public class DisplayWindow extends JFrame {
 		
 	}
 	
+	/**
+	 * Paint - Jo molt holt awian
+	 */
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		
-		System.out.println("paining");
+		System.out.println("painting");
 		
+		
+		// Frog mi nt wenn x und wenn y stimmp
+		// des funktioniert holt
+		// ALSO NT ÄNDERN !!!!
 		for (int y = 0; y < map[1].length; y++) {
 			for (int x = 0; x < map.length; x++) {
 				switch (map[y][x]) {
@@ -73,7 +86,6 @@ public class DisplayWindow extends JFrame {
 				}
 				
 				g.fillRect(x * 150, y * 150, 150, 150);
-				System.out.println(map[y][x]);
 			}
 		}
 	}

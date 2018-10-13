@@ -13,6 +13,11 @@ public class Algorithm {
 		openlist = new ArrayList<TileNode>();
 	}
 
+	/**
+	 * TODO Tschager bitte moch de fertig
+	 * i hon keine ahnung wos des tuat xD
+	 * @return
+	 */
 	public char[][] solve() {
 		char[][] ret = null;
 		TileNode start = null;

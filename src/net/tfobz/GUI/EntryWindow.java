@@ -1,5 +1,6 @@
 package net.tfobz.GUI;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,8 +24,9 @@ public class EntryWindow extends JFrame {
 		setResizable(false);
 		setVisible(true);
 		
-		lblTitel = new JLabel("AWonderfulStar\nA* Implementation by T&T");
-		lblTitel.setLocation(150, 150);
+		lblTitel = new JLabel("AWonderfulStar -- A* Implementation by T&T");
+		lblTitel.setFont(new Font("Comic Sans", Font.BOLD, 18));
+		lblTitel.setBounds(50, 50, 400, 50);
 		
 		btnEinlesen = new JButton("Einlesen");
 		btnEinlesen.setName("btnEin");
