@@ -17,35 +17,52 @@ public class Algorithm {
 		char[][] ret = null;
 		TileNode start = null;
 		Point ziel = new Point(0, 0);
+		
 		// Ermittle Ziel Koordinaten
 		for (int x = 0; x < field.length; x++)
 			for (int y = 0; y < field[0].length; y++)
 				if (field[x][y] == 'Z')
 					ziel = new Point(x, y);
+		
 		// Ermittle Startknoten
 		for (int x = 0; x < field.length; x++)
 			for (int y = 0; y < field[0].length; y++)
-				if (field[x][y] == 'S')
+				if (field[x][y] == 'L')
 					start = new TileNode(x, y, null, ziel);
+		
 		// Füge Startknoten zur Openlist
 		openlist.add(start);
+		
 		// TODO Bedingung überarbeiten (wenn billigerer Node noch existiert wird dieser
 		// aufgelöst)
 		while (findCheapestNode().getX() != ziel.x && findCheapestNode().getX() != ziel.y) {
 			dissolveNode(findCheapestNode(), ziel);
 		}
-		return ret;
+		
+		return field;
 	}
 
+	/**
+	 * Findet die aktuell billigste Node die man
+	 * auflösen kann und in der OpenListe drinnen steht
+	 * @return Die billigste TileNode in der OpenListe
+	 */
 	public TileNode findCheapestNode() {
 		int ret = 0;
 		double merk = -1;
-		if (openlist.size() > 0)
-			for (int i = 0; i < openlist.size(); i++)
-				if (merk < openlist.get(i).getDistance() + openlist.get(i).getLimit()) {
-					ret = i;
-					merk = openlist.get(i).getDistance() + openlist.get(i).getLimit();
+		
+		if (openlist.size() > 0) {
+			// Läuft alle Elemente der openListe durch,
+			// auf das aktuell ausgewählte Objekt kann mit
+			// tn zugegriffen werden
+			for (TileNode tn : openlist) {
+				if (merk < tn.getDistance() + tn.getLimit()) {
+					ret = openlist.indexOf(tn);
+					merk = tn.getDistance() + tn.getLimit();
 				}
+			}
+		}
+		
 		return openlist.get(ret);
 	}
 

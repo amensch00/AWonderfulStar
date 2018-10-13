@@ -1,68 +1,80 @@
 package net.tfobz.GUI;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
-import net.tfobz.Daten.IMGProcessor;
+import net.tfobz.Controller.Algorithm;
 
 public class DisplayWindow extends JFrame {
-	private JButton button1;
-	private JButton button2;
+	private char[][] map;
+	Rectangle[][] grid;
 	
-	public DisplayWindow () {
-		
+	public DisplayWindow (final char[][] map) {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(500,500);
-		setVisible(true);
+		setSize(1000, 1000);
 		setLayout(null);
 		setResizable(false);
+		setVisible(true);
 		
-		button1 = new JButton("Pfad berechnen");
-		button2 = new JButton("Pfad berechnen Demo");
+		if (map == null)
+			return;
+
+		this.map = map;
 		
-		button1.setBounds(100,100,200, 50);
-		button2.setBounds(100,200,200, 50);
+		Algorithm alg = new Algorithm(map);
+		char[][] test = alg.solve();
 		
-		add(button1);
-		add(button2);
-		
-		button1.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser j = new JFileChooser();
-				if (j.showOpenDialog(DisplayWindow.this) == JFileChooser.APPROVE_OPTION) {
-					BufferedImage img = null;
-					try {
-					    img = ImageIO.read(new File(j.getSelectedFile().getPath()));
-					    IMGProcessor converter = new IMGProcessor(img);
-					    converter.convert();
-					} catch (IOException ex) {
-						System.err.println("IO FEHLER");
-					}
-				}
+		for (int x = 0; x < test.length; x++) {
+			for (int y = 0; y < test[1].length; y++) {
+				System.out.print(test[x][y]+ " ");
 			}
-		});
+			System.out.println();
+		}
 		
-		button2.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				
-			}
-		});
+		grid = new Rectangle[map.length][map[1].length];
+
+
+		repaint();
 	}
 	
+	private void createGrid() {
+		
+		
+		
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		
+		System.out.println("paining");
+		
+		for (int y = 0; y < map[1].length; y++) {
+			for (int x = 0; x < map.length; x++) {
+				switch (map[y][x]) {
+				case 'L':
+					g.setColor(new Color(0, 0, 255));
+					break;
+				case 'Z':
+					g.setColor(new Color(255, 255, 0));
+					break;
+				case 'S':
+					g.setColor(new Color(0, 255, 0));
+					break;
+				case 'W':
+					g.setColor(new Color(255, 0, 0));
+					break;
 
+				default:
+					break;
+				}
+				
+				g.fillRect(x * 150, y * 150, 150, 150);
+				System.out.println(map[y][x]);
+			}
+		}
+	}
 }

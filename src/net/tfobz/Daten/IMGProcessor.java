@@ -6,6 +6,11 @@ import java.awt.image.BufferedImage;
 
 public class IMGProcessor {
 	private BufferedImage img;
+	
+	final int WALL = new Color(255, 0, 0).getRGB();
+	final int STREET = new Color(0, 255, 0).getRGB();
+	final int START = new Color(0, 0, 255).getRGB();
+	final int ZIEL = new Color(255, 255, 0).getRGB();
 
 	public IMGProcessor(BufferedImage img) {
 		this.img = img;
@@ -14,17 +19,17 @@ public class IMGProcessor {
 	public char[][] convert() {
 		char[][] ret = new char[img.getWidth()][img.getHeight()];
 		//TODO VERMEIDEN VON MEHREREN STARTS/ZIELEN
-		int wall = new Color(255, 0, 0).getRGB();
-		int street = new Color(0, 255, 0).getRGB();
 
 		for (int x = 0; x < img.getWidth(); x++) {
 			for (int y = 0; y < img.getHeight(); y++) {
-				if (img.getRGB(y, x) == wall) {
+				if (img.getRGB(y, x) == WALL)
 					ret[x][y] = 'W';
-				}
-				if (img.getRGB(y, x) == street) {
+				if (img.getRGB(y, x) == STREET)
 					ret[x][y] = 'S';
-				}
+				if (img.getRGB(y,  x) == START)
+					ret[x][y] = 'L';
+				if (img.getRGB(y, x) == ZIEL)
+					ret[x][y] = 'Z';
 			}
 		}
 		

@@ -8,12 +8,11 @@ import javax.swing.*;
 import net.tfobz.Controller.WindowController;
 
 public class EntryWindow extends JFrame {
-	private final int width = 250;
+	private final int width = 500;
 	private final int height = 500;
 	private JButton btnEinlesen;
 	private JButton btnEinlesenStepByStep;
 	private JLabel lblTitel;
-	private WindowController wnd;
 	
 	public EntryWindow() {
 		EinlesenAction einlesen = new EinlesenAction();
@@ -25,17 +24,21 @@ public class EntryWindow extends JFrame {
 		setVisible(true);
 		
 		lblTitel = new JLabel("AWonderfulStar\nA* Implementation by T&T");
-		lblTitel.setLocation((width / 2), height - height / 5);
+		lblTitel.setLocation(150, 150);
 		
 		btnEinlesen = new JButton("Einlesen");
-		btnEinlesenStepByStep.setName("btnEin");
-		btnEinlesen.setBounds(width - width / 4, height - height / 3, 200, 50);
+		btnEinlesen.setName("btnEin");
+		btnEinlesen.setBounds(150, 150, 250, 50);
 		btnEinlesen.addActionListener(einlesen);
 		
 		btnEinlesenStepByStep = new JButton("Einlesen mit StepByStep darstellung");
 		btnEinlesenStepByStep.setName("btnEinMitStep");
-		btnEinlesenStepByStep.setBounds(width - width / 4, height - 2 * height / 3, 200, 50);
+		btnEinlesenStepByStep.setBounds(150, 300, 250, 50);
 		btnEinlesenStepByStep.addActionListener(einlesen);
+		
+		add(lblTitel);
+		add(btnEinlesen);
+		add(btnEinlesenStepByStep);
 	}
 	
 	private class EinlesenAction implements ActionListener{
@@ -44,9 +47,9 @@ public class EntryWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (e != null)
 				if (((JButton)e.getSource()).getName().equals("btnEin"))
-					wnd.einlesen();
+					WindowController.einlesen();
 				else
-					wnd.einlesenStep();
+					WindowController.einlesenStep();
 		}
 		
 	}
