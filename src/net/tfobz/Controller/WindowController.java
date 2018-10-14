@@ -1,13 +1,11 @@
 package net.tfobz.Controller;
 
-import java.awt.DisplayMode;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.tfobz.Daten.IMGProcessor;

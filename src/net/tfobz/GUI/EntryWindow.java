@@ -25,7 +25,7 @@ public class EntryWindow extends JFrame {
 		setVisible(true);
 		
 		lblTitel = new JLabel("AWonderfulStar -- A* Implementation by T&T");
-		lblTitel.setFont(new Font("Comic Sans", Font.BOLD, 18));
+		lblTitel.setFont(new Font("Courier New", Font.BOLD, 18));
 		lblTitel.setBounds(50, 50, 400, 50);
 		
 		btnEinlesen = new JButton("Einlesen");

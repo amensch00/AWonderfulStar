@@ -40,7 +40,8 @@ public class Algorithm {
 		
 		// TODO Bedingung überarbeiten (wenn billigerer Node noch existiert wird dieser
 		// aufgelöst)
-		while (findCheapestNode().getX() != ziel.x && findCheapestNode().getX() != ziel.y) {
+		while (findCheapestNode().getX() != ziel.x && findCheapestNode().getY() != ziel.y) {
+			System.out.println("auflösen...");
 			dissolveNode(findCheapestNode(), ziel);
 		}
 		
@@ -109,11 +110,10 @@ public class Algorithm {
 				openlist.add(new TileNode(node.y + 1, node.x - 1, node, ziel));
 			}
 		}
+		
 		// o o o
 		// x x o
 		// o o o
-		
-		
 		if (node.x - 1 >= 0) {
 			if (field[node.y][node.x - 1] == 'S') {
 				openlist.add(new TileNode(node.y, node.x - 1, node, ziel));
