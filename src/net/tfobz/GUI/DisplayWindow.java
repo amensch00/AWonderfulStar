@@ -84,8 +84,16 @@ public class DisplayWindow extends JFrame {
 				default:
 					break;
 				}
+				int tileNumber = 0;
+				if (map.length > map[0].length) 
+					tileNumber = map[0].length;
+				else
+					tileNumber = map.length;
 				
-				g.fillRect(x * 150, y * 150, 150, 150);
+				if (this.getWidth() > this.getHeight())
+					g.fillRect(x * this.getWidth()/tileNumber, y * this.getWidth()/tileNumber, this.getWidth()/tileNumber, this.getWidth()/tileNumber);
+				else 
+					g.fillRect(x * this.getHeight()/tileNumber, y * this.getHeight()/tileNumber, this.getHeight()/tileNumber, this.getHeight()/tileNumber);
 			}
 		}
 	}

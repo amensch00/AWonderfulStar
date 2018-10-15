@@ -7,10 +7,10 @@ import java.awt.image.BufferedImage;
 public class IMGProcessor {
 	private BufferedImage img;
 	
-	final int WALL = new Color(255, 0, 0).getRGB();
-	final int STREET = new Color(0, 255, 0).getRGB();
-	final int START = new Color(0, 0, 255).getRGB();
-	final int ZIEL = new Color(255, 255, 0).getRGB();
+	private final int WALL = new Color(255, 0, 0).getRGB();
+	private final int STREET = new Color(0, 255, 0).getRGB();
+	private final int START = new Color(0, 0, 255).getRGB();
+	private final int ZIEL = new Color(255, 255, 0).getRGB();
 
 	public IMGProcessor(BufferedImage img) {
 		this.img = img;
@@ -32,13 +32,6 @@ public class IMGProcessor {
 					ret[x][y] = 'Z';
 			}
 		}
-		
-//		for (int x = 0; x < img.getWidth(); x++) {
-//			for (int y = 0; y < img.getHeight(); y++) {
-//				System.out.print(ret[x][y]+ " ");
-//			}
-//			System.out.println();
-//		}
 	
 		return ret;
 	}
