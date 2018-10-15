@@ -33,7 +33,7 @@ public class Algorithm {
 		for (int x = 0; x < field.length; x++)
 			for (int y = 0; y < field[0].length; y++)
 				if (field[x][y] == 'L')
-					start = new TileNode(x, y, null, ziel);
+					start = new TileNode(y, x, null, ziel);
 		
 		// Füge Startknoten zur Openlist
 		openlist.add(start);
@@ -80,7 +80,8 @@ public class Algorithm {
 		
 		// HARDCODING LIKE A SCIACO CUZ MÜDE
 		
-	
+		//HARDCODING BEHOBN, ALSO DENKI, LOL. NO NET PROBIERT DESHOLB BENUTZ MO ES OLTE INZWISCHN xD
+		
 //		checkNeighbour (node , 0, 1, ziel);
 //		checkNeighbour (node , 1, 0, ziel);
 //		checkNeighbour (node , 1, 1, ziel);

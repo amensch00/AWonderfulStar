@@ -21,11 +21,13 @@ public class TileNode {
 			this.distance = this.previous.getDistance() + this.calculateDistance();
 		}
 		this.ziel = ziel;
+		this.limit = this.calculateBeeLine();
+		
 		
 	}
 
 	private double calculateBeeLine() {
-		return Math.sqrt(Math.pow(x - ziel.x, 2) + Math.pow(y - ziel.y, 2));
+		return Math.sqrt(Math.pow(this.x - this.ziel.x, 2) + Math.pow(this.y - this.ziel.y, 2));
 	}
 
 	private double calculateDistance() {
