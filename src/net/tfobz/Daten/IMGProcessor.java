@@ -35,7 +35,6 @@ public class IMGProcessor {
 					ret[x][y] = 'Z';
 				else
 					ret[x][y] = 'W';
-
 			}
 		}
 

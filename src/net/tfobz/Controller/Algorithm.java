@@ -80,6 +80,16 @@ public class Algorithm {
 		
 		// HARDCODING LIKE A SCIACO CUZ MÜDE
 		
+	
+//		checkNeighbour (node , 0, 1, ziel);
+//		checkNeighbour (node , 1, 0, ziel);
+//		checkNeighbour (node , 1, 1, ziel);
+//		checkNeighbour (node , 0, -1, ziel);
+//		checkNeighbour (node , -1, 0, ziel);
+//		checkNeighbour (node , -1, -1, ziel);
+//		checkNeighbour (node , 1, -1, ziel);
+//		checkNeighbour (node , -1, 1, ziel);
+
 		
 		// o o o
 		// o x x
@@ -143,6 +153,12 @@ public class Algorithm {
 				openlist.add(new TileNode(node.y - 1, node.x + 1, node, ziel));
 
 		openlist.remove(node);
+	}
+	
+	private void checkNeighbour (TileNode node , int y, int x, Point ziel) {
+		if (node.y + y < field[0].length && node.x + x < field.length && node.y + y >= 0 && node.x + x >= 0)
+			if (field[node.y + 1][node.x + 1] == 'S')
+				openlist.add(new TileNode(node.y + y, node.x + x, node, ziel));
 	}
 
 }
