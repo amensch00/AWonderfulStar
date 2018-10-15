@@ -1,7 +1,6 @@
 package net.tfobz.Daten;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class IMGProcessor {
@@ -20,6 +19,12 @@ public class IMGProcessor {
 		char[][] ret = new char[img.getWidth()][img.getHeight()];
 		// TODO VERMEIDEN VON MEHREREN STARTS/ZIELEN
 
+		// I find des super, dass x und y in der Reihenfolge
+		// oanfoch es restliche Programm schwieriger mocht 
+		// zu lesen und verstian *facepalm*
+		/**
+		 * @author Flapp
+		 */
 		for (int x = 0; x < img.getWidth(); x++) {
 			for (int y = 0; y < img.getHeight(); y++) {
 				if (img.getRGB(y, x) == STREET)
