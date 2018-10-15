@@ -61,10 +61,6 @@ public class DisplayWindow extends JFrame {
 		
 		System.out.println("painting");
 		
-		
-		// Frog mi nt wenn x und wenn y stimmp
-		// des funktioniert holt
-		// ALSO NT ÄNDERN !!!!
 		for (int y = 0; y < map[1].length; y++) {
 			for (int x = 0; x < map.length; x++) {
 				switch (map[y][x]) {
