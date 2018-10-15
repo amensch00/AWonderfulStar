@@ -90,10 +90,16 @@ public class DisplayWindow extends JFrame {
 				else
 					tileNumber = map.length;
 				
-				if (this.getWidth() > this.getHeight())
-					g.fillRect(x * this.getWidth()/tileNumber, y * this.getWidth()/tileNumber, this.getWidth()/tileNumber, this.getWidth()/tileNumber);
+				if (this.getContentPane().getWidth() > this.getContentPane().getHeight())
+					g.fillRect(x * this.getContentPane().getWidth() / tileNumber + getInsets().left,
+							   y * this.getContentPane().getHeight() / tileNumber + getInsets().top, 
+							   this.getWidth() / tileNumber, 
+							   this.getHeight() / tileNumber);
 				else 
-					g.fillRect(x * this.getHeight()/tileNumber, y * this.getHeight()/tileNumber, this.getHeight()/tileNumber, this.getHeight()/tileNumber);
+					g.fillRect(x * this.getContentPane().getWidth() / tileNumber + getInsets().left, 
+							   y * this.getContentPane().getHeight() / tileNumber + getInsets().top, 
+							   this.getWidth() / tileNumber, 
+							   this.getHeight() / tileNumber);
 			}
 		}
 	}
