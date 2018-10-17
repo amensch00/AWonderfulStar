@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import javax.swing.JFrame;
 
 import net.tfobz.Controller.Algorithm;
+import net.tfobz.Controller.TileNode;
 
 public class DisplayWindow extends JFrame {
 	private char[][] map;
@@ -27,7 +28,10 @@ public class DisplayWindow extends JFrame {
 		Algorithm alg = new Algorithm(map);
 		
 		// Die solve funnkt no nt wirklich
-		char[][] test = alg.solve();
+		TileNode t = alg.solve();
+		alg.printBacktrack(t);
+		
+		char[][] test = alg.getField();
 		
 		for (int x = 0; x < test.length; x++) {
 			for (int y = 0; y < test[1].length; y++) {
