@@ -7,13 +7,16 @@ import java.awt.Rectangle;
 import javax.swing.JFrame;
 
 import net.tfobz.Controller.Algorithm;
+import net.tfobz.Controller.Observer;
 import net.tfobz.Controller.TileNode;
+import net.tfobz.Controller.Utilities;
 
-public class DisplayWindow extends JFrame {
+public class DisplayWindow extends JFrame implements Observer {
 	private char[][] map;
-	Rectangle[][] grid;
+	private Algorithm alg;
+	private boolean isStepByStep;
 	
-	public DisplayWindow (final char[][] map) {
+	public DisplayWindow (char[][] map, boolean isStepByStep) {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1000, 1000);
 		setLayout(null);
@@ -24,36 +27,20 @@ public class DisplayWindow extends JFrame {
 			return;
 
 		this.map = map;
+		this.isStepByStep = isStepByStep;
 		
-		Algorithm alg = new Algorithm(map);
+		alg = new Algorithm(map, isStepByStep);
+		
+		alg.attach(this);
 		
 		// Die solve funnkt no nt wirklich
-		TileNode t = alg.solve();
-		alg.printBacktrack(t);
+		alg.start();
 		
-		char[][] test = alg.getField();
-		
-		for (int x = 0; x < test.length; x++) {
-			for (int y = 0; y < test[1].length; y++) {
-				System.out.print(test[x][y]+ " ");
-			}
-			System.out.println();
-		}
-		
-		// I hon mi no nt gonz entschieden ob mir des
-		// spater vlleicht no brauchen
-		grid = new Rectangle[map.length][map[1].length];
-
+		Utilities.print2DCharArray(alg.getField());
 
 		// I woas nt ob man des bracuht
 		// Hon no nt ohne ausprobierrt
-		repaint();
-	}
-	
-	private void createGrid() {
-		
-		
-		
+//		repaint();
 	}
 	
 	/**
@@ -80,6 +67,9 @@ public class DisplayWindow extends JFrame {
 				case 'W':
 					g.setColor(new Color(255, 0, 0));
 					break;
+				case 'X':
+					g.setColor(new Color(255, 0, 255));
+					break;
 
 				default:
 					break;
@@ -102,5 +92,11 @@ public class DisplayWindow extends JFrame {
 							   this.getHeight() / tileNumber);
 			}
 		}
+	}
+
+	@Override
+	public void update() {
+		map = alg.getField();
+		repaint();
 	}
 }
