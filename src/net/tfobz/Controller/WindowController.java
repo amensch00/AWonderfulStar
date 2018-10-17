@@ -50,6 +50,18 @@ public class WindowController {
 	}
 	
 	public static void einlesenStep() {
-		einlesen();
+		char[][] map = null;
+		
+		BufferedImage img = null;
+		try {
+		    img = ImageIO.read(new File("C:/Users/Tronics-PC/Desktop/testData.png"));
+		    IMGProcessor converter = new IMGProcessor(img);
+		    map = converter.convert();
+		} catch (IOException ex) {
+			System.err.println("IO FEHLER");
+		}
+		
+		DisplayWindow dpWin = new DisplayWindow(map);
+		dpWin.setVisible(true);
 	}
 }
