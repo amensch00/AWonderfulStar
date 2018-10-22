@@ -18,7 +18,7 @@ public class Algorithm {
 	 * i hon keine ahnung wos des tuat xD
 	 * @return
 	 */
-	public char[][] solve() {
+	public TileNode solve() {
 		char[][] ret = null;
 		TileNode start = null;
 		Point ziel = new Point(0, 0);
@@ -27,7 +27,7 @@ public class Algorithm {
 		for (int x = 0; x < field.length; x++)
 			for (int y = 0; y < field[0].length; y++)
 				if (field[x][y] == 'Z')
-					ziel = new Point(x, y);
+					ziel = new Point(y, x);
 		
 		// Ermittle Startknoten
 		for (int x = 0; x < field.length; x++)
@@ -35,22 +35,26 @@ public class Algorithm {
 				if (field[x][y] == 'L')
 					start = new TileNode(y, x, null, ziel);
 		
-		// Füge Startknoten zur Openlist
+		// Fï¿½ge Startknoten zur Openlist
 		openlist.add(start);
 		
-		// TODO Bedingung überarbeiten (wenn billigerer Node noch existiert wird dieser
-		// aufgelöst)
+		// TODO Bedingung ï¿½berarbeiten (wenn billigerer Node noch existiert wird dieser
+		// aufgelï¿½st)
 		while (findCheapestNode().getX() != ziel.x && findCheapestNode().getY() != ziel.y) {
-			System.out.println("auflösen...");
+			System.out.println("auflï¿½sen...");
 			dissolveNode(findCheapestNode(), ziel);
 		}
 		
-		return field;
+		
+		
+		// TODO gib billigste node zurÃ¼ck um vrogÃ¤nger ausgeben zu kÃ¶nnen
+		// TODO Methode zur ausgabe von vorgÃ¤nger machen!
+		return findCheapestNode();
 	}
 
 	/**
 	 * Findet die aktuell billigste Node die man
-	 * auflösen kann und in der OpenListe drinnen steht
+	 * auflï¿½sen kann und in der OpenListe drinnen steht
 	 * @return Die billigste TileNode in der OpenListe
 	 */
 	public TileNode findCheapestNode() {
@@ -58,8 +62,8 @@ public class Algorithm {
 		double merk = -1;
 		
 		if (openlist.size() > 0) {
-			// Läuft alle Elemente der openListe durch,
-			// auf das aktuell ausgewählte Objekt kann mit
+			// Lï¿½uft alle Elemente der openListe durch,
+			// auf das aktuell ausgewï¿½hlte Objekt kann mit
 			// tn zugegriffen werden
 			for (TileNode tn : openlist) {
 				if (merk < tn.getDistance() + tn.getLimit()) {
@@ -73,12 +77,12 @@ public class Algorithm {
 	}
 
 	/**
-	 * Auflösen des Knotens
+	 * Auflï¿½sen des Knotens
 	 */
 	public void dissolveNode(TileNode node, Point ziel) {
 		
 		
-		// HARDCODING LIKE A SCIACO CUZ MÜDE
+		// HARDCODING LIKE A SCIACO CUZ Mï¿½DE
 		
 		//HARDCODING BEHOBN, ALSO DENKI, LOL. NO NET PROBIERT DESHOLB BENUTZ MO ES OLTE INZWISCHN xD
 		
@@ -160,6 +164,19 @@ public class Algorithm {
 		if (node.y + y < field[0].length && node.x + x < field.length && node.y + y >= 0 && node.x + x >= 0)
 			if (field[node.y + 1][node.x + 1] == 'S')
 				openlist.add(new TileNode(node.y + y, node.x + x, node, ziel));
+	}
+	
+	public void printBacktrack(TileNode tn) {
+		if (tn.getPrevious() == null) {
+			return;
+		} else {
+			field[tn.getPrevious().getY()][tn.getPrevious().getX()] = 'X';
+			printBacktrack(tn.getPrevious());
+		}
+	}
+	
+	public char[][] getField() {
+		return field;
 	}
 
 }
