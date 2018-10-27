@@ -2,26 +2,32 @@ package net.tfobz.Controller;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
-public class Algorithm {
-
+public class Algorithm implements Runnable {
+	private ArrayList<Observer> observers = new ArrayList<Observer>();
+	
+	Thread t = null;
 	private char[][] field = null;
-	private ArrayList<TileNode> openlist = null;
+	
+	private PriorityQueue<TileNode> openlist = null;
+	private boolean[][] closed;
 
-	public Algorithm(char[][] field) {
+	public Algorithm(char[][] field, boolean isStepByStep) {
 		this.field = field;
-		openlist = new ArrayList<TileNode>();
+		openlist = new PriorityQueue<TileNode>(field.length * field[0].length, new TileNodeComparator());
+		closed = new boolean[field.length][field[0].length];
 	}
-
+	
+	
 	/**
 	 * TODO Tschager bitte moch de fertig
 	 * i hon keine ahnung wos des tuat xD
 	 * @return
 	 */
-	public TileNode solve() {
-		char[][] ret = null;
+	private TileNode solve() {
 		TileNode start = null;
-		Point ziel = new Point(0, 0);
+		Point ziel = null;
 		
 		// Ermittle Ziel Koordinaten
 		for (int x = 0; x < field.length; x++)
@@ -40,16 +46,40 @@ public class Algorithm {
 		
 		// TODO Bedingung �berarbeiten (wenn billigerer Node noch existiert wird dieser
 		// aufgel�st)
-		while (findCheapestNode().getX() != ziel.x && findCheapestNode().getY() != ziel.y) {
-			System.out.println("aufl�sen...");
-			dissolveNode(findCheapestNode(), ziel);
+		TileNode currentNode;
+		while ( true ) {
+			//System.out.println("aufl�sen...");
+			
+			currentNode = openlist.poll();
+			
+			if (currentNode == null) break; // Madonna wos ischn do passiert
+			
+			if (currentNode.getX() == ziel.x && currentNode.getY() == ziel.y) {
+				// Ziel gefunden
+				return new TileNode(currentNode);
+			}
+			
+			closed[currentNode.getX()][currentNode.getY()] = true;
+			
+			// TODO moch dass die dissolve node nt vergisst es ziel in die OpenListe inzatrogen
+			// Isch nehmlich awian bled wenn dr algo nia es ziel durcheckt \/^^\/
+			dissolveNode(currentNode, ziel);
+
+			
+			
+			try {
+				t.sleep(3000);
+			} catch (Exception e) {
+				System.out.println("wups");
+				e.printStackTrace();
+			}
 		}
 		
-		
+		Utilities.print2DCharArray(field);
 		
 		// TODO gib billigste node zurück um vrogänger ausgeben zu können
 		// TODO Methode zur ausgabe von vorgänger machen!
-		return findCheapestNode();
+		return currentNode;
 	}
 
 	/**
@@ -59,110 +89,136 @@ public class Algorithm {
 	 */
 	public TileNode findCheapestNode() {
 		int ret = 0;
-		double merk = -1;
+		double smallestDistance = Double.POSITIVE_INFINITY;
+		double smallestTotalDistance = Double.POSITIVE_INFINITY;
 		
-		if (openlist.size() > 0) {
-			// L�uft alle Elemente der openListe durch,
-			// auf das aktuell ausgew�hlte Objekt kann mit
-			// tn zugegriffen werden
-			for (TileNode tn : openlist) {
-				if (merk < tn.getDistance() + tn.getLimit()) {
-					ret = openlist.indexOf(tn);
-					merk = tn.getDistance() + tn.getLimit();
+		// L�uft alle Elemente der openListe durch,
+		// auf das aktuell ausgew�hlte Objekt kann mit
+		// tn zugegriffen werden
+		for (TileNode tn : openlist) {
+			
+			if (tn.getTotaleEntfernung() == smallestTotalDistance) {
+				if (tn.getDistance() < smallestDistance)
+					continue;
+				else {
+//					ret = openlist.indexOf(tn);
 				}
 			}
 		}
 		
-		return openlist.get(ret);
+		if (smallestDistance == Double.POSITIVE_INFINITY || smallestTotalDistance == Double.POSITIVE_INFINITY)
+			Utilities.showWarningWindow("Ahhh positive inifinity");
+		//return openlist.get(ret);
+		
+		return null;
 	}
 
+	@Override
+	public void run() {
+		solve();
+	}
+	
+	public void start() {
+		if (t == null) {
+			t = new Thread(this, "ProjektilThread");
+			t.start();
+		}
+	}
+	
 	/**
 	 * Aufl�sen des Knotens
 	 */
 	public void dissolveNode(TileNode node, Point ziel) {
 		
 		
-		// HARDCODING LIKE A SCIACO CUZ M�DE
+		System.out.println("Current Node: [" + node.getX() + "||" + node.getY() + "]");
 		
+		for (TileNode t : openlist) {
+			System.out.print(t.toString());
+		}
+		System.out.println();
+			
 	
-//		checkNeighbour (node , 0, 1, ziel);
-//		checkNeighbour (node , 1, 0, ziel);
-//		checkNeighbour (node , 1, 1, ziel);
-//		checkNeighbour (node , 0, -1, ziel);
-//		checkNeighbour (node , -1, 0, ziel);
-//		checkNeighbour (node , -1, -1, ziel);
-//		checkNeighbour (node , 1, -1, ziel);
-//		checkNeighbour (node , -1, 1, ziel);
+		checkNeighbour (node , 0, 1, ziel);
+		checkNeighbour (node , 1, 0, ziel);
+		checkNeighbour (node , 1, 1, ziel);
+		checkNeighbour (node , 0, -1, ziel);
+		checkNeighbour (node , -1, 0, ziel);
+		checkNeighbour (node , -1, -1, ziel);
+		checkNeighbour (node , 1, -1, ziel);
+		checkNeighbour (node , -1, 1, ziel);
 
+		field[node.getY()][node.getX()] = 'X';
+		notifyAllObservers();
 		
 		// o o o
 		// o x x
 		// o o o
-		if (node.x + 1 < field.length)
-			if (field[node.y][node.x + 1] == 'S')
-				openlist.add(new TileNode(node.y, node.x + 1, node, ziel));
+//		if (node.x + 1 < field.length)
+//			if (field[node.y][node.x + 1] == 'S')
+//				openlist.add(new TileNode(node.y, node.x + 1, node, ziel));
 
 		// o o o
 		// o x o
 		// o o x
-		if (node.y + 1 < field[0].length && node.x + 1 < field.length)
-			if (field[node.y + 1][node.x + 1] == 'S')
-				openlist.add(new TileNode(node.y + 1, node.x + 1, node, ziel));
+//		if (node.y + 1 < field[0].length && node.x + 1 < field.length)
+//			if (field[node.y + 1][node.x + 1] == 'S')
+//				openlist.add(new TileNode(node.y + 1, node.x + 1, node, ziel));
 
 		// o o o
 		// o x o
 		// o x o
-		if (node.y + 1 < field[0].length)
-			if (field[node.y + 1][node.x] == 'S')
-				openlist.add(new TileNode(node.y + 1, node.x, node, ziel));
+//		if (node.y + 1 < field[0].length)
+//			if (field[node.y + 1][node.x] == 'S')
+//				openlist.add(new TileNode(node.y + 1, node.x, node, ziel));
 
 		// o o o
 		// o x o
 		// x o o
-		if (node.y + 1 < field[0].length && node.x - 1 >= 0) {
-			if (field[node.y + 1][node.x - 1] == 'S') {
-				openlist.add(new TileNode(node.y + 1, node.x - 1, node, ziel));
-			}
-		}
+//		if (node.y + 1 < field[0].length && node.x - 1 >= 0) {
+//			if (field[node.y + 1][node.x - 1] == 'S') {
+//				openlist.add(new TileNode(node.y + 1, node.x - 1, node, ziel));
+//			}
+//		}
 		
 		// o o o
 		// x x o
 		// o o o
-		if (node.x - 1 >= 0) {
-			if (field[node.y][node.x - 1] == 'S') {
-				openlist.add(new TileNode(node.y, node.x - 1, node, ziel));
-			}
-		}
+//		if (node.x - 1 >= 0) {
+//			if (field[node.y][node.x - 1] == 'S') {
+//				openlist.add(new TileNode(node.y, node.x - 1, node, ziel));
+//			}
+//		}
 		// x o o
 		// o x o
 		// o o o
-		if (node.y - 1 >= 0 && node.x - 1 >= 0) {
-			if (field[node.y - 1][node.x - 1] == 'S') {
-				openlist.add(new TileNode(node.y - 1, node.x - 1, node, ziel));
-			}
-		}
+//		if (node.y - 1 >= 0 && node.x - 1 >= 0) {
+//			if (field[node.y - 1][node.x - 1] == 'S') {
+//				openlist.add(new TileNode(node.y - 1, node.x - 1, node, ziel));
+//			}
+//		}
 		// o x o
 		// o x o
 		// o o o
-		if (node.y - 1 >= 0) {
-			if (field[node.y - 1][node.x] == 'S') {
-				openlist.add(new TileNode(node.y + 1, node.x, node, ziel));
-			}
-		}
+//		if (node.y - 1 >= 0) {
+//			if (field[node.y - 1][node.x] == 'S') {
+//				openlist.add(new TileNode(node.y + 1, node.x, node, ziel));
+//			}
+//		}
 		// o o x
 		// o x o
 		// o o o
-		if (node.y - 1 >= 0 && node.x + 1 < field.length)
-			if (field[node.y - 1][node.x + 1] == 'S')
-				openlist.add(new TileNode(node.y - 1, node.x + 1, node, ziel));
+//		if (node.y - 1 >= 0 && node.x + 1 < field.length)
+//			if (field[node.y - 1][node.x + 1] == 'S')
+//				openlist.add(new TileNode(node.y - 1, node.x + 1, node, ziel));
 
 		openlist.remove(node);
 	}
 	
 	private void checkNeighbour (TileNode node , int y, int x, Point ziel) {
-		if (node.y + y < field[0].length && node.x + x < field.length && node.y + y >= 0 && node.x + x >= 0)
-			if (field[node.y + 1][node.x + 1] == 'S')
-				openlist.add(new TileNode(node.y + y, node.x + x, node, ziel));
+		if (node.getY() + y < field.length && node.getX() + x < field[0].length && node.getY() + y >= 0 && node.getX() + x >= 0)
+			if (field[node.getY() + y][node.getX() + x] == 'S' || field[node.getY() + y][node.getX() + x] == 'Z')
+				openlist.add(new TileNode(node.getY() + y, node.getX() + x, node, ziel));
 	}
 	
 	public void printBacktrack(TileNode tn) {
@@ -174,8 +230,24 @@ public class Algorithm {
 		}
 	}
 	
+	public void setField(char[][] field) {
+		this.field = field;
+		notifyAllObservers();
+	}
+	
 	public char[][] getField() {
 		return field;
 	}
+	
+	public void attach(Observer obst) {
+		observers.add(obst);
+	}
+	
+	private void notifyAllObservers() {
+		for (Observer obst : observers)
+			obst.update();
+	}
+
+
 
 }

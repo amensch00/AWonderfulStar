@@ -2,13 +2,10 @@ package net.tfobz.GUI;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-
 import javax.swing.JFrame;
 
 import net.tfobz.Controller.Algorithm;
 import net.tfobz.Controller.Observer;
-import net.tfobz.Controller.TileNode;
 import net.tfobz.Controller.Utilities;
 
 public class DisplayWindow extends JFrame implements Observer {
@@ -36,7 +33,7 @@ public class DisplayWindow extends JFrame implements Observer {
 		// Die solve funnkt no nt wirklich
 		alg.start();
 		
-		Utilities.print2DCharArray(alg.getField());
+		
 
 		// I woas nt ob man des bracuht
 		// Hon no nt ohne ausprobierrt
@@ -50,7 +47,7 @@ public class DisplayWindow extends JFrame implements Observer {
 	public void paint(Graphics g) {
 		super.paint(g);
 		
-		System.out.println("painting");
+		//System.out.println("painting");
 		
 		for (int y = 0; y < map[1].length; y++) {
 			for (int x = 0; x < map.length; x++) {

@@ -45,7 +45,7 @@ public class WindowController {
 			}
 		}
 		
-		DisplayWindow dpWin = new DisplayWindow(map);
+		DisplayWindow dpWin = new DisplayWindow(map, false);
 		dpWin.setVisible(true);
 	}
 	
@@ -61,7 +61,7 @@ public class WindowController {
 			System.err.println("IO FEHLER");
 		}
 		
-		DisplayWindow dpWin = new DisplayWindow(map);
+		DisplayWindow dpWin = new DisplayWindow(map, true);
 		dpWin.setVisible(true);
 	}
 }
