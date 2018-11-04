@@ -7,7 +7,6 @@ import java.util.PriorityQueue;
 public class Algorithm implements Runnable {
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	
-	Thread t = null;
 	private char[][] field = null;
 	
 	private PriorityQueue<TileNode> openlist = null;
@@ -44,11 +43,8 @@ public class Algorithm implements Runnable {
 		// F�ge Startknoten zur Openlist
 		openlist.add(start);
 		
-		// TODO Bedingung �berarbeiten (wenn billigerer Node noch existiert wird dieser
-		// aufgel�st)
 		TileNode currentNode;
 		while ( true ) {
-			//System.out.println("aufl�sen...");
 			
 			currentNode = openlist.poll();
 			
@@ -61,14 +57,10 @@ public class Algorithm implements Runnable {
 			
 			closed[currentNode.getX()][currentNode.getY()] = true;
 			
-			// TODO moch dass die dissolve node nt vergisst es ziel in die OpenListe inzatrogen
-			// Isch nehmlich awian bled wenn dr algo nia es ziel durcheckt \/^^\/
 			dissolveNode(currentNode, ziel);
-
-			
 			
 			try {
-				t.sleep(3000);
+				Thread.sleep(3000);
 			} catch (Exception e) {
 				System.out.println("wups");
 				e.printStackTrace();
@@ -77,52 +69,12 @@ public class Algorithm implements Runnable {
 		
 		Utilities.print2DCharArray(field);
 		
-		// TODO gib billigste node zurück um vrogänger ausgeben zu können
-		// TODO Methode zur ausgabe von vorgänger machen!
 		return currentNode;
-	}
-
-	/**
-	 * Findet die aktuell billigste Node die man
-	 * aufl�sen kann und in der OpenListe drinnen steht
-	 * @return Die billigste TileNode in der OpenListe
-	 */
-	public TileNode findCheapestNode() {
-		int ret = 0;
-		double smallestDistance = Double.POSITIVE_INFINITY;
-		double smallestTotalDistance = Double.POSITIVE_INFINITY;
-		
-		// L�uft alle Elemente der openListe durch,
-		// auf das aktuell ausgew�hlte Objekt kann mit
-		// tn zugegriffen werden
-		for (TileNode tn : openlist) {
-			
-			if (tn.getTotaleEntfernung() == smallestTotalDistance) {
-				if (tn.getDistance() < smallestDistance)
-					continue;
-				else {
-//					ret = openlist.indexOf(tn);
-				}
-			}
-		}
-		
-		if (smallestDistance == Double.POSITIVE_INFINITY || smallestTotalDistance == Double.POSITIVE_INFINITY)
-			Utilities.showWarningWindow("Ahhh positive inifinity");
-		//return openlist.get(ret);
-		
-		return null;
 	}
 
 	@Override
 	public void run() {
 		solve();
-	}
-	
-	public void start() {
-		if (t == null) {
-			t = new Thread(this, "ProjektilThread");
-			t.start();
-		}
 	}
 	
 	/**
@@ -215,10 +167,18 @@ public class Algorithm implements Runnable {
 		openlist.remove(node);
 	}
 	
-	private void checkNeighbour (TileNode node , int y, int x, Point ziel) {
-		if (node.getY() + y < field.length && node.getX() + x < field[0].length && node.getY() + y >= 0 && node.getX() + x >= 0)
-			if (field[node.getY() + y][node.getX() + x] == 'S' || field[node.getY() + y][node.getX() + x] == 'Z')
+	private void checkNeighbour (TileNode node , int y, int x, Point ziel) {		
+		if (node.getY() + y < field.length && 
+			node.getX() + x < field[0].length && 
+			node.getY() + y >= 0 && 
+			node.getX() + x >= 0) 
+		{
+			if (field[node.getY() + y][node.getX() + x] == 'W' || closed[node.getY() + y][node.getX() + x])
+				return;
+			
+			//if ()
 				openlist.add(new TileNode(node.getY() + y, node.getX() + x, node, ziel));
+		}
 	}
 	
 	public void printBacktrack(TileNode tn) {

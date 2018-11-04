@@ -27,11 +27,11 @@ public class DisplayWindow extends JFrame implements Observer {
 		this.isStepByStep = isStepByStep;
 		
 		alg = new Algorithm(map, isStepByStep);
-		
 		alg.attach(this);
 		
-		// Die solve funnkt no nt wirklich
-		alg.start();
+		Thread algThread = new Thread(alg);
+		
+		algThread.start();
 		
 		
 
