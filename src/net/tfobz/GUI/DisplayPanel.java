@@ -24,13 +24,46 @@ public class DisplayPanel extends JPanel {
 
 	}
 
+	public int getDisplayedWidth() {
+		
+		return getLength() * map[0].length;
+		
+		
+	}
+
+	public int getDisplayedHeight() {
+	
+		return getLength() * map.length;
+	}
 
 	public void setGridOn(boolean gridOn) {
 		this.gridOn = gridOn;
 	}
 
+	public char[][] getMap() {
+		return this.map;
+	}
+
 	public void setMap(final char[][] map) {
 		this.map = map;
+	}
+
+	public void setMapAt(int row, int col, char c) {
+		if (row >= 0 && row < map.length && col >= 0 && col < map[0].length) {
+			if (c == 'L' || c == 'Z' || c == 'S' || c == 'W')
+				map[row][col] = c;
+		}
+		this.repaint();
+	}
+
+	public int getLength() {
+		int tileNumber = 0;
+		if (map.length < map[0].length)
+			tileNumber = map[0].length;
+		else
+			tileNumber = map.length;
+
+		return this.getWidth() / tileNumber;
 	}
 
 	@Override
@@ -39,15 +72,9 @@ public class DisplayPanel extends JPanel {
 
 		System.out.println("painting");
 		if (map != null) {
-			int tileNumber = 0;
-			int length = 0;
-			if (map.length < map[0].length)
-				tileNumber = map[0].length;
 
-			else
-				tileNumber = map.length;
+			int length = getLength();
 
-			length = ((this.getHeight()) / tileNumber) - 1;
 			for (int y = 0; y < map[0].length; y++) {
 				for (int x = 0; x < map.length; x++) {
 					switch (map[x][y]) {
@@ -74,18 +101,18 @@ public class DisplayPanel extends JPanel {
 			}
 			if (gridOn) {
 				g.setColor(new Color(255, 255, 255));
-				int height = length * map.length -1;
-				int width = length * map[0].length -1;
-				
+				int height = length * map.length - 1;
+				int width = length * map[0].length - 1;
+
 				for (int y = 1; y < map.length; y++) {
-					g.drawLine(0, y * length,width , y * length);
+					g.drawLine(0, y * length, width, y * length);
 				}
 
 				for (int x = 1; x < map[0].length; x++) {
 					g.drawLine(x * length, 0, x * length, height);
 				}
 			}
-			
+
 		}
 
 	}

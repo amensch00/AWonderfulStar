@@ -51,7 +51,7 @@ public class Photoshop extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 
-		newFileArr = new char[30][40];
+		newFileArr = new char[15][20];
 		for (int i = 0; i < newFileArr.length; i++)
 			for (int j = 0; j < newFileArr[1].length; j++)
 				newFileArr[i][j] = 'S';
@@ -59,12 +59,19 @@ public class Photoshop extends JFrame {
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == newFile) {
-					mapDisplayer = new DisplayPanel(newFileArr, true);
+					newFileArr = new char[15][20];
+					for (int i = 0; i < newFileArr.length; i++)
+						for (int j = 0; j < newFileArr[1].length; j++)
+							newFileArr[i][j] = 'S';
+					mapDisplayer.setMap(newFileArr);
+					mapDisplayer.setGridOn(true);
+//					mapDisplayer = new DisplayPanel(newFileArr, true);
 					mapDisplayer.setBounds(90, 0, getWidth() - 90, getHeight() - menuBar.getHeight());
 					mapDisplayer.setBackground(new Color(75, 75, 75));
 					mapDisplayer.setLayout(null);
 					getContentPane().add(mapDisplayer);
 					mapDisplayer.repaint();
+
 				} else if (e.getSource() == openFile) {
 					// JFileChooser j = new JFileChooser();
 					// j.setDialogTitle("Bild Datei auswählen");
@@ -92,8 +99,11 @@ public class Photoshop extends JFrame {
 					try {
 						img = ImageIO.read(new File("C:\\Users\\Julian Tschager\\Documents\\testData.png"));
 						IMGProcessor converter = new IMGProcessor(img);
+
 						map = converter.convert();
+						mapDisplayer.setGridOn(false);
 						mapDisplayer.setMap(map);
+
 						System.out.println("DONE");
 						mapDisplayer.repaint();
 					} catch (IOException ex) {
@@ -175,18 +185,18 @@ public class Photoshop extends JFrame {
 		colorPicker.setLayout(null);
 		getContentPane().add(colorPicker);
 
-		mapDisplayer = new DisplayPanel(null, false);
+		mapDisplayer = new DisplayPanel(newFileArr, false);
 		mapDisplayer.setBounds(90, 0, this.getWidth() - 90, this.getHeight() - menuBar.getHeight());
 		mapDisplayer.setBackground(new Color(75, 75, 75));
 		mapDisplayer.setLayout(null);
+		mapDisplayer.setGridOn(true);
 		getContentPane().add(mapDisplayer);
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
 				Toolkit toolkit = Toolkit.getDefaultToolkit();
 				// Image cursorimg = null;
 				Point cursorHotSpot = new Point(0, 0);
-				//
-				//
+
 				// try {
 				// switch (cursor) {
 				//
@@ -217,6 +227,55 @@ public class Photoshop extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				setCursor(Cursor.getDefaultCursor());
 			}
+		});
+		
+		//ERMÖGLICHT MALEN
+		mapDisplayer.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				
+
+					if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
+							&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
+
+						int col = 0;
+						int row = 0;
+						int x = ((DisplayPanel) e.getSource()).getLength();
+						while (col * x < e.getX())
+							if (col * x < e.getX())
+								col += 1;
+
+						x = ((DisplayPanel) e.getSource()).getLength();
+						while (row * x < e.getY())
+							if (row * x < e.getY())
+								row += 1;
+
+						switch (cursor) {
+						case 1:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'L');
+							break;
+						case 2:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'Z');
+							break;
+						case 3:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'W');
+							break;
+						case 4:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'S');
+							break;
+						}
+
+					} 
+
+				
+			}
+			public void mouseDragged(MouseEvent e) {
+				
+				while (e.isMetaDown()) {
+					Point p = getLocation();
+				}
+				
+			}
+
 		});
 
 		// scrollPane = new ScrollPane();
