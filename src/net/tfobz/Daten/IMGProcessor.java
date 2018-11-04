@@ -16,7 +16,7 @@ public class IMGProcessor {
 	}
 
 	public char[][] convert() {
-		char[][] ret = new char[img.getWidth()][img.getHeight()];
+		char[][] ret = new char[img.getHeight()][img.getWidth()];
 		// TODO VERMEIDEN VON MEHREREN STARTS/ZIELEN
 
 		// I find des super, dass x und y in der Reihenfolge
@@ -25,16 +25,16 @@ public class IMGProcessor {
 		/**
 		 * @author Flapp
 		 */
-		for (int x = 0; x < img.getWidth(); x++) {
-			for (int y = 0; y < img.getHeight(); y++) {
-				if (img.getRGB(y, x) == STREET)
-					ret[x][y] = 'S';
-				else if (img.getRGB(y, x) == START)
-					ret[x][y] = 'L';
-				else if (img.getRGB(y, x) == ZIEL)
-					ret[x][y] = 'Z';
+		for (int y = 0; y < img.getHeight(); y++) {
+			for (int x = 0; x < img.getWidth(); x++) {
+				if (img.getRGB(x, y) == STREET)
+					ret[y][x] = 'S';
+				else if (img.getRGB(x, y) == START)
+					ret[y][x]  = 'L';
+				else if (img.getRGB(x, y) == ZIEL)
+					ret[y][x]  = 'Z';
 				else
-					ret[x][y] = 'W';
+					ret[y][x]  = 'W';
 			}
 		}
 

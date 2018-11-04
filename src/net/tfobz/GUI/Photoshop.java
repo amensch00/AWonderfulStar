@@ -8,7 +8,9 @@ import net.tfobz.Daten.IMGProcessor;
 
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -29,12 +31,16 @@ public class Photoshop extends JFrame {
 	DisplayPanel mapDisplayer;
 	// Colorpicker
 	private JButton start, end, street, wall;
+	private JButton start_hl, end_hl, street_hl, wall_hl;
 	private JLabel lblstart, lblend, lblstreet, lblwall;
 	private Component horizontalStrut_1;
-	private Rectangle highlighter;
+
 	private ScrollPane scrollPane;
 	private Scrollbar horizontalScroll;
 	private Scrollbar verticalScroll;
+	// 1 = start; 2 = end; 3 = wall; 4 = street
+	private int cursor = 1;
+	private char[][] newFileArr;
 
 	public Photoshop() {
 		setBackground(Color.BLACK);
@@ -44,33 +50,43 @@ public class Photoshop extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-		
+
+		newFileArr = new char[30][40];
+		for (int i = 0; i < newFileArr.length; i++)
+			for (int j = 0; j < newFileArr[1].length; j++)
+				newFileArr[i][j] = 'S';
+
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == newFile) {
-					
+					mapDisplayer = new DisplayPanel(newFileArr, true);
+					mapDisplayer.setBounds(90, 0, getWidth() - 90, getHeight() - menuBar.getHeight());
+					mapDisplayer.setBackground(new Color(75, 75, 75));
+					mapDisplayer.setLayout(null);
+					getContentPane().add(mapDisplayer);
+					mapDisplayer.repaint();
 				} else if (e.getSource() == openFile) {
-//					JFileChooser j = new JFileChooser();
-//					j.setDialogTitle("Bild Datei auswählen");
-//					j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
-//
-//					char[][] map = null;
-//					
-//					if (j.showOpenDialog(Photoshop.this) == JFileChooser.APPROVE_OPTION) {
-//						BufferedImage img = null;
-//						try {
-//							img = ImageIO.read(new File(j.getSelectedFile().getPath()));
-//							IMGProcessor converter = new IMGProcessor(img);
-//							map = converter.convert();
-//							mapDisplayer.setMap(map);
-//							System.out.println("DONE");
-//							mapDisplayer.repaint();
-//						} catch (IOException ex) {
-//							System.err.println("IO FEHLER");
-//						}
-//					}
-//					
-					
+					// JFileChooser j = new JFileChooser();
+					// j.setDialogTitle("Bild Datei auswählen");
+					// j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
+					//
+					// char[][] map = null;
+					//
+					// if (j.showOpenDialog(Photoshop.this) == JFileChooser.APPROVE_OPTION) {
+					// BufferedImage img = null;
+					// try {
+					// img = ImageIO.read(new File(j.getSelectedFile().getPath()));
+					// IMGProcessor converter = new IMGProcessor(img);
+					// map = converter.convert();
+					// mapDisplayer.setMap(map);
+					// System.out.println("DONE");
+					// mapDisplayer.repaint();
+					// } catch (IOException ex) {
+					// System.err.println("IO FEHLER");
+					// }
+					// }
+					//
+
 					char[][] map = null;
 					BufferedImage img = null;
 					try {
@@ -83,12 +99,13 @@ public class Photoshop extends JFrame {
 					} catch (IOException ex) {
 						System.err.println("IO FEHLER");
 					}
-				
+
 				} else if (e.getSource() == options) {
 
 				} else if (e.getSource() == exit) {
 					ClosingDialog c = new ClosingDialog(
-							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 100, (int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
+							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 100,
+							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 					// dispose();
 					// System.exit(0);
 				} else if (e.getSource() == run) {
@@ -102,8 +119,28 @@ public class Photoshop extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				// start.setIcon(new
-				// ImageIcon("C:/Users/Julian%20Tschager/Desktop/JUL03715.jpg"));
+				start_hl.setVisible(false);
+				end_hl.setVisible(false);
+				wall_hl.setVisible(false);
+				street_hl.setVisible(false);
+
+				if (e.getSource() == start) {
+					start_hl.setVisible(true);
+					cursor = 1;
+				}
+
+				if (e.getSource() == end) {
+					end_hl.setVisible(true);
+					cursor = 2;
+				}
+				if (e.getSource() == wall) {
+					wall_hl.setVisible(true);
+					cursor = 3;
+				}
+				if (e.getSource() == street) {
+					street_hl.setVisible(true);
+					cursor = 4;
+				}
 			}
 
 		};
@@ -132,25 +169,61 @@ public class Photoshop extends JFrame {
 
 		colorPicker = new JPanel();
 
-		colorPicker.setBounds(0, menuBar.getHeight(), 90, this.getHeight() - menuBar.getHeight() - this.getInsets().top);
+		colorPicker.setBounds(0, menuBar.getHeight(), 90,
+				this.getHeight() - menuBar.getHeight() - this.getInsets().top);
 		colorPicker.setBackground(new Color(64, 64, 64));
 		colorPicker.setLayout(null);
 		getContentPane().add(colorPicker);
 
-		mapDisplayer = new DisplayPanel(null);
+		mapDisplayer = new DisplayPanel(null, false);
 		mapDisplayer.setBounds(90, 0, this.getWidth() - 90, this.getHeight() - menuBar.getHeight());
 		mapDisplayer.setBackground(new Color(75, 75, 75));
 		mapDisplayer.setLayout(null);
-		
-//		scrollPane = new ScrollPane();
-//		scrollPane.setBounds(90, 0, this.getWidth() - 90, this.getHeight() - menuBar.getHeight());
-//		scrollPane.add(mapDisplayer);
-//		getContentPane().add(scrollPane);
-		
 		getContentPane().add(mapDisplayer);
-		
-		
+		mapDisplayer.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				Toolkit toolkit = Toolkit.getDefaultToolkit();
+				// Image cursorimg = null;
+				Point cursorHotSpot = new Point(0, 0);
+				//
+				//
+				// try {
+				// switch (cursor) {
+				//
+				// case 1:
+				// cursorimg =
+				// toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
+				// case 2:
+				// cursorimg =
+				// toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
+				// case 3:
+				// cursorimg =
+				// toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
+				// case 4:
+				// cursorimg =
+				// toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
+				// }
+				// setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot,
+				// "CCursor"));
+				//
+				// } catch (Exception ex) {
+				// System.out.println("Cursor nicht gefunden!");
+				// setCursor(Cursor.getDefaultCursor());
+				// }
+				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
+			}
+
+			public void mouseExited(MouseEvent e) {
+				setCursor(Cursor.getDefaultCursor());
+			}
+		});
+
+		// scrollPane = new ScrollPane();
+		// scrollPane.setBounds(90, 0, this.getWidth() - 90, this.getHeight() -
+		// menuBar.getHeight());
+		// scrollPane.add(mapDisplayer);
+		// getContentPane().add(scrollPane);
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -162,7 +235,16 @@ public class Photoshop extends JFrame {
 		start.addActionListener(myColorListener);
 		start.setSelected(true);
 		colorPicker.add(start);
-		
+
+		start_hl = new JButton();
+		start_hl.setBounds(9, 99, 72, 72);
+		start_hl.setBackground(Color.WHITE);
+		start_hl.setBorderPainted(false);
+		buttonGroup.add(start_hl);
+		start_hl.addActionListener(myColorListener);
+		start_hl.setEnabled(false);
+		start_hl.setVisible(true);
+		colorPicker.add(start_hl);
 
 		lblstart = new JLabel("Start", SwingConstants.CENTER);
 		lblstart.setBounds(10, 50, 70, 70);
@@ -177,6 +259,16 @@ public class Photoshop extends JFrame {
 		buttonGroup.add(end);
 		end.addActionListener(myColorListener);
 		colorPicker.add(end);
+
+		end_hl = new JButton();
+		end_hl.setBounds(9, 219, 72, 72);
+		end_hl.setBackground(Color.WHITE);
+		end_hl.setBorderPainted(false);
+		buttonGroup.add(end_hl);
+		end_hl.addActionListener(myColorListener);
+		end_hl.setEnabled(false);
+		end_hl.setVisible(false);
+		colorPicker.add(end_hl);
 
 		lblend = new JLabel("End", SwingConstants.CENTER);
 		lblend.setBounds(10, 170, 70, 70);
@@ -193,6 +285,16 @@ public class Photoshop extends JFrame {
 		street.addActionListener(myColorListener);
 		colorPicker.add(street);
 
+		street_hl = new JButton();
+		street_hl.setBounds(9, 339, 72, 72);
+		street_hl.setBackground(Color.WHITE);
+		street_hl.setBorderPainted(false);
+		buttonGroup.add(street_hl);
+		street_hl.addActionListener(myColorListener);
+		street_hl.setEnabled(false);
+		street_hl.setVisible(false);
+		colorPicker.add(street_hl);
+
 		lblstreet = new JLabel("Street", SwingConstants.CENTER);
 		lblstreet.setBounds(10, 290, 70, 70);
 		lblstreet.setForeground(Color.WHITE);
@@ -208,15 +310,24 @@ public class Photoshop extends JFrame {
 		wall.addActionListener(myColorListener);
 		colorPicker.add(wall);
 
+		wall_hl = new JButton();
+		wall_hl.setBounds(9, 459, 72, 72);
+		wall_hl.setBackground(Color.WHITE);
+		wall_hl.setBorderPainted(false);
+		buttonGroup.add(wall_hl);
+		wall_hl.addActionListener(myColorListener);
+		wall_hl.setEnabled(false);
+		wall_hl.setVisible(false);
+		colorPicker.add(wall_hl);
+
 		lblwall = new JLabel("Wall", SwingConstants.CENTER);
 		lblwall.setBounds(10, 410, 70, 70);
 		lblwall.setForeground(Color.WHITE);
 		lblwall.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		colorPicker.add(lblwall);
 
-//		highlighter = new Rectangle(start.getBounds());
-		
-		
+		// highlighter = new Rectangle(start.getBounds());
+
 		newFile = new MyButton(0, 0, 40, 40, "New file");
 		newFile.setMinimumSize(new Dimension(20, 24));
 		newFile.setBackground(new Color(0x343434));
@@ -255,8 +366,6 @@ public class Photoshop extends JFrame {
 		horizontalStrut_1 = Box.createHorizontalStrut(573);
 		menuBar.add(horizontalStrut_1);
 		menuBar.add(run);
-		
-		
 
 		setVisible(true);
 

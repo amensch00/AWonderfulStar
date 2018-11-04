@@ -11,57 +11,46 @@ import net.tfobz.Controller.TileNode;
 
 public class DisplayPanel extends JPanel {
 	private char[][] map = null;
+	boolean gridOn = false;
 	Rectangle[][] grid;
-	
-	public DisplayPanel(final char[][] map) {
 
+	public DisplayPanel(final char[][] map, boolean gridOn) {
 		setLayout(null);
 		this.map = map;
-		System.out.println("YO");
+		this.gridOn = gridOn;
+		repaint();
 		if (map == null)
 			return;
 
-		
-//		Algorithm alg = new Algorithm(map);
-//
-//		// Die solve funnkt no nt wirklich
-//		TileNode t = alg.solve();
-//		alg.printBacktrack(t);
-//
-//		char[][] test = alg.getField();
-//
-//		for (int x = 0; x < test.length; x++) {
-//			for (int y = 0; y < test[1].length; y++) {
-//				System.out.print(test[x][y] + " ");
-//			}
-//			System.out.println();
-//		}
-//
-//		// I hon mi no nt gonz entschieden ob mir des
-//		// spater vlleicht no brauchen
-//		grid = new Rectangle[map.length][map[1].length];
-
-		// I woas nt ob man des bracuht
-		// Hon no nt ohne ausprobierrt
-		repaint();
 	}
 
-	private void createGrid() {
 
+	public void setGridOn(boolean gridOn) {
+		this.gridOn = gridOn;
 	}
 
-	/**
-	 * Paint - Jo molt holt awian
-	 */
+	public void setMap(final char[][] map) {
+		this.map = map;
+	}
+
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 
 		System.out.println("painting");
-		if (map != null)
-			for (int y = 0; y < map[1].length; y++) {
+		if (map != null) {
+			int tileNumber = 0;
+			int length = 0;
+			if (map.length < map[0].length)
+				tileNumber = map[0].length;
+
+			else
+				tileNumber = map.length;
+
+			length = ((this.getHeight()) / tileNumber) - 1;
+			for (int y = 0; y < map[0].length; y++) {
 				for (int x = 0; x < map.length; x++) {
-					switch (map[y][x]) {
+					switch (map[x][y]) {
 					case 'L':
 						g.setColor(new Color(0, 0, 255));
 						break;
@@ -78,31 +67,27 @@ public class DisplayPanel extends JPanel {
 					default:
 						break;
 					}
-					int tileNumber = 0;
-					int length = 0;
-					if (map.length < map[0].length)
-						tileNumber = map[0].length;
 
-					else
-						tileNumber = map.length;
-					
-					length = ((this.getHeight()) / tileNumber) - 1;
-					
-					g.fillRect(x * length, y * length, length, length);
-					
-					// if (this.getWidth() > this.getHeight())
-					// g.fillRect(x * this.getWidth() / tileNumber, y * this.getHeight() /
-					// tileNumber,
-					// this.getWidth() / tileNumber, this.getHeight() / tileNumber);
-					// else
-					// g.fillRect(x * this.getWidth() / tileNumber, y * this.getHeight() /
-					// tileNumber,
-					// this.getWidth() / tileNumber, this.getHeight() / tileNumber);
+					g.fillRect(y * length, x * length, length, length);
+
 				}
 			}
+			if (gridOn) {
+				g.setColor(new Color(255, 255, 255));
+				int height = length * map.length -1;
+				int width = length * map[0].length -1;
+				
+				for (int y = 1; y < map.length; y++) {
+					g.drawLine(0, y * length,width , y * length);
+				}
+
+				for (int x = 1; x < map[0].length; x++) {
+					g.drawLine(x * length, 0, x * length, height);
+				}
+			}
+			
+		}
+
 	}
 
-	public void setMap(final char[][] map) {
-		this.map = map;
-	}
 }
