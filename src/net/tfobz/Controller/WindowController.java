@@ -14,54 +14,47 @@ import net.tfobz.GUI.EntryWindow;
 
 public class WindowController {
 	static EntryWindow w;
-	
+
 	public static void main(String[] args) {
 		w = new EntryWindow();
 		w.setVisible(true);
 	}
-	
-	
+
 	/**
-	 * Liest eine Datei ein und  stellt sie
-	 * in einem DisplayWindow dar
-	 * Lesbare Dateiendungen sind :
-	 *     .png
+	 * Liest eine Datei ein und stellt sie in einem DisplayWindow dar Lesbare
+	 * Dateiendungen sind : .png
 	 */
 	public static void einlesen() {
 		JFileChooser j = new JFileChooser();
 		j.setDialogTitle("Bild Datei auswählen");
 		j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
-		
-		char[][] map = null;
-		
+
 		if (j.showOpenDialog(w) == JFileChooser.APPROVE_OPTION) {
 			BufferedImage img = null;
+			IMGProcessor converter;
 			try {
-			    img = ImageIO.read(new File(j.getSelectedFile().getPath()));
-			    IMGProcessor converter = new IMGProcessor(img);
-			    map = converter.convert();
+				img = ImageIO.read(new File(j.getSelectedFile().getPath()));
+				converter = new IMGProcessor(img);
+
+				DisplayWindow dpWin = new DisplayWindow(converter.convert(), false);
+				dpWin.setVisible(true);
 			} catch (IOException ex) {
 				System.err.println("IO FEHLER");
 			}
 		}
-		
-		DisplayWindow dpWin = new DisplayWindow(map, false);
-		dpWin.setVisible(true);
+
 	}
-	
+
 	public static void einlesenStep() {
-		char[][] map = null;
-		
 		BufferedImage img = null;
 		try {
-		    img = ImageIO.read(new File("C:/Users/Tronics-PC/Desktop/testData.png"));
-		    IMGProcessor converter = new IMGProcessor(img);
-		    map = converter.convert();
+			img = ImageIO.read(new File("C:/Users/Tronics-PC/Desktop/testData.png"));
+			IMGProcessor converter = new IMGProcessor(img);
+
+			DisplayWindow dpWin = new DisplayWindow(converter.convert(), true);
+			dpWin.setVisible(true);
 		} catch (IOException ex) {
 			System.err.println("IO FEHLER");
 		}
-		
-		DisplayWindow dpWin = new DisplayWindow(map, true);
-		dpWin.setVisible(true);
 	}
 }
