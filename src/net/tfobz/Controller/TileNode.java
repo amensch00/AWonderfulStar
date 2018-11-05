@@ -18,7 +18,7 @@ public class TileNode {
 		this.xPos = x;
 		this.yPos = y;
 
-		System.out.println("\tnew tileNode created: " + this.toString());
+		//System.out.println("\tnew tileNode created: " + this.toString());
 	}
 
 	public TileNode(TileNode previous) {

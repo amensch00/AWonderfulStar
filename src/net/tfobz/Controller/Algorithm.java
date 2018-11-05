@@ -30,9 +30,9 @@ public class Algorithm implements Runnable {
 		TileNode currentNode;
 		while (true) {
 
-			for (TileNode t : openlist) {
-				System.out.print(t.toString() + "\t");
-			}
+//			for (TileNode t : openlist) {
+//				System.out.print(t.toString() + "\t");
+//			}
 			
 			currentNode = openlist.poll();
 
@@ -71,7 +71,7 @@ public class Algorithm implements Runnable {
 		if (tn.getPrevious() == null)
 			return;
 		else {
-			System.out.println(tn.toString());
+			//System.out.println(tn.toString());
 			map.setTileAt(tn.getX(), tn.getY(), TileType.DAWE);
 			printDaWe(tn.getPrevious());
 		}
@@ -79,10 +79,10 @@ public class Algorithm implements Runnable {
 
 	public void dissolveNode(TileNode node) {
 
-		System.out.println("Current Node: [" + node.getX() + "||" + node.getY() + "]");
+//		System.out.println("Current Node: [" + node.getX() + "||" + node.getY() + "]");
 
 		
-		System.out.println();System.out.println();
+//		System.out.println();System.out.println();
 
 		checkNeighbour(node, 0, 1);
 		checkNeighbour(node, 1, 0);
@@ -106,6 +106,9 @@ public class Algorithm implements Runnable {
 
 		if (map.getTileAt(node.getX() + x, node.getY() + y).getType() == TileType.WALL
 				|| closed[node.getX() + x][node.getY() + y])
+			return;
+		
+		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL || map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
 			return;
 		
 		map.getTileAt(node.getX() + x, node.getY() + y).setPrevious(
