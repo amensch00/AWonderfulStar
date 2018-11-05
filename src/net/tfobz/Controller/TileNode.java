@@ -1,96 +1,118 @@
 package net.tfobz.Controller;
 
-import java.awt.Point;
-
+/**
+ * 
+ * @author Elias Thomaser
+ *
+ */
 public class TileNode {
-	// Entfernung S nach K
-	private double distance = 0;
-	// Untere Schranke f�r die Entfernung K nach Z (Luftlinie)
-	private double limit = 0;
-	private int x = 0;
-	private int y = 0;
-	private Point ziel;
-	// Vorg�ngerknoten f�r R�ckwegbestimmung
-	private TileNode previous = null;
+	private int xPos;
+	private int yPos;
+	private TileNode previousTN;
+	private TileType type;
+	private double luftlinie;
+	private double distanz;
+	private Map map;
 
-	public TileNode(int x, int y, TileNode previous, Point ziel) {
-		this.x = x;
-		this.y = y;
-		if (previous != null) {
-			this.previous = previous;
-			this.distance = this.previous.getDistance() + this.calculateDistance();
-		}
-		this.ziel = ziel;
-		this.limit = this.calculateBeeLine();
-		
-		if (ziel != null) 
-			this.limit = calculateLuftlinie();
-		
-		System.out.println("\tnew tileNode created: " + this.toString());
+	public TileNode(int x, int y) {
+		this.xPos = x;
+		this.yPos = y;
+
+		//System.out.println("\tnew tileNode created: " + this.toString());
 	}
-	
+
 	public TileNode(TileNode previous) {
 		if (previous != null) {
-			this.previous = previous;
-			this.distance = this.previous.getDistance() + this.calculateDistance();
-		}
-		else 
+			this.previousTN = previous;
+			this.distanz = this.previousTN.getDistance() + this.calculateDistance();
+		} else
 			throw new NullPointerException();
 	}
 
 	private double calculateLuftlinie() {
-		return Math.sqrt(Math.pow(x - ziel.x, 2) + Math.pow(y - ziel.y, 2));
+		return Math.sqrt(Math.pow(xPos - map.getZiel().getX(), 2) + Math.pow(yPos - map.getZiel().getY(), 2));
 	}
 
 	/**
-	 * Wenn die vorherige Tile diagonal zur derzeitigen ist
-	 * wird die Wurzel aus 2 zur�ckgegeben
-	 * ansonsten gitb es die distanz von 1 zur�ck
-	 * @return Wurzel(2) wenn diagonal
-	 * 		   1 ist normale R�ckgabe
-	 * 		   0 falls previous null ist
+	 * Wenn die vorherige Tile diagonal zur derzeitigen ist wird die Wurzel aus 2
+	 * zur�ckgegeben ansonsten gitb es die distanz von 1 zur�ck
+	 * 
+	 * @return Wurzel(2) wenn diagonal 1 ist normale R�ckgabe 0 falls previous
+	 *         null ist
 	 */
 	private double calculateDistance() {
-		if (previous != null) {
+		if (previousTN != null) {
 			// Wenn die vorherige Tile diagonal zur derzeitigen ist
 			// wird die Wurzel aus 2 zur�ckgegeben
 			// ansonsten gitb es die distanz von 1 zur�ck
-			if (this.x != previous.x && this.y != previous.y)
+			if (this.xPos != previousTN.xPos && this.yPos != previousTN.yPos)
 				return Math.sqrt(2.0);
 			else
 				return 1;
 		}
 		return 0;
-		
+
 	}
 
 	public Double getTotaleEntfernung() {
-		return distance + limit;
+		return distanz + luftlinie;
 	}
-	
+
 	public double getDistance() {
-		return distance;
+		return distanz;
 	}
-	
+
 	public int getX() {
-		return x;
+		return xPos;
+	}
+
+	public void setXPos(int x) {
+		this.xPos = x;
 	}
 
 	public int getY() {
-		return y;
+		return yPos;
+	}
+
+	public void setYPos(int y) {
+		this.yPos = y;
 	}
 
 	public TileNode getPrevious() {
-		return previous;
+		return previousTN;
 	}
-	
+
 	public void setPrevious(TileNode prev) {
-		this.previous = prev;
+		this.previousTN = prev;
+		
+		distanz = calculateDistance();
+		luftlinie = calculateLuftlinie();
 	}
-	
+
+	public void setTileType(TileType type) {
+		this.type = type;
+	}
+
+	public void setMap(Map map) {
+		this.map = map;
+	}
+
+	public TileType getType() {
+		return type;
+	}
+
 	@Override
 	public String toString() {
-		return "[Tile: " + x + "::" + y + "]";
+		return "[Tile: " + xPos + "::" + yPos + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof TileNode)
+			return ((TileNode) obj).getX() == this.xPos && ((TileNode) obj).getY() == this.yPos
+					&& ((TileNode) obj).getType() == this.type;
+		else
+			return false;
 	}
 
 }
