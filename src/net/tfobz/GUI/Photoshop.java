@@ -232,16 +232,16 @@ public class Photoshop extends JFrame {
 		//ERMÖGLICHT MALEN
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-<<<<<<< HEAD
+
 					if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
 							&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
 
-=======
+
 					
 					if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
 							&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
 						
->>>>>>> get-aStar-alg-working
+
 						int col = 0;
 						int row = 0;
 						int x = ((DisplayPanel) e.getSource()).getLength();
@@ -254,22 +254,22 @@ public class Photoshop extends JFrame {
 							if (row * x < e.getY())
 								row += 1;
 
-						switch (cursor) {
-						case 1:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'L');
-							break;
-						case 2:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'Z');
-							break;
-						case 3:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'W');
-							break;
-						case 4:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'S');
-							break;
-						}
+//						switch (cursor) {
+//						case 1:
+//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'L');
+//							break;
+//						case 2:
+//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'Z');
+//							break;
+//						case 3:
+//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'W');
+//							break;
+//						case 4:
+//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'S');
+//							break;
+//						}
 
-					} 
+					 
 
 				
 			}
