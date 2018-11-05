@@ -7,12 +7,16 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 import net.tfobz.Controller.Algorithm;
+import net.tfobz.Controller.Map;
+import net.tfobz.Controller.Observer;
 import net.tfobz.Controller.TileNode;
+import net.tfobz.Daten.IMGProcessor;
 
-public class DisplayPanel extends JPanel {
+public class DisplayPanel extends JPanel implements Observer {
 	private char[][] map = null;
 	boolean gridOn = false;
 	Rectangle[][] grid;
+	Algorithm alg;
 
 	public DisplayPanel(final char[][] map, boolean gridOn) {
 		setLayout(null);
@@ -50,7 +54,7 @@ public class DisplayPanel extends JPanel {
 	//TODO
 	public void setMapAt(int row, int col, char c) {
 		if (row >= 0 && row < map.length && col >= 0 && col < map[0].length) {
-			if (c == 'L' || c == 'Z' || c == 'S' || c == 'W')
+			if (c == 'L' || c == 'Z' || c == 'S' || c == 'W' || c == 'P')
 				map[row][col] = c;
 		}
 		this.repaint();
@@ -58,12 +62,24 @@ public class DisplayPanel extends JPanel {
 
 	public int getLength() {
 		int tileNumber = 0;
-		if (map.length < map[0].length)
+		int size = 0;
+		if (map.length < map[0].length) {
 			tileNumber = map[0].length;
-		else
+			size = this.getWidth();
+		}
+			
+		else {
 			tileNumber = map.length;
-
-		return this.getWidth() / tileNumber;
+			size = this.getHeight();
+		}
+			
+		
+			
+			
+		
+			
+			
+		return size / tileNumber - 1;
 	}
 
 	@Override
@@ -79,18 +95,20 @@ public class DisplayPanel extends JPanel {
 				for (int x = 0; x < map.length; x++) {
 					switch (map[x][y]) {
 					case 'L':
-						g.setColor(new Color(0, 0, 255));
+						g.setColor(new Color(52,152,219));
 						break;
 					case 'Z':
-						g.setColor(new Color(255, 255, 0));
+						g.setColor(new Color(241,196,15));
 						break;
 					case 'S':
-						g.setColor(new Color(0, 255, 0));
+						g.setColor(new Color(46,204,113));
 						break;
 					case 'W':
-						g.setColor(new Color(255, 0, 0));
+						g.setColor(new Color(231,76,60));
 						break;
-
+					case 'P':
+						g.setColor(new Color(142,68,173));
+						
 					default:
 						break;
 					}
@@ -115,6 +133,19 @@ public class DisplayPanel extends JPanel {
 
 		}
 
+	}
+	public void startAlg(Map map, boolean isStepByStep) {
+		alg = new Algorithm(map, isStepByStep);
+		alg.attach(this);
+
+		Thread algThread = new Thread(alg);
+
+		algThread.start();
+	}
+	@Override
+	public void update() {
+		map = IMGProcessor.mapConverter(alg.getMap());
+		repaint();
 	}
 
 }

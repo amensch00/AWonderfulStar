@@ -4,6 +4,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import net.tfobz.Controller.Algorithm;
+import net.tfobz.Controller.Map;
+import net.tfobz.Controller.Observer;
 import net.tfobz.Daten.IMGProcessor;
 
 import java.awt.Component;
@@ -41,8 +44,10 @@ public class Photoshop extends JFrame {
 	// 1 = start; 2 = end; 3 = wall; 4 = street
 	private int cursor = 1;
 	private char[][] newFileArr;
-
+	private Algorithm alg;
+	private Map map;
 	public Photoshop() {
+		
 		setBackground(Color.BLACK);
 		setLocation(400, 150);
 		setSize(1024, 800);
@@ -60,57 +65,61 @@ public class Photoshop extends JFrame {
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == newFile) {
-					newFileArr = new char[15][20];
-					for (int i = 0; i < newFileArr.length; i++)
-						for (int j = 0; j < newFileArr[1].length; j++)
-							newFileArr[i][j] = 'S';
-					mapDisplayer.setMap(newFileArr);
-					mapDisplayer.setGridOn(true);
-//					mapDisplayer = new DisplayPanel(newFileArr, true);
-					mapDisplayer.setBounds(90, 0, getWidth() - 90, getHeight() - menuBar.getHeight());
-					mapDisplayer.setBackground(new Color(75, 75, 75));
-					mapDisplayer.setLayout(null);
-					getContentPane().add(mapDisplayer);
-					mapDisplayer.repaint();
+					NewDialog nd = new NewDialog((int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 200,
+							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 100);
+					if (nd.getWasYesPressed()) {
+						newFileArr = new char[nd.getArrayHeight()][nd.getArrayWidth()];
+						for (int i = 0; i < newFileArr.length; i++)
+							for (int j = 0; j < newFileArr[1].length; j++)
+								newFileArr[i][j] = 'S';
+						mapDisplayer.setMap(newFileArr);
+						mapDisplayer.setGridOn(true);
+						mapDisplayer.setBounds(90, 0, getWidth() - 90, getHeight() - menuBar.getHeight());
+						mapDisplayer.setBackground(new Color(75, 75, 75));
+						mapDisplayer.setLayout(null);
+						getContentPane().add(mapDisplayer);
+						mapDisplayer.repaint();
+					}
+					
 
 				} else if (e.getSource() == openFile) {
-					// JFileChooser j = new JFileChooser();
-					// j.setDialogTitle("Bild Datei auswählen");
-					// j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
-					//
-					// char[][] map = null;
-					//
-					// if (j.showOpenDialog(Photoshop.this) == JFileChooser.APPROVE_OPTION) {
-					// BufferedImage img = null;
-					// try {
-					// img = ImageIO.read(new File(j.getSelectedFile().getPath()));
-					// IMGProcessor converter = new IMGProcessor(img);
-					// map = converter.convert();
-					// mapDisplayer.setMap(map);
-					// System.out.println("DONE");
-					// mapDisplayer.repaint();
-					// } catch (IOException ex) {
-					// System.err.println("IO FEHLER");
-					// }
-					// }
+					 JFileChooser j = new JFileChooser();
+					 j.setDialogTitle("Bild Datei auswählen");
+					 j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
+					
+					 char[][] map = null;
+					
+					 if (j.showOpenDialog(Photoshop.this) == JFileChooser.APPROVE_OPTION) {
+					 BufferedImage img = null;
+					 try {
+					 img = ImageIO.read(new File(j.getSelectedFile().getPath()));
+					 IMGProcessor converter = new IMGProcessor(img);
+					 map = converter.convert();
+					 mapDisplayer.setMap(map);
+					 System.out.println("DONE");
+					 mapDisplayer.repaint();
+					 } catch (IOException ex) {
+					 System.err.println("IO FEHLER");
+					 }
+					 }
 
 					
 
-					char[][] map = null;
-					BufferedImage img = null;
-					try {
-						img = ImageIO.read(new File("C:\\Users\\Julian Tschager\\Documents\\testData.png"));
-						IMGProcessor converter = new IMGProcessor(img);
-
-						map = converter.convert();
-						mapDisplayer.setGridOn(false);
-						mapDisplayer.setMap(map);
-
-						System.out.println("DONE");
-						mapDisplayer.repaint();
-					} catch (IOException ex) {
-						System.err.println("IO FEHLER");
-					}
+//					char[][] map = null;
+//					BufferedImage img = null;
+//					try {
+//						img = ImageIO.read(new File("C:\\Users\\Julian Tschager\\Documents\\testData1.png"));
+//						IMGProcessor converter = new IMGProcessor(img);
+//
+//						map = converter.convert();
+//						mapDisplayer.setGridOn(false);
+//						mapDisplayer.setMap(map);
+//
+//						System.out.println("DONE");
+//						mapDisplayer.repaint();
+//					} catch (IOException ex) {
+//						System.err.println("IO FEHLER");
+//					}
 
 				} else if (e.getSource() == options) {
 
@@ -118,11 +127,12 @@ public class Photoshop extends JFrame {
 					ClosingDialog c = new ClosingDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 100,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
-					// dispose();
-					// System.exit(0);
-				} else if (e.getSource() == run) {
 					
-					DisplayWindow dw = new DisplayWindow(IMGProcessor.arrayConverter(mapDisplayer.getMap()), false);
+				} else if (e.getSource() == run) {
+
+					mapDisplayer.startAlg(IMGProcessor.arrayConverter(mapDisplayer.getMap()), false);
+
+					
 				}
 			}
 		};
@@ -292,7 +302,7 @@ public class Photoshop extends JFrame {
 
 		start = new JButton();
 		start.setBounds(10, 100, 70, 70);
-		start.setBackground(new Color(0, 0, 255));
+		start.setBackground(new Color(52,152,219));
 		start.setBorderPainted(false);
 		buttonGroup.add(start);
 		start.addActionListener(myColorListener);
@@ -317,7 +327,7 @@ public class Photoshop extends JFrame {
 
 		end = new JButton();
 		end.setBounds(10, 220, 70, 70);
-		end.setBackground(new Color(255, 255, 0));
+		end.setBackground(new Color(241,196,15));
 		end.setBorderPainted(false);
 		buttonGroup.add(end);
 		end.addActionListener(myColorListener);
@@ -341,7 +351,7 @@ public class Photoshop extends JFrame {
 
 		street = new JButton();
 		street.setBounds(10, 340, 70, 70);
-		street.setBackground(new Color(0, 255, 0));
+		street.setBackground(new Color(46,204,113));
 		street.setFocusPainted(true);
 		street.setBorderPainted(false);
 		buttonGroup.add(street);
@@ -366,7 +376,7 @@ public class Photoshop extends JFrame {
 
 		wall = new JButton();
 		wall.setBounds(10, 460, 70, 70);
-		wall.setBackground(new Color(255, 0, 0));
+		wall.setBackground(new Color(231,76,60));
 		wall.setFocusPainted(true);
 		wall.setBorderPainted(false);
 		buttonGroup.add(wall);
@@ -431,7 +441,13 @@ public class Photoshop extends JFrame {
 		menuBar.add(run);
 
 		setVisible(true);
-
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
 	}
 
 	public static void main(String[] args) {

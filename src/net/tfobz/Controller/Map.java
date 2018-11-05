@@ -31,7 +31,10 @@ public class Map {
 		allTNs[y * mapWidth + x].setTileType(type);
 		allTNs[y * mapWidth + x].setMap(this);
 	}
-
+	
+	public TileNode[] getAllTNs() {
+		return this.allTNs;
+	}
 	public TileNode getZiel() {
 		return allTNs[ziel.y * mapWidth + ziel.x];
 	}

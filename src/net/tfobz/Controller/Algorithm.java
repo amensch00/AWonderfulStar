@@ -68,8 +68,9 @@ public class Algorithm implements Runnable {
 	}
 	
 	private void printDaWe(TileNode tn) {
-		if (tn.getPrevious() == null)
-			return;
+		
+		if (tn == null || tn.getPrevious() == null)
+			System.out.println("Es gibt keinen Weg!");
 		else {
 			//System.out.println(tn.toString());
 			map.setTileAt(tn.getX(), tn.getY(), TileType.DAWE);

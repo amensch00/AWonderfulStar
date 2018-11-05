@@ -29,37 +29,6 @@ public class DisplayWindow extends JFrame implements Observer {
 		this.map = map;
 		this.isStepByStep = isStepByStep;
 
-		Map m = new Map(4, 4);
-
-		/*
-		 * B S S S S W W S S S W S S S W Z
-		 * 
-		 * B = Start S = Street W = Wall Z = Ziel
-		 */
-
-		m.setTileAt(0, 0, TileType.START);
-		m.setTileAt(1, 0, TileType.STREET);
-		m.setTileAt(2, 0, TileType.STREET);
-		m.setTileAt(3, 0, TileType.STREET);
-
-		m.setTileAt(0, 1, TileType.STREET);
-		m.setTileAt(1, 1, TileType.WALL);
-		m.setTileAt(2, 1, TileType.WALL);
-		m.setTileAt(3, 1, TileType.STREET);
-
-		m.setTileAt(0, 2, TileType.STREET);
-		m.setTileAt(1, 2, TileType.STREET);
-		m.setTileAt(2, 2, TileType.WALL);
-		m.setTileAt(3, 2, TileType.STREET);
-
-		m.setTileAt(0, 3, TileType.STREET);
-		m.setTileAt(1, 3, TileType.STREET);
-		m.setTileAt(2, 3, TileType.WALL);
-		m.setTileAt(3, 3, TileType.ZIEL);
-
-		m.setStart(new Point(0, 0));
-		m.setZiel(new Point(3, 3));
-
 		alg = new Algorithm(map, isStepByStep);
 		alg.attach(this);
 
