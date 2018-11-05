@@ -32,10 +32,7 @@ public class DisplayWindow extends JFrame implements Observer {
 		Map m = new Map(4, 4);
 
 		/*
-		 * B S S S 
-		 * S W W S 
-		 * S S W S 
-		 * S S W Z
+		 * B S S S S W W S S S W S S S W Z
 		 * 
 		 * B = Start S = Street W = Wall Z = Ziel
 		 */
@@ -71,51 +68,99 @@ public class DisplayWindow extends JFrame implements Observer {
 		algThread.start();
 	}
 
-	@Override
+	
+	public int getLength() {
+		int tileNumber = 0;
+		if (this.map.getMapHeight() < this.map.getMapWidth())
+			tileNumber = this.map.getMapWidth();
+		else
+			tileNumber = this.map.getMapHeight();
+
+		return this.getWidth() / tileNumber;
+	}
+	
 	public void paint(Graphics g) {
 		super.paint(g);
 
 		// System.out.println("painting");
+		super.paint(g);
 
-		for (int y = 0; y < map.getMapHeight(); y++) {
-			for (int x = 0; x < map.getMapWidth(); x++) {
-				switch (map.getTileAt(x, y).getType()) {
-				case START:
-					g.setColor(new Color(0, 0, 255));
-					break;
-				case ZIEL:
-					g.setColor(new Color(255, 255, 0));
-					break;
-				case STREET:
-					g.setColor(new Color(0, 255, 0));
-					break;
-				case WALL:
-					g.setColor(new Color(255, 0, 0));
-					break;
-				case DAWE:
-					g.setColor(new Color(255, 0, 255));
-					break;
-					
-				default:
-					break;
+		// System.out.println("painting");
+		if (map != null) {
+
+			int length = getLength();
+
+			for (int y = 0; y < map.getMapHeight(); y++) {
+				for (int x = 0; x < map.getMapWidth(); x++) {
+					switch (map.getTileAt(x, y).getType()) {
+					case START:
+						g.setColor(new Color(0, 0, 255));
+						break;
+					case ZIEL:
+						g.setColor(new Color(255, 255, 0));
+						break;
+					case STREET:
+						g.setColor(new Color(0, 255, 0));
+						break;
+					case WALL:
+						g.setColor(new Color(255, 0, 0));
+						break;
+					case DAWE:
+						g.setColor(new Color(255, 0, 255));
+						break;
+
+					default:
+						break;
+
+					}
+
+					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
 				}
-
-				int tileNumber = 0;
-				if (map.getMapWidth() > map.getMapHeight())
-					tileNumber = map.getMapHeight();
-				else
-					tileNumber = map.getMapWidth();
-
-				if (this.getContentPane().getWidth() > this.getContentPane().getHeight())
-					g.fillRect(x * this.getContentPane().getWidth() / tileNumber + getInsets().left,
-							y * this.getContentPane().getHeight() / tileNumber + getInsets().top,
-							this.getWidth() / tileNumber, this.getHeight() / tileNumber);
-				else
-					g.fillRect(x * this.getContentPane().getWidth() / tileNumber + getInsets().left,
-							y * this.getContentPane().getHeight() / tileNumber + getInsets().top,
-							this.getWidth() / tileNumber, this.getHeight() / tileNumber);
 			}
+
 		}
+
+		// for (int y = 0; y < map.getMapHeight(); y++) {
+		// for (int x = 0; x < map.getMapWidth(); x++) {
+		// switch (map.getTileAt(x, y).getType()) {
+		// case START:
+		// g.setColor(new Color(0, 0, 255));
+		// break;
+		// case ZIEL:
+		// g.setColor(new Color(255, 255, 0));
+		// break;
+		// case STREET:
+		// g.setColor(new Color(0, 255, 0));
+		// break;
+		// case WALL:
+		// g.setColor(new Color(255, 0, 0));
+		// break;
+		// case DAWE:
+		// g.setColor(new Color(255, 0, 255));
+		// break;
+		//
+		// default:
+		// break;
+		// }
+		//
+		// int tileNumber = 0;
+		// if (map.getMapWidth() > map.getMapHeight())
+		// tileNumber = map.getMapHeight();
+		// else
+		// tileNumber = map.getMapWidth();
+		//
+		// if (this.getContentPane().getWidth() > this.getContentPane().getHeight())
+		// g.fillRect(x * this.getContentPane().getWidth() / tileNumber +
+		// getInsets().left,
+		// y * this.getContentPane().getHeight() / tileNumber + getInsets().top,
+		// this.getWidth() / tileNumber, this.getHeight() / tileNumber);
+		// else
+		// g.fillRect(x * this.getContentPane().getWidth() / tileNumber +
+		// getInsets().left,
+		// y * this.getContentPane().getHeight() / tileNumber + getInsets().top,
+		// this.getWidth() / tileNumber, this.getHeight() / tileNumber);
+		// }
+		// }
 	}
 
 	@Override

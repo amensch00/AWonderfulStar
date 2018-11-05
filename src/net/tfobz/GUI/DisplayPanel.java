@@ -43,11 +43,11 @@ public class DisplayPanel extends JPanel {
 	public char[][] getMap() {
 		return this.map;
 	}
-
+	//TODO
 	public void setMap(final char[][] map) {
 		this.map = map;
 	}
-
+	//TODO
 	public void setMapAt(int row, int col, char c) {
 		if (row >= 0 && row < map.length && col >= 0 && col < map[0].length) {
 			if (c == 'L' || c == 'Z' || c == 'S' || c == 'W')

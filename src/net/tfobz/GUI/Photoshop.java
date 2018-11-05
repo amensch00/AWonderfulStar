@@ -55,7 +55,8 @@ public class Photoshop extends JFrame {
 		for (int i = 0; i < newFileArr.length; i++)
 			for (int j = 0; j < newFileArr[1].length; j++)
 				newFileArr[i][j] = 'S';
-
+		
+		//Für Menü-Leiste zuständig
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == newFile) {
@@ -92,7 +93,8 @@ public class Photoshop extends JFrame {
 					// System.err.println("IO FEHLER");
 					// }
 					// }
-					//
+
+					
 
 					char[][] map = null;
 					BufferedImage img = null;
@@ -119,7 +121,8 @@ public class Photoshop extends JFrame {
 					// dispose();
 					// System.exit(0);
 				} else if (e.getSource() == run) {
-
+					
+					DisplayWindow dw = new DisplayWindow(IMGProcessor.arrayConverter(mapDisplayer.getMap()), false);
 				}
 			}
 		};
@@ -172,6 +175,7 @@ public class Photoshop extends JFrame {
 				}
 			}
 		});
+		
 		menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(0x343434));
 		menuBar.setBorderPainted(false);
@@ -230,18 +234,13 @@ public class Photoshop extends JFrame {
 		});
 		
 		//ERMÖGLICHT MALEN
+		//TODO
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 
 					if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
 							&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
-
-
-					
-					if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
-							&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
 						
-
 						int col = 0;
 						int row = 0;
 						int x = ((DisplayPanel) e.getSource()).getLength();
@@ -254,25 +253,33 @@ public class Photoshop extends JFrame {
 							if (row * x < e.getY())
 								row += 1;
 
-//						switch (cursor) {
-//						case 1:
-//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'L');
-//							break;
-//						case 2:
-//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'Z');
-//							break;
-//						case 3:
-//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'W');
-//							break;
-//						case 4:
-//							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'S');
-//							break;
-//						}
+						switch (cursor) {
+						case 1:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'L');
+							break;
+						case 2:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'Z');
+							break;
+						case 3:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'W');
+							break;
+						case 4:
+							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'S');
+							break;
+						}
 
-					 
+					} 
 
 				
 			}
+			public void mouseDragged(MouseEvent e) {
+				
+				while (e.isMetaDown()) {
+					Point p = getLocation();
+				}
+				
+			}
+
 		});
 
 		// scrollPane = new ScrollPane();
