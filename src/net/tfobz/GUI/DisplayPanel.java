@@ -70,7 +70,7 @@ public class DisplayPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 
-		System.out.println("painting");
+//		System.out.println("painting");
 		if (map != null) {
 
 			int length = getLength();
