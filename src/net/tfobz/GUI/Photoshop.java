@@ -232,8 +232,6 @@ public class Photoshop extends JFrame {
 		//ERMÖGLICHT MALEN
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				
-
 					if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
 							&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
 
@@ -268,14 +266,6 @@ public class Photoshop extends JFrame {
 
 				
 			}
-			public void mouseDragged(MouseEvent e) {
-				
-				while (e.isMetaDown()) {
-					Point p = getLocation();
-				}
-				
-			}
-
 		});
 
 		// scrollPane = new ScrollPane();
