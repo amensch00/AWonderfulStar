@@ -19,6 +19,7 @@ public class IMGProcessor {
 		this.img = img;
 	}
 
+<<<<<<< HEAD
 	public Map convert() {
 		Map ret = new Map(img.getWidth(), img.getHeight());
 
@@ -34,6 +35,28 @@ public class IMGProcessor {
 					ret.setZiel(new Point(x, y));
 				} else
 					ret.setTileAt(x, y, TileType.WALL);
+=======
+	public char[][] convert() {
+		char[][] ret = new char[img.getHeight()][img.getWidth()];
+		// TODO VERMEIDEN VON MEHREREN STARTS/ZIELEN
+
+		// I find des super, dass x und y in der Reihenfolge
+		// oanfoch es restliche Programm schwieriger mocht 
+		// zu lesen und verstian *facepalm*
+		/**
+		 * @author Flapp
+		 */
+		for (int y = 0; y < img.getHeight(); y++) {
+			for (int x = 0; x < img.getWidth(); x++) {
+				if (img.getRGB(x, y) == STREET)
+					ret[y][x] = 'S';
+				else if (img.getRGB(x, y) == START)
+					ret[y][x]  = 'L';
+				else if (img.getRGB(x, y) == ZIEL)
+					ret[y][x]  = 'Z';
+				else
+					ret[y][x]  = 'W';
+>>>>>>> get-aStar-alg-working
 			}
 		}
 
