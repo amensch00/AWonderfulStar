@@ -74,9 +74,6 @@ public class DisplayWindow extends JFrame implements Observer {
 					case WALL:
 						g.setColor(new Color(255, 0, 0));
 						break;
-					case DAWE:
-						g.setColor(new Color(255, 0, 255));
-						break;
 
 					default:
 						break;

@@ -10,6 +10,7 @@ public class TileNode {
 	private int yPos;
 	private TileNode previousTN;
 	private TileType type;
+	private TileOverlay overlay;
 	private double luftlinie;
 	private double distanz;
 	private Map map;
@@ -17,6 +18,9 @@ public class TileNode {
 	public TileNode(int x, int y) {
 		this.xPos = x;
 		this.yPos = y;
+		
+		this.type = TileType.STREET;
+		this.overlay = TileOverlay.NOTHING;
 
 		//System.out.println("\tnew tileNode created: " + this.toString());
 	}
@@ -93,12 +97,20 @@ public class TileNode {
 		this.type = type;
 	}
 
-	public void setMap(Map map) {
-		this.map = map;
-	}
-
 	public TileType getType() {
 		return type;
+	}
+
+	public TileOverlay getOverlay() {
+		return overlay;
+	}
+	
+	public void setOverlay(TileOverlay overlay) {
+		this.overlay = overlay;
+	}
+	
+	public void setMap(Map map) {
+		this.map = map;
 	}
 
 	@Override

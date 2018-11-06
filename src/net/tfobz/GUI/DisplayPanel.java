@@ -9,53 +9,49 @@ import javax.swing.JPanel;
 import net.tfobz.Controller.Algorithm;
 import net.tfobz.Controller.Map;
 import net.tfobz.Controller.Observer;
-import net.tfobz.Controller.TileNode;
-import net.tfobz.Daten.IMGProcessor;
+import net.tfobz.Controller.TileType;
+import net.tfobz.Utilities.ColorPalette;
 
 public class DisplayPanel extends JPanel implements Observer {
-	private char[][] map = null;
+	private Map map = null;
 	boolean gridOn = false;
 	Rectangle[][] grid;
 	Algorithm alg;
 
-	public DisplayPanel(final char[][] map, boolean gridOn) {
+	public DisplayPanel(final Map map, boolean gridOn) {
 		setLayout(null);
 		this.map = map;
 		this.gridOn = gridOn;
+		
 		repaint();
-		if (map == null)
-			return;
-
 	}
 
 	public int getDisplayedWidth() {
-		
-		return getLength() * map[0].length;
-		
-		
+		return getLength() * map.getMapWidth();
 	}
 
 	public int getDisplayedHeight() {
-	
-		return getLength() * map.length;
+		return getLength() * map.getMapHeight();
 	}
 
 	public void setGridOn(boolean gridOn) {
 		this.gridOn = gridOn;
 	}
 
-	public char[][] getMap() {
+	public Map getMap() {
 		return this.map;
 	}
+	
 	//TODO
-	public void setMap(final char[][] map) {
+	public void setMap(Map map) {
 		this.map = map;
 	}
+	
 	//TODO
-	public void setMapAt(int row, int col, char c) {
-		if (row >= 0 && row < map.length && col >= 0 && col < map[0].length) {
-			if (c == 'L' || c == 'Z' || c == 'S' || c == 'W' || c == 'P')
-				map[row][col] = c;
+	public void setMapAt(int y, int x, TileType type) {
+		if (y >= 0 && y < map.getMapHeight() && x >= 0 && x < map.getMapWidth()) {
+			if (type == TileType.START || type == TileType.ZIEL || type == TileType.STREET || type == TileType.WALL)
+				map.setTileAt(x, y, type);
 		}
 		this.repaint();
 	}
@@ -63,22 +59,16 @@ public class DisplayPanel extends JPanel implements Observer {
 	public int getLength() {
 		int tileNumber = 0;
 		int size = 0;
-		if (map.length < map[0].length) {
-			tileNumber = map[0].length;
+		if (map.getMapHeight() < map.getMapWidth()) {
+			tileNumber = map.getMapWidth();
 			size = this.getWidth();
 		}
 			
 		else {
-			tileNumber = map.length;
+			tileNumber = map.getMapHeight();
 			size = this.getHeight();
 		}
-			
 		
-			
-			
-		
-			
-			
 		return size / tileNumber - 1;
 	}
 
@@ -87,46 +77,62 @@ public class DisplayPanel extends JPanel implements Observer {
 		super.paint(g);
 
 //		System.out.println("painting");
+		
 		if (map != null) {
 
 			int length = getLength();
 
-			for (int y = 0; y < map[0].length; y++) {
-				for (int x = 0; x < map.length; x++) {
-					switch (map[x][y]) {
-					case 'L':
-						g.setColor(new Color(52,152,219));
+			for (int y = 0; y < map.getMapHeight(); y++) {
+				for (int x = 0; x < map.getMapWidth(); x++) {
+					switch (map.getTileAt(y, x).getType()) {
+					case START:
+						g.setColor(ColorPalette.BLAU);
 						break;
-					case 'Z':
-						g.setColor(new Color(241,196,15));
+					case ZIEL:
+						g.setColor(ColorPalette.GELB);
 						break;
-					case 'S':
-						g.setColor(new Color(46,204,113));
+					case STREET:
+						g.setColor(ColorPalette.GRUEN);
 						break;
-					case 'W':
-						g.setColor(new Color(231,76,60));
+					case WALL:
+						g.setColor(ColorPalette.ROT);
 						break;
-					case 'P':
-						g.setColor(new Color(142,68,173));
-						
 					default:
 						break;
 					}
-
-					g.fillRect(y * length, x * length, length, length);
-
+					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
+					
+					// TODO x y schun widr verkehrt
+					
+					switch (map.getTileAt(y, x).getOverlay()) {
+					case NOTHING:
+						break;
+					case INOPEN:
+						g.setColor(ColorPalette.INOPEN);
+						break;
+					case INCLOSED:
+						g.setColor(ColorPalette.INCLOSED);
+						break;
+					case DAWE:
+						g.setColor(ColorPalette.DAWE);
+						break;
+					default:
+						break;
+					}
+					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
 				}
 			}
+			
 			if (gridOn) {
 				g.setColor(new Color(255, 255, 255));
-				int height = length * map.length - 1;
-				int width = length * map[0].length - 1;
+				int height = length * map.getMapHeight() - 1;
+				int width = length * map.getMapWidth() - 1;
 
-				for (int y = 1; y < map.length; y++) {
+				for (int y = 1; y < map.getMapHeight(); y++) {
 					g.drawLine(0, y * length, width, y * length);
 				}
 
-				for (int x = 1; x < map[0].length; x++) {
+				for (int x = 1; x < map.getMapWidth(); x++) {
 					g.drawLine(x * length, 0, x * length, height);
 				}
 			}
@@ -134,6 +140,7 @@ public class DisplayPanel extends JPanel implements Observer {
 		}
 
 	}
+	
 	public void startAlg(Map map, boolean isStepByStep) {
 		alg = new Algorithm(map, isStepByStep);
 		alg.attach(this);
@@ -142,9 +149,10 @@ public class DisplayPanel extends JPanel implements Observer {
 
 		algThread.start();
 	}
+	
 	@Override
 	public void update() {
-		map = IMGProcessor.mapConverter(alg.getMap());
+		map = alg.getMap();
 		repaint();
 	}
 

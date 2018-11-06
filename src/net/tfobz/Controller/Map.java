@@ -32,6 +32,18 @@ public class Map {
 		allTNs[y * mapWidth + x].setMap(this);
 	}
 	
+	public void setTileAt(int x, int y, TileType type, TileOverlay overlay) {
+		if (allTNs[y * mapWidth + x] == null)
+			allTNs[y * mapWidth + x] = new TileNode(x, y);
+
+		allTNs[y * mapWidth + x].setXPos(x);
+		allTNs[y * mapWidth + x].setYPos(y);
+
+		allTNs[y * mapWidth + x].setTileType(type);
+		allTNs[y * mapWidth + x].setOverlay(overlay);
+		allTNs[y * mapWidth + x].setMap(this);
+	}
+	
 	public TileNode[] getAllTNs() {
 		return this.allTNs;
 	}
