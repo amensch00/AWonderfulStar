@@ -9,9 +9,7 @@ import javax.swing.JPanel;
 import net.tfobz.Controller.Algorithm;
 import net.tfobz.Controller.Map;
 import net.tfobz.Controller.Observer;
-import net.tfobz.Controller.TileNode;
 import net.tfobz.Controller.TileType;
-import net.tfobz.Daten.IMGProcessor;
 import net.tfobz.Utilities.ColorPalette;
 
 public class DisplayPanel extends JPanel implements Observer {
@@ -52,8 +50,8 @@ public class DisplayPanel extends JPanel implements Observer {
 	//TODO
 	public void setMapAt(int y, int x, TileType type) {
 		if (y >= 0 && y < map.getMapHeight() && x >= 0 && x < map.getMapWidth()) {
-			if (type == TileType.START || type == TileType.ZIEL || type == TileType.STREET || type == TileType.WALL || type == TileType.DAWE)
-				map[y][x] = type;
+			if (type == TileType.START || type == TileType.ZIEL || type == TileType.STREET || type == TileType.WALL)
+				map.setTileAt(x, y, type);
 		}
 		this.repaint();
 	}
@@ -61,13 +59,13 @@ public class DisplayPanel extends JPanel implements Observer {
 	public int getLength() {
 		int tileNumber = 0;
 		int size = 0;
-		if (map.length < map[0].length) {
-			tileNumber = map[0].length;
+		if (map.getMapHeight() < map.getMapWidth()) {
+			tileNumber = map.getMapWidth();
 			size = this.getWidth();
 		}
 			
 		else {
-			tileNumber = map.length;
+			tileNumber = map.getMapHeight();
 			size = this.getHeight();
 		}
 		
@@ -86,7 +84,7 @@ public class DisplayPanel extends JPanel implements Observer {
 
 			for (int y = 0; y < map.getMapHeight(); y++) {
 				for (int x = 0; x < map.getMapWidth(); x++) {
-					switch (map.getTileAt(x, y).getType()) {
+					switch (map.getTileAt(y, x).getType()) {
 					case START:
 						g.setColor(ColorPalette.BLAU);
 						break;
@@ -99,29 +97,42 @@ public class DisplayPanel extends JPanel implements Observer {
 					case WALL:
 						g.setColor(ColorPalette.ROT);
 						break;
-					case DAWE:
-						g.setColor(ColorPalette.VIOLETT);
-						break;
-
 					default:
 						break;
-
 					}
-
+					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
+					
+					// TODO x y schun widr verkehrt
+					
+					switch (map.getTileAt(y, x).getOverlay()) {
+					case NOTHING:
+						break;
+					case INOPEN:
+						g.setColor(ColorPalette.INOPEN);
+						break;
+					case INCLOSED:
+						g.setColor(ColorPalette.INCLOSED);
+						break;
+					case DAWE:
+						g.setColor(ColorPalette.DAWE);
+						break;
+					default:
+						break;
+					}
 					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
 				}
 			}
 			
 			if (gridOn) {
 				g.setColor(new Color(255, 255, 255));
-				int height = length * map.length - 1;
-				int width = length * map[0].length - 1;
+				int height = length * map.getMapHeight() - 1;
+				int width = length * map.getMapWidth() - 1;
 
-				for (int y = 1; y < map.length; y++) {
+				for (int y = 1; y < map.getMapHeight(); y++) {
 					g.drawLine(0, y * length, width, y * length);
 				}
 
-				for (int x = 1; x < map[0].length; x++) {
+				for (int x = 1; x < map.getMapWidth(); x++) {
 					g.drawLine(x * length, 0, x * length, height);
 				}
 			}
@@ -141,7 +152,7 @@ public class DisplayPanel extends JPanel implements Observer {
 	
 	@Override
 	public void update() {
-		map = IMGProcessor.mapConverter(alg.getMap());
+		map = alg.getMap();
 		repaint();
 	}
 

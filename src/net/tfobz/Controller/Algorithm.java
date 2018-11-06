@@ -73,7 +73,7 @@ public class Algorithm implements Runnable {
 			System.out.println("Es gibt keinen Weg!");
 		else {
 			//System.out.println(tn.toString());
-			map.setTileAt(tn.getX(), tn.getY(), TileType.DAWE);
+			map.setTileAt(tn.getX(), tn.getY(), TileType.STREET, TileOverlay.DAWE);
 			printDaWe(tn.getPrevious());
 		}
 	}
@@ -105,10 +105,15 @@ public class Algorithm implements Runnable {
 				|| node.getY() + y >= map.getMapHeight())
 			return;
 
+		// if gewählte position gleich mauer zrughupfen
 		if (map.getTileAt(node.getX() + x, node.getY() + y).getType() == TileType.WALL
 				|| closed[node.getX() + x][node.getY() + y])
 			return;
 		
+		// P T1
+		// T2 Z
+		// checked ob T1 ODER T2 mauer sind,
+		// wenn ja, dann returned die methode
 		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL || map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
 			return;
 		

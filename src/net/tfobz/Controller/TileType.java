@@ -4,6 +4,5 @@ public enum TileType {
 	START,
 	ZIEL,
 	STREET,
-	WALL,
-	DAWE
+	WALL
 }

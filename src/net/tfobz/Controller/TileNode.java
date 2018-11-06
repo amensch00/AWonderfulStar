@@ -18,6 +18,9 @@ public class TileNode {
 	public TileNode(int x, int y) {
 		this.xPos = x;
 		this.yPos = y;
+		
+		this.type = TileType.STREET;
+		this.overlay = TileOverlay.NOTHING;
 
 		//System.out.println("\tnew tileNode created: " + this.toString());
 	}
