@@ -46,6 +46,7 @@ public class Photoshop extends JFrame {
 	private char[][] newFileArr;
 	private Algorithm alg;
 	private Map map;
+	
 	public Photoshop() {
 		
 		setBackground(Color.BLACK);
@@ -208,33 +209,37 @@ public class Photoshop extends JFrame {
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
 				Toolkit toolkit = Toolkit.getDefaultToolkit();
-				// Image cursorimg = null;
-				Point cursorHotSpot = new Point(0, 0);
+				 Image cursorimg = null;
+				Point cursorHotSpot = new Point(0, 31);
 
-				// try {
-				// switch (cursor) {
-				//
-				// case 1:
-				// cursorimg =
-				// toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
-				// case 2:
-				// cursorimg =
-				// toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
-				// case 3:
-				// cursorimg =
-				// toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
-				// case 4:
-				// cursorimg =
-				// toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
-				// }
-				// setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot,
-				// "CCursor"));
-				//
-				// } catch (Exception ex) {
-				// System.out.println("Cursor nicht gefunden!");
-				// setCursor(Cursor.getDefaultCursor());
-				// }
-				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				 try {
+				 switch (cursor) {
+				
+				 case 1:
+				 cursorimg =
+				 toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
+				 break;
+				 case 2:
+				 cursorimg =
+				 toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
+				 break;
+				 case 3:
+				 cursorimg =
+				 toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
+				 break;
+				 case 4:
+				 cursorimg =
+				 toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
+				 break;
+				 }
+				 setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot,
+				 "CCursor"));
+				
+				 } catch (Exception ex) {
+				 System.out.println("Cursor nicht gefunden!");
+				 setCursor(Cursor.getDefaultCursor());
+				 }
+//				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
 			}
 
@@ -247,49 +252,38 @@ public class Photoshop extends JFrame {
 		//TODO
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
+						&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
+					
+					int col = 0;
+					int row = 0;
+					int x = ((DisplayPanel) e.getSource()).getLength();
+					
+					while (col * x < e.getX())
+						if (col * x < e.getX())
+							col += 1;
 
-					if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
-							&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
-						
-						int col = 0;
-						int row = 0;
-						int x = ((DisplayPanel) e.getSource()).getLength();
-						while (col * x < e.getX())
-							if (col * x < e.getX())
-								col += 1;
+					x = ((DisplayPanel) e.getSource()).getLength();
+					while (row * x < e.getY())
+						if (row * x < e.getY())
+							row += 1;
 
-						x = ((DisplayPanel) e.getSource()).getLength();
-						while (row * x < e.getY())
-							if (row * x < e.getY())
-								row += 1;
-
-						switch (cursor) {
-						case 1:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'L');
-							break;
-						case 2:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'Z');
-							break;
-						case 3:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'W');
-							break;
-						case 4:
-							((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'S');
-							break;
-						}
-
-					} 
-
-				
-			}
-			public void mouseDragged(MouseEvent e) {
-				
-				while (e.isMetaDown()) {
-					Point p = getLocation();
+					switch (cursor) {
+					case 1:
+						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'L');
+						break;
+					case 2:
+						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'Z');
+						break;
+					case 3:
+						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'W');
+						break;
+					case 4:
+						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, 'S');
+						break;
+					}
 				}
-				
 			}
-
 		});
 
 		// scrollPane = new ScrollPane();
