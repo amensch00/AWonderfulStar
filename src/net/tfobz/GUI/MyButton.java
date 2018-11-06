@@ -10,6 +10,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 
+/**
+ * 
+ * @author Julian Tschager
+ *
+ */
 public class MyButton extends JPanel {
 	private JLabel jLabel = new JLabel();
 
