@@ -88,19 +88,19 @@ public class DisplayPanel extends JPanel implements Observer {
 				for (int x = 0; x < map.getMapWidth(); x++) {
 					switch (map.getTileAt(x, y).getType()) {
 					case START:
-						g.setColor(new Color(0, 0, 255));
+						g.setColor(ColorPalette.BLAU);
 						break;
 					case ZIEL:
-						g.setColor(new Color(255, 255, 0));
+						g.setColor(ColorPalette.GELB);
 						break;
 					case STREET:
-						g.setColor(new Color(0, 255, 0));
+						g.setColor(ColorPalette.GRUEN);
 						break;
 					case WALL:
-						g.setColor(new Color(255, 0, 0));
+						g.setColor(ColorPalette.ROT);
 						break;
 					case DAWE:
-						g.setColor(new Color(255, 0, 255));
+						g.setColor(ColorPalette.VIOLETT);
 						break;
 
 					default:
@@ -125,40 +125,6 @@ public class DisplayPanel extends JPanel implements Observer {
 					g.drawLine(x * length, 0, x * length, height);
 				}
 			}
-
-		}
-		
-		if (map != null) {
-
-			int length = getLength();
-
-			for (int y = 0; y < map[0].length; y++) {
-				for (int x = 0; x < map.length; x++) {
-					switch (map[x][y]) {
-					case 'L':
-						g.setColor(ColorPalette.BLAU);
-						break;
-					case 'Z':
-						g.setColor(ColorPalette.GELB);
-						break;
-					case 'S':
-						g.setColor(ColorPalette.GRUEN);
-						break;
-					case 'W':
-						g.setColor(ColorPalette.ROT);
-						break;
-					case 'P':
-						g.setColor(ColorPalette.VIOLETT);
-						
-					default:
-						break;
-					}
-
-					g.fillRect(y * length, x * length, length, length);
-
-				}
-			}
-			
 
 		}
 
