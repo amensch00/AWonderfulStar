@@ -7,14 +7,15 @@ import java.awt.image.BufferedImage;
 import net.tfobz.Controller.Map;
 import net.tfobz.Controller.TileNode;
 import net.tfobz.Controller.TileType;
+import net.tfobz.Utilities.ColorPalette;
 
 public class IMGProcessor {
 	private BufferedImage img;
 
-	private static final int RWALL = new Color(255, 0, 0).getRGB();
-	private static final int RSTREET = new Color(0, 255, 0).getRGB();
-	private static final int RSTART = new Color(0, 0, 255).getRGB();
-	private static final int RZIEL = new Color(255, 255, 0).getRGB();
+	private static final int RWALL = ColorPalette.ROT.getRGB();
+	private static final int RSTREET = ColorPalette.GRUEN.getRGB();
+	private static final int RSTART = ColorPalette.BLAU.getRGB();
+	private static final int RZIEL = ColorPalette.GELB.getRGB();
 
 	public IMGProcessor(BufferedImage img) {
 		this.img = img;

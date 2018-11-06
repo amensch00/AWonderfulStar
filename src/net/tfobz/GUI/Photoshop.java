@@ -3,29 +3,17 @@ package net.tfobz.GUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import net.tfobz.Controller.Algorithm;
 import net.tfobz.Controller.Map;
-import net.tfobz.Controller.Observer;
 import net.tfobz.Controller.TileType;
 import net.tfobz.Daten.IMGProcessor;
-
 import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Color;
-import java.awt.Rectangle;
-import java.awt.ScrollPane;
-import java.awt.Scrollbar;
-import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.awt.Dimension;
 
 public class Photoshop extends JFrame {
@@ -39,13 +27,10 @@ public class Photoshop extends JFrame {
 	private JLabel lblstart, lblend, lblstreet, lblwall;
 	private Component horizontalStrut_1;
 
-	private ScrollPane scrollPane;
-	private Scrollbar horizontalScroll;
-	private Scrollbar verticalScroll;
 	// 1 = start; 2 = end; 3 = wall; 4 = street
-	private int cursor = 1;
-	private Algorithm alg;
-	private Map map;
+	private int currentColorSelection = 1;
+	
+	private Map map = null;
 
 	public Photoshop() {
 
@@ -56,11 +41,6 @@ public class Photoshop extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-
-		map = new Map(15, 20);
-		for (int i = 0; i < map.getMapHeight(); i++)
-			for (int j = 0; j < map.getMapWidth(); j++)
-				map.setTileAt(i, j, TileType.STREET);
 
 		// Für Menü-Leiste zuständig
 		MouseListener myListener = new MouseAdapter() {
@@ -90,14 +70,12 @@ public class Photoshop extends JFrame {
 					j.setDialogTitle("Bild Datei auswählen");
 					j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
 
-					char[][] map = null;
-
 					if (j.showOpenDialog(Photoshop.this) == JFileChooser.APPROVE_OPTION) {
 						BufferedImage img = null;
 						try {
 							img = ImageIO.read(new File(j.getSelectedFile().getPath()));
 							IMGProcessor converter = new IMGProcessor(img);
-							map = converter.convert();
+							map = converter.convertToMap();
 
 							mapDisplayer.setMap(converter.convertToMap());
 							System.out.println("DONE");
@@ -107,22 +85,6 @@ public class Photoshop extends JFrame {
 						}
 					}
 
-//					char[][] map = null;
-//					BufferedImage img = null;
-//					try {
-//						img = ImageIO.read(new File("C:\\Users\\Julian Tschager\\Documents\\testData1.png"));
-//						IMGProcessor converter = new IMGProcessor(img);
-//
-//						map = converter.convert();
-//						mapDisplayer.setGridOn(false);
-//						mapDisplayer.setMap(map);
-//
-//						System.out.println("DONE");
-//						mapDisplayer.repaint();
-//					} catch (IOException ex) {
-//						System.err.println("IO FEHLER");
-//					}
-
 				} else if (e.getSource() == options) {
 
 				} else if (e.getSource() == exit) {
@@ -131,6 +93,7 @@ public class Photoshop extends JFrame {
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 
 				} else if (e.getSource() == run) {
+					map.clearOverlay();
 					mapDisplayer.startAlg(map, false);
 				}
 			}
@@ -148,42 +111,24 @@ public class Photoshop extends JFrame {
 
 				if (e.getSource() == start) {
 					start_hl.setVisible(true);
-					cursor = 1;
+					currentColorSelection = 1;
 				}
 
 				if (e.getSource() == end) {
 					end_hl.setVisible(true);
-					cursor = 2;
+					currentColorSelection = 2;
 				}
 				if (e.getSource() == wall) {
 					wall_hl.setVisible(true);
-					cursor = 3;
+					currentColorSelection = 3;
 				}
 				if (e.getSource() == street) {
 					street_hl.setVisible(true);
-					cursor = 4;
+					currentColorSelection = 4;
 				}
 			}
 
 		};
-		// Macht JFrame beweglich
-		Point point = new Point(0, 0);
-		addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (!e.isMetaDown()) {
-					point.x = e.getX();
-					point.y = e.getY();
-				}
-			}
-		});
-		addMouseMotionListener(new MouseMotionAdapter() {
-			public void mouseDragged(MouseEvent e) {
-				if (!e.isMetaDown()) {
-					Point p = getLocation();
-					setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
-				}
-			}
-		});
 
 		menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(0x343434));
@@ -206,48 +151,10 @@ public class Photoshop extends JFrame {
 
 		getContentPane().add(mapDisplayer);
 
-		mapDisplayer.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				Toolkit toolkit = Toolkit.getDefaultToolkit();
-				Image cursorimg = null;
-				Point cursorHotSpot = new Point(0, 31);
-
-				try {
-					switch (cursor) {
-
-					case 1:
-						cursorimg = toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
-						break;
-					case 2:
-						cursorimg = toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
-						break;
-					case 3:
-						cursorimg = toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
-						break;
-					case 4:
-						cursorimg = toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
-						break;
-					}
-					setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot, "CCursor"));
-
-				} catch (Exception ex) {
-					System.out.println("Cursor nicht gefunden!");
-					setCursor(Cursor.getDefaultCursor());
-				}
-//				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-
-			}
-
-			public void mouseExited(MouseEvent e) {
-				setCursor(Cursor.getDefaultCursor());
-			}
-		});
-
-		// ERMÖGLICHT MALEN
-		// TODO
+		// Mole Methode
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
+				if (map != null && e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
 						&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
 
 					int col = 0;
@@ -263,12 +170,14 @@ public class Photoshop extends JFrame {
 						if (row * x < e.getY())
 							row += 1;
 
-					switch (cursor) {
+					switch (currentColorSelection) {
 					case 1:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.START);
+						map.setStart(new Point(col-1, row-1));
 						break;
 					case 2:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.ZIEL);
+						map.setZiel(new Point(col-1, row-1));
 						break;
 					case 3:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.WALL);
@@ -280,12 +189,6 @@ public class Photoshop extends JFrame {
 				}
 			}
 		});
-
-		// scrollPane = new ScrollPane();
-		// scrollPane.setBounds(90, 0, this.getWidth() - 90, this.getHeight() -
-		// menuBar.getHeight());
-		// scrollPane.add(mapDisplayer);
-		// getContentPane().add(scrollPane);
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -430,16 +333,50 @@ public class Photoshop extends JFrame {
 		menuBar.add(run);
 
 		setVisible(true);
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
-
-	public static void main(String[] args) {
-		Photoshop p = new Photoshop();
-	}
 }
+
+
+//mapDisplayer.addMouseListener(new MouseAdapter() {
+//public void mouseEntered(MouseEvent e) {
+//	Toolkit toolkit = Toolkit.getDefaultToolkit();
+//	Image cursorimg = null;
+//	Point cursorHotSpot = new Point(0, 31);
+//
+////	try {
+////		switch (currentColorSelection) {
+////
+////		case 1:
+////			cursorimg = toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
+////			break;
+////		case 2:
+////			cursorimg = toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
+////			break;
+////		case 3:
+////			cursorimg = toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
+////			break;
+////		case 4:
+////			cursorimg = toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
+////			break;
+////		}
+////		setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot, "CCursor"));
+////
+////	} catch (Exception ex) {
+////		System.out.println("Cursor nicht gefunden!");
+////		setCursor(Cursor.getDefaultCursor());
+////	}
+////	setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+//
+//}
+//
+//public void mouseExited(MouseEvent e) {
+//	setCursor(Cursor.getDefaultCursor());
+//}
+//});

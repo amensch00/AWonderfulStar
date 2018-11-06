@@ -49,9 +49,13 @@ public class Algorithm implements Runnable {
 			closed[currentNode.getX()][currentNode.getY()] = true;
 
 			dissolveNode(currentNode);
+			
+			map.setTileAt(currentNode.getX(), currentNode.getY(), currentNode.getType(), TileOverlay.INCLOSED);
+			
+			notifyAllObservers();
 
 			try {
-//				Thread.sleep(1000);
+				Thread.sleep(5);
 			} catch (Exception e) {
 				System.out.println("wups");
 				e.printStackTrace();
@@ -69,7 +73,7 @@ public class Algorithm implements Runnable {
 	
 	private void printDaWe(TileNode tn) {
 		
-		if (tn == null || tn.getPrevious() == null)
+		if (tn.getPrevious() == null)
 			System.out.println("Es gibt keinen Weg!");
 		else {
 			//System.out.println(tn.toString());

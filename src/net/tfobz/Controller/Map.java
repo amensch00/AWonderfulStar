@@ -81,4 +81,9 @@ public class Map {
 
 		allTNs[y * mapWidth + x].setPrevious(previous);
 	}
+	
+	public void clearOverlay() {
+		for (int i = 0; i < allTNs.length; i++)
+			allTNs[i].setOverlay(TileOverlay.NOTHING);
+	}
 }
