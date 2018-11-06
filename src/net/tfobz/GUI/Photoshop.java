@@ -93,6 +93,7 @@ public class Photoshop extends JFrame {
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 
 				} else if (e.getSource() == run) {
+					map.clearOverlay();
 					mapDisplayer.startAlg(map, false);
 				}
 			}
@@ -172,11 +173,11 @@ public class Photoshop extends JFrame {
 					switch (currentColorSelection) {
 					case 1:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.START);
-						map.setStart(new Point(row-1, col-1));
+						map.setStart(new Point(col-1, row-1));
 						break;
 					case 2:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.ZIEL);
-						map.setZiel(new Point(row-1, col-1));
+						map.setZiel(new Point(col-1, row-1));
 						break;
 					case 3:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.WALL);

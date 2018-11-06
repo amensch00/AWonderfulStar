@@ -128,12 +128,12 @@ public class DisplayPanel extends JPanel implements Observer {
 				int height = length * map.getMapHeight() - 1;
 				int width = length * map.getMapWidth() - 1;
 
-				for (int y = 1; y < map.getMapHeight(); y++) {
-					g.drawLine(0, y * length, width, y * length);
+				for (int x = 1; x < map.getMapWidth(); x++) {
+					g.drawLine(0, x * length, width, x * length);
 				}
 
-				for (int x = 1; x < map.getMapWidth(); x++) {
-					g.drawLine(x * length, 0, x * length, height);
+				for (int y = 1; y < map.getMapHeight(); y++) {
+					g.drawLine(y * length, 0, y * length, height);
 				}
 			}
 
