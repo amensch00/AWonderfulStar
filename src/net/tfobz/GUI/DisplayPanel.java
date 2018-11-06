@@ -119,7 +119,7 @@ public class DisplayPanel extends JPanel implements Observer {
 					default:
 						break;
 					}
-					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
+					g.fillRect(y * length + length / 4, x * length + this.getInsets().top + length / 4, length / 2, length / 2);
 				}
 			}
 			
