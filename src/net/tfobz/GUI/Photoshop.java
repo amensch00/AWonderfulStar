@@ -29,7 +29,7 @@ public class Photoshop extends JFrame {
 
 	// 1 = start; 2 = end; 3 = wall; 4 = street
 	private int currentColorSelection = 1;
-	
+
 	private Map map = null;
 
 	public Photoshop() {
@@ -51,9 +51,9 @@ public class Photoshop extends JFrame {
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 100);
 
 					if (nd.getWasYesPressed()) {
-						map = new Map(nd.getArrayWidth(), nd.getArrayHeight());
-						for (int i = 0; i < map.getMapHeight(); i++)
-							for (int j = 0; j < map.getMapWidth(); j++)
+						map = new Map(nd.getArrayHeight(), nd.getArrayWidth());
+						for (int i = 0; i < map.getMapWidth(); i++)
+							for (int j = 0; j < map.getMapHeight(); j++)
 								map.setTileAt(i, j, TileType.STREET);
 
 						mapDisplayer.setMap(map);
@@ -151,7 +151,7 @@ public class Photoshop extends JFrame {
 
 		getContentPane().add(mapDisplayer);
 
-		// Mole Methode
+		// Dieser Listener, ermöglicht Malen
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (map != null && e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
@@ -161,23 +161,23 @@ public class Photoshop extends JFrame {
 					int row = 0;
 					int x = ((DisplayPanel) e.getSource()).getLength();
 
-					while (col * x < e.getX())
-						if (col * x < e.getX())
+					while (col * x < e.getY())
+						if (col * x < e.getY())
 							col += 1;
 
 					x = ((DisplayPanel) e.getSource()).getLength();
-					while (row * x < e.getY())
-						if (row * x < e.getY())
+					while (row * x < e.getX())
+						if (row * x < e.getX())
 							row += 1;
 
 					switch (currentColorSelection) {
 					case 1:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.START);
-						map.setStart(new Point(col-1, row-1));
+						map.setStart(new Point(col - 1, row - 1));
 						break;
 					case 2:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.ZIEL);
-						map.setZiel(new Point(col-1, row-1));
+						map.setZiel(new Point(col - 1, row - 1));
 						break;
 					case 3:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.WALL);
@@ -333,7 +333,7 @@ public class Photoshop extends JFrame {
 		menuBar.add(run);
 
 		setVisible(true);
-		
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -343,40 +343,43 @@ public class Photoshop extends JFrame {
 	}
 }
 
-
-//mapDisplayer.addMouseListener(new MouseAdapter() {
-//public void mouseEntered(MouseEvent e) {
-//	Toolkit toolkit = Toolkit.getDefaultToolkit();
-//	Image cursorimg = null;
-//	Point cursorHotSpot = new Point(0, 31);
+// mapDisplayer.addMouseListener(new MouseAdapter() {
+// public void mouseEntered(MouseEvent e) {
+// Toolkit toolkit = Toolkit.getDefaultToolkit();
+// Image cursorimg = null;
+// Point cursorHotSpot = new Point(0, 31);
 //
-////	try {
-////		switch (currentColorSelection) {
+//// try {
+//// switch (currentColorSelection) {
 ////
-////		case 1:
-////			cursorimg = toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
-////			break;
-////		case 2:
-////			cursorimg = toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
-////			break;
-////		case 3:
-////			cursorimg = toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
-////			break;
-////		case 4:
-////			cursorimg = toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
-////			break;
-////		}
-////		setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot, "CCursor"));
+//// case 1:
+//// cursorimg =
+// toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
+//// break;
+//// case 2:
+//// cursorimg =
+// toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
+//// break;
+//// case 3:
+//// cursorimg =
+// toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
+//// break;
+//// case 4:
+//// cursorimg =
+// toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
+//// break;
+//// }
+//// setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot, "CCursor"));
 ////
-////	} catch (Exception ex) {
-////		System.out.println("Cursor nicht gefunden!");
-////		setCursor(Cursor.getDefaultCursor());
-////	}
-////	setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+//// } catch (Exception ex) {
+//// System.out.println("Cursor nicht gefunden!");
+//// setCursor(Cursor.getDefaultCursor());
+//// }
+//// setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 //
-//}
+// }
 //
-//public void mouseExited(MouseEvent e) {
-//	setCursor(Cursor.getDefaultCursor());
-//}
-//});
+// public void mouseExited(MouseEvent e) {
+// setCursor(Cursor.getDefaultCursor());
+// }
+// });

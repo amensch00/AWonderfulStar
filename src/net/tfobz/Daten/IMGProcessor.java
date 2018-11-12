@@ -22,20 +22,20 @@ public class IMGProcessor {
 	}
 
 	public Map convertToMap() {
-		Map ret = new Map(img.getWidth(), img.getHeight());
+		Map ret = new Map(img.getHeight(),img.getWidth());
 
-		for (int y = 0; y < img.getHeight(); y++) {
-			for (int x = 0; x < img.getWidth(); x++) {
+		for (int x = 0; x < img.getWidth(); x++) {
+			for (int y = 0; y < img.getHeight(); y++) {
 				if (img.getRGB(x, y) == RSTREET)
-					ret.setTileAt(x, y, TileType.STREET);
+					ret.setTileAt(y, x, TileType.STREET);
 				else if (img.getRGB(x, y) == RSTART) {
-					ret.setTileAt(x, y, TileType.START);
-					ret.setStart(new Point(x, y));
+					ret.setTileAt(y, x, TileType.START);
+					ret.setStart(new Point(y, x));
 				} else if (img.getRGB(x, y) == RZIEL) {
-					ret.setTileAt(x, y, TileType.ZIEL);
-					ret.setZiel(new Point(x, y));
+					ret.setTileAt(y, x, TileType.ZIEL);
+					ret.setZiel(new Point(y, x));
 				} else
-					ret.setTileAt(x, y, TileType.WALL);
+					ret.setTileAt(y, x, TileType.WALL);
 			}
 		}
 		return ret;

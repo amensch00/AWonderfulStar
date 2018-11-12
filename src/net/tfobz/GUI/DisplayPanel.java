@@ -22,7 +22,7 @@ public class DisplayPanel extends JPanel implements Observer {
 		setLayout(null);
 		this.map = map;
 		this.gridOn = gridOn;
-		
+
 		repaint();
 	}
 
@@ -41,13 +41,13 @@ public class DisplayPanel extends JPanel implements Observer {
 	public Map getMap() {
 		return this.map;
 	}
-	
-	//TODO
+
+	// TODO
 	public void setMap(Map map) {
 		this.map = map;
 	}
-	
-	//TODO
+
+	// TODO
 	public void setMapAt(int y, int x, TileType type) {
 		if (y >= 0 && y < map.getMapHeight() && x >= 0 && x < map.getMapWidth()) {
 			if (type == TileType.START || type == TileType.ZIEL || type == TileType.STREET || type == TileType.WALL)
@@ -58,33 +58,26 @@ public class DisplayPanel extends JPanel implements Observer {
 
 	public int getLength() {
 		int tileNumber = 0;
-		int size = 0;
-		if (map.getMapHeight() < map.getMapWidth()) {
+		if (map.getMapHeight() < map.getMapWidth())
 			tileNumber = map.getMapWidth();
-			size = this.getWidth();
-		}
-			
-		else {
+		else
 			tileNumber = map.getMapHeight();
-			size = this.getHeight();
-		}
-		
-		return size / tileNumber - 1;
+		return (int) Math.floor(this.getHeight() / tileNumber);
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 
-//		System.out.println("painting");
-		
+		// System.out.println("painting");
+
 		if (map != null) {
 
 			int length = getLength();
 
 			for (int y = 0; y < map.getMapHeight(); y++) {
 				for (int x = 0; x < map.getMapWidth(); x++) {
-					switch (map.getTileAt(y, x).getType()) {
+					switch (map.getTileAt(x, y).getType()) {
 					case START:
 						g.setColor(ColorPalette.BLAU);
 						break;
@@ -101,10 +94,10 @@ public class DisplayPanel extends JPanel implements Observer {
 						break;
 					}
 					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
-					
+
 					// TODO x y schun widr verkehrt
-					
-					switch (map.getTileAt(y, x).getOverlay()) {
+
+					switch (map.getTileAt(x, y).getOverlay()) {
 					case NOTHING:
 						break;
 					case INOPEN:
@@ -119,14 +112,15 @@ public class DisplayPanel extends JPanel implements Observer {
 					default:
 						break;
 					}
-					g.fillRect(y * length + length / 4, x * length + this.getInsets().top + length / 4, length / 2, length / 2);
+					g.fillRect(y * length + length / 4, x * length + this.getInsets().top + length / 4, length / 2,
+							length / 2);
 				}
 			}
-			
+
 			if (gridOn) {
 				g.setColor(new Color(255, 255, 255));
-				int height = length * map.getMapHeight() - 1;
-				int width = length * map.getMapWidth() - 1;
+				int height = length * map.getMapWidth() - 1;
+				int width = length * map.getMapHeight() - 1;
 
 				for (int x = 1; x < map.getMapWidth(); x++) {
 					g.drawLine(0, x * length, width, x * length);
@@ -140,7 +134,7 @@ public class DisplayPanel extends JPanel implements Observer {
 		}
 
 	}
-	
+
 	public void startAlg(Map map, boolean isStepByStep) {
 		alg = new Algorithm(map, isStepByStep);
 		alg.attach(this);
@@ -149,7 +143,7 @@ public class DisplayPanel extends JPanel implements Observer {
 
 		algThread.start();
 	}
-	
+
 	@Override
 	public void update() {
 		map = alg.getMap();
