@@ -9,6 +9,8 @@ import net.tfobz.Daten.IMGProcessor;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.ScrollPane;
+import java.awt.Scrollbar;
 import java.awt.Color;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -20,6 +22,7 @@ public class Photoshop extends JFrame {
 	private JMenuBar menuBar;
 	private MyButton newFile, openFile, options, exit, run;
 	JPanel colorPicker;
+	JScrollPane scrollPane;
 	DisplayPanel mapDisplayer;
 	// Colorpicker
 	private JButton start, end, street, wall;
@@ -61,8 +64,8 @@ public class Photoshop extends JFrame {
 						mapDisplayer.setBounds(90, 0, getWidth() - 90, getHeight() - menuBar.getHeight());
 						mapDisplayer.setBackground(new Color(75, 75, 75));
 						mapDisplayer.setLayout(null);
-						getContentPane().add(mapDisplayer);
 						mapDisplayer.repaint();
+
 					}
 
 				} else if (e.getSource() == openFile) {
@@ -129,7 +132,23 @@ public class Photoshop extends JFrame {
 			}
 
 		};
-
+		Point point = new Point();
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (!e.isMetaDown()) {
+					point.x = e.getX();
+					point.y = e.getY();
+				}
+			}
+		});
+		addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseDragged(MouseEvent e) {
+				if (!e.isMetaDown()) {
+					Point p = getLocation();
+					setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
+				}
+			}
+		});
 		menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(0x343434));
 		menuBar.setBorderPainted(false);
@@ -145,10 +164,17 @@ public class Photoshop extends JFrame {
 
 		mapDisplayer = new DisplayPanel(map, false);
 		mapDisplayer.setBounds(90, 0, this.getWidth() - 90, this.getHeight() - menuBar.getHeight());
+//		mapDisplayer.setBounds(90, 0, 1000, 1500);
+		System.out.println((this.getWidth() - 90) + " " + (this.getHeight() - menuBar.getHeight()));
 		mapDisplayer.setBackground(new Color(75, 75, 75));
 		mapDisplayer.setLayout(null);
 		mapDisplayer.setGridOn(true);
-
+		
+//		scrollPane = new JScrollPane(mapDisplayer,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+//		scrollPane.setBounds(90, 0, this.getWidth() - 110, this.getHeight() - menuBar.getHeight()-50);
+//		scrollPane.setBackground(Color.DARK_GRAY);
+//		getContentPane().add(scrollPane);
+		
 		getContentPane().add(mapDisplayer);
 
 		// Dieser Listener, ermöglicht Malen
