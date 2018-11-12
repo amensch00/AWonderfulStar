@@ -2,6 +2,14 @@ package net.tfobz.Controller;
 
 import java.util.Comparator;
 
+/**
+ * Dieser Comparator, vergleicht zwei TileNodes (tn, tn1), anhand ihrer totalen
+ * Entfernungen (Luftlinie + bisher gefahrene Strecke) und liefert einen
+ * int-Wert zurück (kleiner = neg, gleich = 0, groeßer = positiv)
+ * 
+ * @author Elias Thomaser, Julian Tschager
+ *
+ */
 public class TileNodeComparator implements Comparator<TileNode> {
 
 	@Override

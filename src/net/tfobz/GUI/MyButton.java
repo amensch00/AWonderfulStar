@@ -11,16 +11,19 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 
 /**
+ * Diese Klasse stellt einen besonderen Button zur Verfügung, welcher sich
+ * dadurch auszueichnet, dass er so simple wie möglich ist und zu einer
+ * schlichten UI-Schnittstelle beiträgt. Er besteht aus einem JPanel und hat
+ * eine Hoveranimation. Zudem stellt Sie einige Methoden zur Verfügung, welche
+ * es ermöglichen den Button Inhalt, sowie Style festzulegen.
  * 
- * @author Julian Tschager
+ * @author Julian Tschager, Elias Thomaser
  *
  */
 public class MyButton extends JPanel {
 	private JLabel jLabel = new JLabel();
 
 	public MyButton(int x, int y, int width, int height) {
-		
-		this.setBounds(x, y, width, height);
 		jLabel.setHorizontalAlignment(JLabel.CENTER);
 		jLabel.setBounds(x, y, width, height);
 		this.addMouseListener(new buttonHoverListener());

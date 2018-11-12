@@ -2,7 +2,7 @@ package net.tfobz.Utilities;
 
 /**
  * 
- * @author Elias Thomaser
+ * @author Elias Thomaser, Julian Tschager
  *
  */
 public class NotImplementedException extends RuntimeException {

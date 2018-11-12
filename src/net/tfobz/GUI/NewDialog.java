@@ -15,6 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+/**
+ * Dieses PopUp-Fenster wird geöffnet, sobald der User eine neue Eingabe-Map
+ * erstellen will. Über dieses Fenster,
+ * 
+ * @author Julian Tschager, Elias Thomaser
+ *
+ */
 public class NewDialog extends JDialog {
 
 	private MyButton yes;
@@ -25,29 +32,34 @@ public class NewDialog extends JDialog {
 	private boolean wasYesPressed = false;
 
 	public NewDialog(int x, int y) {
+		// Frame-Einstellungen
 		this.getContentPane().setBackground(Color.DARK_GRAY);
-
 		setModal(true);
 		setUndecorated(true);
 		setLayout(null);
 		setBounds(x, y, 230, 200);
+
 		newFile = new JLabel("Create a new file");
 		newFile.setBounds(25, 20, 200, 40);
 		newFile.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
 		newFile.setForeground(Color.WHITE);
 		add(newFile);
-
+		
+		// Bestätigungs-Button, welcher Filerstellt
 		yes = new MyButton(25, 140, 40, 40, "Ok");
-		cancel = new MyButton(95, 140, 80, 40, "Cancel");
 		yes.setBackground(Color.DARK_GRAY);
-		cancel.setBackground(Color.DARK_GRAY);
 		yes.setLabelColor(Color.WHITE);
-		cancel.setLabelColor(Color.WHITE);
 		yes.setLabelFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		cancel.setLabelFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
 		add(yes);
+		
+		// Abbruchsbutton, zum Zurückgehen
+		cancel = new MyButton(95, 140, 80, 40, "Cancel");
+		cancel.setBackground(Color.DARK_GRAY);
+		cancel.setLabelColor(Color.WHITE);
+		cancel.setLabelFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
 		add(cancel);
-
+		
+		//Feld - zur Eingabe von Breite der Testmap
 		width = new JTextField("width..");
 		width.setHorizontalAlignment(SwingConstants.CENTER);
 		width.setBounds(25, 80, 80, 40);
@@ -58,7 +70,7 @@ public class NewDialog extends JDialog {
 		width.setCaretColor(Color.WHITE);
 		width.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		add(width);
-
+		//Feld - zur Eingabe von Höhe der Testmap
 		height = new JTextField("height..");
 		height.setHorizontalAlignment(SwingConstants.CENTER);
 		height.setBounds(130, 80, 80, 40);
@@ -69,39 +81,36 @@ public class NewDialog extends JDialog {
 		height.setCaretColor(Color.WHITE);
 		height.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		add(height);
-
+		
+		//Lässt nur Eingabe von Zahlen zu
 		width.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (width.getText().contains("width..")) {
 					width.setText("");
 					width.setForeground(Color.WHITE);
 				}
-
 			}
 
 			public void keyReleased(KeyEvent e) {
-
 				if (width.getText().length() > 0 && (e.getKeyChar() < 48 || e.getKeyChar() > 57))
 					width.setText(width.getText().substring(0, width.getText().length() - 1));
 			}
 		});
-
+		//Lässt nur Eingabe von Zahlen zu
 		height.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (height.getText().contains("height..")) {
 					height.setText("");
 					height.setForeground(Color.WHITE);
 				}
-
 			}
 
 			public void keyReleased(KeyEvent e) {
-
 				if (height.getText().length() > 0 && (e.getKeyChar() < 48 || e.getKeyChar() > 57))
 					height.setText(width.getText().substring(0, height.getText().length() - 1));
 			}
 		});
-
+		//Überprüft-Eingabe
 		yes.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int button = 0;
@@ -114,12 +123,12 @@ public class NewDialog extends JDialog {
 						button = 0;
 						throw new Exception();
 					}
-					
+
 					if (!(Integer.parseInt(height.getText()) >= 3)) {
 						button = 1;
 						throw new Exception();
 					}
-						
+
 					wasYesPressed = true;
 					NewDialog.this.setVisible(false);
 				} catch (Exception ex) {
@@ -133,7 +142,7 @@ public class NewDialog extends JDialog {
 
 			}
 		});
-
+		//Rückgängig-Button
 		cancel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				NewDialog.this.setVisible(false);

@@ -3,8 +3,9 @@ package net.tfobz.Controller;
 import java.awt.Point;
 
 /**
+ * Diese Klasse ist in der Lage eine Karte in Form von Nodes abzuspeichren.
  * 
- * @author Elias Thomaser
+ * @author Elias Thomaser, Julian Tschager
  *
  */
 public class Map {
@@ -31,7 +32,7 @@ public class Map {
 		allTNs[y * mapWidth + x].setTileType(type);
 		allTNs[y * mapWidth + x].setMap(this);
 	}
-	
+
 	public void setTileAt(int x, int y, TileType type, TileOverlay overlay) {
 		if (allTNs[y * mapWidth + x] == null)
 			allTNs[y * mapWidth + x] = new TileNode(x, y);
@@ -43,10 +44,11 @@ public class Map {
 		allTNs[y * mapWidth + x].setOverlay(overlay);
 		allTNs[y * mapWidth + x].setMap(this);
 	}
-	
+
 	public TileNode[] getAllTNs() {
 		return this.allTNs;
 	}
+
 	public TileNode getZiel() {
 		return allTNs[ziel.y * mapWidth + ziel.x];
 	}
@@ -81,7 +83,7 @@ public class Map {
 
 		allTNs[y * mapWidth + x].setPrevious(previous);
 	}
-	
+
 	public void clearOverlay() {
 		for (int i = 0; i < allTNs.length; i++)
 			allTNs[i].setOverlay(TileOverlay.NOTHING);

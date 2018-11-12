@@ -1,8 +1,11 @@
 package net.tfobz.Controller;
 
 /**
+ * Nodes, welche benutzt werden, um die Map aufzubauen. Sie enthalten
+ * Informationen, wie die Koordinaten, das zuvor angefahrene TN, der Typ, das
+ * derzeitige Overlay, die Distanzen und die Map indem es sich befindet.
  * 
- * @author Elias Thomaser
+ * @author Elias Thomaser, Julian Tschager
  *
  */
 public class TileNode {
@@ -18,11 +21,11 @@ public class TileNode {
 	public TileNode(int x, int y) {
 		this.xPos = x;
 		this.yPos = y;
-		
+
 		this.type = TileType.STREET;
 		this.overlay = TileOverlay.NOTHING;
 
-		//System.out.println("\tnew tileNode created: " + this.toString());
+		// System.out.println("\tnew tileNode created: " + this.toString());
 	}
 
 	public TileNode(TileNode previous) {
@@ -88,7 +91,7 @@ public class TileNode {
 
 	public void setPrevious(TileNode prev) {
 		this.previousTN = prev;
-		
+
 		distanz = calculateDistance();
 		luftlinie = calculateLuftlinie();
 	}
@@ -104,11 +107,11 @@ public class TileNode {
 	public TileOverlay getOverlay() {
 		return overlay;
 	}
-	
+
 	public void setOverlay(TileOverlay overlay) {
 		this.overlay = overlay;
 	}
-	
+
 	public void setMap(Map map) {
 		this.map = map;
 	}
