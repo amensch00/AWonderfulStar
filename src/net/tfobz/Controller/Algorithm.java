@@ -55,7 +55,7 @@ public class Algorithm implements Runnable {
 			notifyAllObservers();
 
 			try {
-				Thread.sleep(5);
+				Thread.sleep(100);
 			} catch (Exception e) {
 				System.out.println("wups");
 				e.printStackTrace();
@@ -121,9 +121,14 @@ public class Algorithm implements Runnable {
 		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL || map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
 			return;
 		
+		
+
+		if (map.getTileAt(node.getX() + x, node.getY() + y).getTotaleEntfernung() > node.getTotaleEntfernung() || openlist.contains(map.getTileAt(node.getX() + x, node.getY() + y)))
+			return;
+		
 		map.getTileAt(node.getX() + x, node.getY() + y).setPrevious(
 				map.getTileAt(node.getX(), node.getY()));
-
+		
 		openlist.add(map.getTileAt(node.getX() + x, node.getY() + y));
 	}
 
