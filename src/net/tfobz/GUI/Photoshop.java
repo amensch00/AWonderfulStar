@@ -24,6 +24,7 @@ public class Photoshop extends JFrame {
 	private MyButton newFile, openFile, options, exit, run;
 	private JPanel colorPicker;
 	private DisplayPanel mapDisplayer;
+	private boolean mode = true;
 
 	// Colorpicker
 	private JButton start, end, street, wall;
@@ -45,7 +46,7 @@ public class Photoshop extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(null);
-		this.getContentPane().setBackground(new Color(75,75,75));
+		this.getContentPane().setBackground(new Color(75, 75, 75));
 		setVisible(true);
 		// F�r Men�-Leiste zust�ndig
 		MouseListener myListener = new MouseAdapter() {
@@ -89,17 +90,28 @@ public class Photoshop extends JFrame {
 					}
 
 				} else if (e.getSource() == options) {
-
+					OptionDialog nd = new OptionDialog(
+							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 150,
+							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75,
+							Photoshop.this.mode);
+					Photoshop.this.mode = nd.getSelection();
+					nd.dispose();
 				} else if (e.getSource() == exit) {
 					ClosingDialog c = new ClosingDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 100,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 
 				} else if (e.getSource() == run) {
-					state = State.CURRENTLY_CALCULATING;
-					colorPicker.setVisible(false);
-					map.clearOverlay();
-					mapDisplayer.startAlg(map, false, Photoshop.this);
+					
+					try {
+						map.clearOverlay();
+						state = State.CURRENTLY_CALCULATING;
+						colorPicker.setVisible(false);
+						mapDisplayer.startAlg(map, mode, Photoshop.this);
+					} catch (Exception ex) {
+						System.out.println("Keine Map!");
+					}
+
 				}
 			}
 		};
@@ -361,7 +373,7 @@ public class Photoshop extends JFrame {
 		horizontalStrut_1 = Box.createHorizontalStrut(573);
 		menuBar.add(horizontalStrut_1);
 		menuBar.add(run);
-		setBackground(new Color(75,75,75));
+		setBackground(new Color(75, 75, 75));
 		setVisible(true);
 
 		try {

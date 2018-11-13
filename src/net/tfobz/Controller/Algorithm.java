@@ -17,12 +17,13 @@ public class Algorithm implements Runnable {
 
 	private PriorityQueue<TileNode> openlist = null;
 	private boolean[][] closed;
-	
+	private boolean isStepByStep;
 	private Photoshop ph;
 
 	public Algorithm(Map map, boolean isStepByStep, Photoshop ph) {
 		this.map = map;
 		this.ph = ph;
+		this.isStepByStep = isStepByStep;
 		openlist = new PriorityQueue<TileNode>(map.getMapWidth() * map.getMapHeight(), new TileNodeComparator());
 		closed = new boolean[map.getMapWidth()][map.getMapHeight()];
 	}
@@ -35,13 +36,14 @@ public class Algorithm implements Runnable {
 		TileNode currentNode;
 		while (true) {
 
-//			for (TileNode t : openlist) {
-//				System.out.print(t.toString() + "\t");
-//			}
-			
+			// for (TileNode t : openlist) {
+			// System.out.print(t.toString() + "\t");
+			// }
+
 			currentNode = openlist.poll();
 
-			if (currentNode == null) break; // Madonna wos ischn do passiert
+			if (currentNode == null)
+				break; // Madonna wos ischn do passiert
 
 			if (currentNode.equals(map.getZiel()))
 				return map.getTileAt(currentNode.getX(), currentNode.getY());
@@ -49,17 +51,17 @@ public class Algorithm implements Runnable {
 			closed[currentNode.getX()][currentNode.getY()] = true;
 
 			dissolveNode(currentNode);
-			
-			map.setTileAt(currentNode.getX(), currentNode.getY(), currentNode.getType(), TileOverlay.INCLOSED);
-			
-			notifyAllObservers();
 
-			try {
-				Thread.sleep(20);
-			} catch (Exception e) {
-				System.out.println("wups");
-				e.printStackTrace();
-			}
+			map.setTileAt(currentNode.getX(), currentNode.getY(), currentNode.getType(), TileOverlay.INCLOSED);
+
+			notifyAllObservers();
+			if (isStepByStep)
+				try {
+					Thread.sleep(50);
+				} catch (Exception e) {
+					System.out.println("wups");
+					e.printStackTrace();
+				}
 		}
 
 		return null;
@@ -70,13 +72,13 @@ public class Algorithm implements Runnable {
 		printDaWe(solve());
 		notifyAllObservers();
 	}
-	
+
 	private void printDaWe(TileNode tn) {
-		
+
 		if (tn == null || tn.getPrevious() == null)
 			ph.setStateAndColorPickerVisibility(State.AVAILABLE, true);
 		else {
-			//System.out.println(tn.toString());
+			// System.out.println(tn.toString());
 			map.setTileAt(tn.getX(), tn.getY(), TileType.STREET, TileOverlay.DAWE);
 			printDaWe(tn.getPrevious());
 		}
@@ -84,10 +86,10 @@ public class Algorithm implements Runnable {
 
 	public void dissolveNode(TileNode node) {
 
-//		System.out.println("Current Node: [" + node.getX() + "||" + node.getY() + "]");
+		// System.out.println("Current Node: [" + node.getX() + "||" + node.getY() +
+		// "]");
 
-		
-//		System.out.println();System.out.println();
+		// System.out.println();System.out.println();
 
 		checkNeighbour(node, 0, 1);
 		checkNeighbour(node, 1, 0);
@@ -99,9 +101,9 @@ public class Algorithm implements Runnable {
 		checkNeighbour(node, -1, 1);
 
 		notifyAllObservers();
-		
+
 		openlist.remove(node);
-//		System.out.println("removed: " + openlist.remove(node));
+		// System.out.println("removed: " + openlist.remove(node));
 	}
 
 	private void checkNeighbour(TileNode node, int y, int x) {
@@ -109,27 +111,29 @@ public class Algorithm implements Runnable {
 		if (node.getX() + x < 0 || node.getY() + y < 0 || node.getX() + x >= map.getMapWidth()
 				|| node.getY() + y >= map.getMapHeight())
 			return;
-		
+
 		// if gew�hlte position gleich mauer zrughupfen
 		if (map.getTileAt(node.getX() + x, node.getY() + y).getType() == TileType.WALL
 				|| closed[node.getX() + x][node.getY() + y])
 			return;
-		
+
 		// P T1
 		// T2 Z
 		// checked ob T1 ODER T2 mauer sind,
 		// wenn ja, dann returned die methode
-		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL || map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
+		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL
+				|| map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
 			return;
-		
+
 		// Distanz von Start zu nachbar
-		double currScore = node.getDistance() + node.calculateDistanceTo(map.getTileAt(node.getX() + x, node.getY() + y));
-		
+		double currScore = node.getDistance()
+				+ node.calculateDistanceTo(map.getTileAt(node.getX() + x, node.getY() + y));
+
 		if (!openlist.contains(map.getTileAt(node.getX() + y, node.getY() + y)))
 			openlist.add(map.getTileAt(node.getX() + x, node.getY() + y));
 		else if (currScore >= map.getTileAt(node.getX() + x, node.getY() + y).getDistance())
 			return;
-		
+
 		map.setPreviousOfTileAt(node.getX() + x, node.getY() + y, node);
 	}
 
@@ -145,5 +149,5 @@ public class Algorithm implements Runnable {
 	public Map getMap() {
 		return map;
 	}
-	
+
 }
