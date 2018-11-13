@@ -186,8 +186,8 @@ public class Photoshop extends JFrame {
 				if (state == State.CURRENTLY_CALCULATING)
 					return;
 				
-				if (map != null && e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()
-						&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()) {
+				if (map != null && e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()
+						&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()) {
 
 					int col = 0;
 					int row = 0;

@@ -17,11 +17,12 @@ import net.tfobz.Controller.TileType;
 import net.tfobz.Utilities.ColorPalette;
 
 public class DisplayPanel extends JPanel implements Observer {
-	public final int MAX_TILE_SIZE = 30;
+	public final int MAX_TILE_SIZE = 50;
 
 	private Map map = null;
 	private boolean gridOn = false;
 	private Algorithm alg;
+
 
 	public DisplayPanel(final Map map, boolean gridOn) {
 		setLayout(null);
@@ -77,7 +78,7 @@ public class DisplayPanel extends JPanel implements Observer {
 				map.setTileAt(x, y, type);
 		}
 
-		repaint();
+		repaint();	
 		
 	}
 
@@ -88,14 +89,15 @@ public class DisplayPanel extends JPanel implements Observer {
 		else
 			tileNumber = map.getMapHeight();
 
-		if ((int) Math.floor(this.getHeight() / tileNumber) < MAX_TILE_SIZE) {
-			this.setSize(MAX_TILE_SIZE * map.getMapWidth(), MAX_TILE_SIZE * map.getMapHeight());
+		if ((int) Math.floor(800 / tileNumber) < MAX_TILE_SIZE) {
+			
+			this.setSize(MAX_TILE_SIZE * map.getMapHeight(), MAX_TILE_SIZE * map.getMapWidth());
 			return MAX_TILE_SIZE;
 		}
 
-		this.setSize((int) Math.floor(this.getHeight() / tileNumber) * map.getMapWidth(),
-				(int) Math.floor(this.getHeight() / tileNumber) * map.getMapHeight());
-		return (int) Math.floor(this.getHeight() / tileNumber);
+		this.setSize((int) Math.floor(800 / tileNumber) * map.getMapHeight(),
+				(int) Math.floor(800 / tileNumber) * map.getMapWidth());
+		return (int) Math.floor(800 / tileNumber);
 	}
 
 	@Override
