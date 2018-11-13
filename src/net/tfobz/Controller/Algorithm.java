@@ -105,10 +105,11 @@ public class Algorithm implements Runnable {
 	}
 
 	private void checkNeighbour(TileNode node, int y, int x) {
+		// Schaut ob der Nachbar innerhalb der Karte liegt
 		if (node.getX() + x < 0 || node.getY() + y < 0 || node.getX() + x >= map.getMapWidth()
 				|| node.getY() + y >= map.getMapHeight())
 			return;
-
+		
 		// if gewählte position gleich mauer zrughupfen
 		if (map.getTileAt(node.getX() + x, node.getY() + y).getType() == TileType.WALL
 				|| closed[node.getX() + x][node.getY() + y])
@@ -121,15 +122,15 @@ public class Algorithm implements Runnable {
 		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL || map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
 			return;
 		
+		// Distanz von Start zu nachbar
+		double currScore = node.getDistance() + node.calculateDistanceTo(map.getTileAt(node.getX() + x, node.getY() + y));
 		
-
-		if (map.getTileAt(node.getX() + x, node.getY() + y).getTotaleEntfernung() > node.getTotaleEntfernung() || openlist.contains(map.getTileAt(node.getX() + x, node.getY() + y)))
+		if (!openlist.contains(map.getTileAt(node.getX() + y, node.getY() + y)))
+			openlist.add(map.getTileAt(node.getX() + x, node.getY() + y));
+		else if (currScore >= map.getTileAt(node.getX() + x, node.getY() + y).getDistance())
 			return;
 		
-		map.getTileAt(node.getX() + x, node.getY() + y).setPrevious(
-				map.getTileAt(node.getX(), node.getY()));
-		
-		openlist.add(map.getTileAt(node.getX() + x, node.getY() + y));
+		map.setPreviousOfTileAt(node.getX() + x, node.getY() + y, node);
 	}
 
 	public void attach(Observer obst) {

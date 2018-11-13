@@ -28,6 +28,11 @@ public class Map {
 
 		allTNs[y * mapWidth + x].setXPos(x);
 		allTNs[y * mapWidth + x].setYPos(y);
+		
+		if (type == TileType.START) {
+			allTNs[y * mapWidth + x].setDistanz(0);
+			allTNs[y * mapWidth + x].setLuftlinie(0);
+		}
 
 		allTNs[y * mapWidth + x].setTileType(type);
 		allTNs[y * mapWidth + x].setMap(this);
@@ -39,6 +44,11 @@ public class Map {
 
 		allTNs[y * mapWidth + x].setXPos(x);
 		allTNs[y * mapWidth + x].setYPos(y);
+		
+		if (type == TileType.START) {
+			allTNs[y * mapWidth + x].setDistanz(0);
+			allTNs[y * mapWidth + x].setLuftlinie(0);
+		}
 
 		allTNs[y * mapWidth + x].setTileType(type);
 		allTNs[y * mapWidth + x].setOverlay(overlay);

@@ -24,16 +24,11 @@ public class TileNode {
 
 		this.type = TileType.STREET;
 		this.overlay = TileOverlay.NOTHING;
+		
+		this.luftlinie = Double.POSITIVE_INFINITY;
+		this.distanz = Double.POSITIVE_INFINITY;
 
 		// System.out.println("\tnew tileNode created: " + this.toString());
-	}
-
-	public TileNode(TileNode previous) {
-		if (previous != null) {
-			this.previousTN = previous;
-			this.distanz = this.previousTN.getDistance() + this.calculateDistance();
-		} else
-			throw new NullPointerException();
 	}
 
 	private double calculateLuftlinie() {
@@ -47,26 +42,30 @@ public class TileNode {
 	 * @return Wurzel(2) wenn diagonal 1 ist normale R�ckgabe 0 falls previous
 	 *         null ist
 	 */
-	private double calculateDistance() {
-		if (previousTN != null) {
-			// Wenn die vorherige Tile diagonal zur derzeitigen ist
-			// wird die Wurzel aus 2 zur�ckgegeben
-			// ansonsten gitb es die distanz von 1 zur�ck
-			if (this.xPos != previousTN.xPos && this.yPos != previousTN.yPos)
-				return Math.sqrt(2.0);
-			else
-				return 1;
-		}
-		return 0;
-
+	public double calculateDistanceTo(TileNode tn) {
+		// Wenn die vorherige Tile diagonal zur derzeitigen ist
+		// wird die Wurzel aus 2 zur�ckgegeben
+		// ansonsten gitb es die distanz von 1 zur�ck
+		if (this.getX() != tn.getX() && this.getY() != tn.getY())
+			return Math.sqrt(2.0);
+		else
+			return 1;
 	}
 
 	public Double getTotaleEntfernung() {
 		return distanz + luftlinie;
 	}
+	
+	public void setLuftlinie(double luftlinie) {
+		this.luftlinie = luftlinie;
+	}
 
 	public double getDistance() {
 		return distanz;
+	}
+	
+	public void setDistanz(double distanz) {
+		this.distanz = distanz;
 	}
 
 	public int getX() {
@@ -92,7 +91,7 @@ public class TileNode {
 	public void setPrevious(TileNode prev) {
 		this.previousTN = prev;
 
-		distanz = prev.getDistance() + calculateDistance();
+		distanz = prev.getDistance() + calculateDistanceTo(prev);
 		luftlinie = calculateLuftlinie();
 	}
 
