@@ -89,15 +89,15 @@ public class DisplayPanel extends JPanel implements Observer {
 		else
 			tileNumber = map.getMapHeight();
 
-		if ((int) Math.floor(800 / tileNumber) < MAX_TILE_SIZE) {
+		if ((int) Math.floor(761 / tileNumber) < MAX_TILE_SIZE) {
 			
 			this.setSize(MAX_TILE_SIZE * map.getMapHeight(), MAX_TILE_SIZE * map.getMapWidth());
 			return MAX_TILE_SIZE;
 		}
 
-		this.setSize((int) Math.floor(800 / tileNumber) * map.getMapHeight(),
-				(int) Math.floor(800 / tileNumber) * map.getMapWidth());
-		return (int) Math.floor(800 / tileNumber);
+		this.setSize((int) Math.floor(761 / tileNumber) * map.getMapHeight(),
+				(int) Math.floor(761 / tileNumber) * map.getMapWidth());
+		return (int) Math.floor(761 / tileNumber);
 	}
 
 	@Override
