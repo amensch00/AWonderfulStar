@@ -53,8 +53,8 @@ public class Photoshop extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == newFile) {
 					NewDialog nd = new NewDialog(
-							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 200,
-							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 100);
+							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 100,
+							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 
 					if (nd.getWasYesPressed()) {
 						map = new Map(nd.getArrayHeight(), nd.getArrayWidth());
