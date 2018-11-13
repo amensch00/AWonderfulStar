@@ -24,7 +24,7 @@ public class Photoshop extends JFrame {
 	private MyButton newFile, openFile, options, exit, run;
 	private JPanel colorPicker;
 	private DisplayPanel mapDisplayer;
-	
+
 	// Colorpicker
 	private JButton start, end, street, wall;
 	private JButton start_hl, end_hl, street_hl, wall_hl;
@@ -35,21 +35,18 @@ public class Photoshop extends JFrame {
 	private int currentColorSelection = 1;
 
 	private Map map = null;
-	
+
 	private State state = State.AVAILABLE;
 
 	public Photoshop() {
-
-		setBackground(Color.BLACK);
 		setLocation(400, 150);
 		setSize(1024, 800);
 		setUndecorated(true);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setBackground(Color.DARK_GRAY);
-//		repaint();
-		getContentPane().setLayout(null);
-
+		setLayout(null);
+		this.getContentPane().setBackground(new Color(75,75,75));
+		setVisible(true);
 		// F�r Men�-Leiste zust�ndig
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -70,7 +67,7 @@ public class Photoshop extends JFrame {
 						mapDisplayer.setLayout(null);
 						mapDisplayer.repaint();
 					}
-					
+
 				} else if (e.getSource() == openFile) {
 					JFileChooser j = new JFileChooser();
 					j.setDialogTitle("Bild Datei ausw�hlen");
@@ -137,12 +134,12 @@ public class Photoshop extends JFrame {
 			}
 
 		};
-		
+
 		menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(0x343434));
 		menuBar.setBorderPainted(false);
 		setJMenuBar(menuBar);
-		
+
 		Point point = new Point();
 		menuBar.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -160,7 +157,6 @@ public class Photoshop extends JFrame {
 				}
 			}
 		});
-		
 
 		colorPicker = new JPanel();
 
@@ -172,11 +168,9 @@ public class Photoshop extends JFrame {
 
 		mapDisplayer = new DisplayPanel(map, false);
 		mapDisplayer.setBounds(90, 0, this.getWidth() - 90, this.getHeight() - menuBar.getHeight());
-		System.out.println((this.getWidth() - 90) + " " + (this.getHeight() - menuBar.getHeight()));
 		mapDisplayer.setBackground(new Color(75, 75, 75));
 		mapDisplayer.setLayout(null);
 		mapDisplayer.setGridOn(true);
-		
 
 		getContentPane().add(mapDisplayer);
 
@@ -185,7 +179,7 @@ public class Photoshop extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if (state == State.CURRENTLY_CALCULATING)
 					return;
-				
+
 				if (map != null && e.getY() <= ((DisplayPanel) e.getSource()).getDisplayedWidth()
 						&& e.getX() <= ((DisplayPanel) e.getSource()).getDisplayedHeight()) {
 
@@ -201,9 +195,9 @@ public class Photoshop extends JFrame {
 					while (row * x < e.getX())
 						if (row * x < e.getX())
 							row += 1;
-					
+
 					colorPicker.setVisible(false);
-					
+
 					switch (currentColorSelection) {
 					case 1:
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.START);
@@ -220,7 +214,7 @@ public class Photoshop extends JFrame {
 						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.STREET);
 						break;
 					}
-					
+
 					colorPicker.setVisible(true);
 				}
 			}
@@ -367,7 +361,7 @@ public class Photoshop extends JFrame {
 		horizontalStrut_1 = Box.createHorizontalStrut(573);
 		menuBar.add(horizontalStrut_1);
 		menuBar.add(run);
-
+		setBackground(new Color(75,75,75));
 		setVisible(true);
 
 		try {
@@ -382,7 +376,7 @@ public class Photoshop extends JFrame {
 		this.state = state;
 		colorPicker.setVisible(visibility);
 	}
-	
+
 }
 
 // mapDisplayer.addMouseListener(new MouseAdapter() {

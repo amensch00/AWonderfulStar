@@ -70,6 +70,7 @@ public class DisplayPanel extends JPanel implements Observer {
 
 	public void setMap(Map map) {
 		this.map = map;
+		this.setLocation(90, 0);
 	}
 
 	public void setMapAt(int y, int x, TileType type) {
