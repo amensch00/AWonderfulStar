@@ -2,7 +2,11 @@ package net.tfobz.GUI;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JPanel;
 
@@ -13,6 +17,8 @@ import net.tfobz.Controller.TileType;
 import net.tfobz.Utilities.ColorPalette;
 
 public class DisplayPanel extends JPanel implements Observer {
+	public final int MAX_TILE_SIZE = 30;
+	
 	private Map map = null;
 	boolean gridOn = false;
 	Rectangle[][] grid;
@@ -22,6 +28,26 @@ public class DisplayPanel extends JPanel implements Observer {
 		setLayout(null);
 		this.map = map;
 		this.gridOn = gridOn;
+		
+		Point point = new Point();
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (!e.isMetaDown()) {
+					point.x = e.getX();
+					point.y = e.getY();DisplayPanel.this.repaint();
+				}
+				DisplayPanel.this.repaint();
+			}
+		});
+		
+		addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseDragged(MouseEvent e) {
+				if (!e.isMetaDown()) {
+					Point p = getLocation();
+					setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);DisplayPanel.this.repaint();
+				}DisplayPanel.this.repaint();
+			}
+		});
 
 		repaint();
 	}
@@ -56,12 +82,19 @@ public class DisplayPanel extends JPanel implements Observer {
 		this.repaint();
 	}
 
-	public int getLength() {
+	public int getLength() {		
 		int tileNumber = 0;
 		if (map.getMapHeight() < map.getMapWidth())
 			tileNumber = map.getMapWidth();
 		else
 			tileNumber = map.getMapHeight();
+		
+		if ((int) Math.floor(this.getHeight() / tileNumber) < MAX_TILE_SIZE) {
+			this.setSize(MAX_TILE_SIZE * map.getMapWidth(), MAX_TILE_SIZE * map.getMapHeight());
+			return MAX_TILE_SIZE;
+		}		
+		
+		this.setSize((int) Math.floor(this.getHeight() / tileNumber) * map.getMapWidth(), (int) Math.floor(this.getHeight() / tileNumber) * map.getMapHeight());
 		return (int) Math.floor(this.getHeight() / tileNumber);
 	}
 
@@ -134,6 +167,8 @@ public class DisplayPanel extends JPanel implements Observer {
 		}
 
 	}
+	
+	
 
 	public void startAlg(Map map, boolean isStepByStep) {
 		alg = new Algorithm(map, isStepByStep);
