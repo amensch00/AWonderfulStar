@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.concurrent.SynchronousQueue;
 
+import net.tfobz.GUI.Photoshop;
+
 /**
  * @author Elias Thomaser
  *
@@ -15,9 +17,12 @@ public class Algorithm implements Runnable {
 
 	private PriorityQueue<TileNode> openlist = null;
 	private boolean[][] closed;
+	
+	private Photoshop ph;
 
-	public Algorithm(Map map, boolean isStepByStep) {
+	public Algorithm(Map map, boolean isStepByStep, Photoshop ph) {
 		this.map = map;
+		this.ph = ph;
 		openlist = new PriorityQueue<TileNode>(map.getMapWidth() * map.getMapHeight(), new TileNodeComparator());
 		closed = new boolean[map.getMapWidth()][map.getMapHeight()];
 	}
@@ -36,15 +41,10 @@ public class Algorithm implements Runnable {
 			
 			currentNode = openlist.poll();
 
-			if (currentNode == null)
-				break; // Madonna wos ischn do passiert
+			if (currentNode == null) break; // Madonna wos ischn do passiert
 
-			if (currentNode.equals(map.getZiel())) {
-				//map.setPreviousOfTileAt(currentNode.getX(), currentNode.getY(),
-				//		map.getTileAt(currentNode.getX(), currentNode.getY()));
-
+			if (currentNode.equals(map.getZiel()))
 				return map.getTileAt(currentNode.getX(), currentNode.getY());
-			}
 
 			closed[currentNode.getX()][currentNode.getY()] = true;
 
@@ -55,7 +55,7 @@ public class Algorithm implements Runnable {
 			notifyAllObservers();
 
 			try {
-				Thread.sleep(100);
+				Thread.sleep(20);
 			} catch (Exception e) {
 				System.out.println("wups");
 				e.printStackTrace();
@@ -73,8 +73,8 @@ public class Algorithm implements Runnable {
 	
 	private void printDaWe(TileNode tn) {
 		
-		if (tn.getPrevious() == null)
-			System.out.println("Es gibt keinen Weg!");
+		if (tn == null || tn.getPrevious() == null)
+			ph.setStateAndColorPickerVisibility(State.AVAILABLE, true);
 		else {
 			//System.out.println(tn.toString());
 			map.setTileAt(tn.getX(), tn.getY(), TileType.STREET, TileOverlay.DAWE);

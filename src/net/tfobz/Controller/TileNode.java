@@ -92,7 +92,7 @@ public class TileNode {
 	public void setPrevious(TileNode prev) {
 		this.previousTN = prev;
 
-		distanz = calculateDistance();
+		distanz = prev.getDistance() + calculateDistance();
 		luftlinie = calculateLuftlinie();
 	}
 
