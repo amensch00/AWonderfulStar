@@ -110,7 +110,7 @@ public class Algorithm implements Runnable {
 				|| node.getY() + y >= map.getMapHeight())
 			return;
 		
-		// if gewählte position gleich mauer zrughupfen
+		// if gewï¿½hlte position gleich mauer zrughupfen
 		if (map.getTileAt(node.getX() + x, node.getY() + y).getType() == TileType.WALL
 				|| closed[node.getX() + x][node.getY() + y])
 			return;

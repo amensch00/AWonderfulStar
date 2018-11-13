@@ -50,7 +50,7 @@ public class Photoshop extends JFrame {
 //		repaint();
 		getContentPane().setLayout(null);
 
-		// Für Menü-Leiste zuständig
+		// Fï¿½r Menï¿½-Leiste zustï¿½ndig
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == newFile) {
@@ -73,7 +73,7 @@ public class Photoshop extends JFrame {
 					
 				} else if (e.getSource() == openFile) {
 					JFileChooser j = new JFileChooser();
-					j.setDialogTitle("Bild Datei auswählen");
+					j.setDialogTitle("Bild Datei auswï¿½hlen");
 					j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
 
 					if (j.showOpenDialog(Photoshop.this) == JFileChooser.APPROVE_OPTION) {
@@ -180,7 +180,7 @@ public class Photoshop extends JFrame {
 
 		getContentPane().add(mapDisplayer);
 
-		// Dieser Listener, ermöglicht Malen
+		// Dieser Listener, ermï¿½glicht Malen
 		mapDisplayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (state == State.CURRENTLY_CALCULATING)
