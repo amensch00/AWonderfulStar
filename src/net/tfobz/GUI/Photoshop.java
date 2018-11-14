@@ -25,6 +25,7 @@ public class Photoshop extends JFrame {
 	private MyButton newFile, openFile, options, exit, stop, run;
 	private JPanel colorPicker;
 	private DisplayPanel mapDisplayer;
+	private int time = 50;
 	private boolean mode = true;
 
 	// Colorpicker
@@ -94,8 +95,10 @@ public class Photoshop extends JFrame {
 					OptionDialog nd = new OptionDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 150,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75,
-							Photoshop.this.mode);
+							Photoshop.this.mode, Photoshop.this.time);
 					Photoshop.this.mode = nd.getSelection();
+					//DO HOSH DI ZEIT :)
+					Photoshop.this.time = nd.getTime();
 					nd.dispose();
 				} else if (e.getSource() == exit) {
 					ClosingDialog c = new ClosingDialog(
