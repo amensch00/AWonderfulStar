@@ -21,10 +21,15 @@ public class Algorithm implements Runnable {
 	private boolean[][] closed;
 	private boolean isStepByStep;
 	
-	public Algorithm(Map map, boolean isStepByStep, Photoshop ph) {
+	private boolean isRunning = true;
+	
+	private int stepTimeout = 50;
+	
+	public Algorithm(Map map, boolean isStepByStep, Photoshop ph, int stepTimeout) {
 		this.map = map;
 		this.ph = ph;
 		this.isStepByStep = isStepByStep;
+		this.stepTimeout = stepTimeout;
 		
 		openlist = new PriorityQueue<TileNode>(map.getMapWidth() * map.getMapHeight(), new TileNodeComparator());
 		closed = new boolean[map.getMapWidth()][map.getMapHeight()];
@@ -92,12 +97,16 @@ public class Algorithm implements Runnable {
 			map.setTileAt(currentNode.getX(), currentNode.getY(), currentNode.getType(), TileOverlay.INCLOSED);
 			notifyAllObservers();
 			
+			if (!isRunning)
+				return null;
 			
 			// Wenn step by step true ist, wird eine kleine Verzögerung eingebaut um die
 			// einzelnen Schritte zu sehen
 			if (isStepByStep)
 				try {
-					Thread.sleep(20);
+					Thread.sleep(stepTimeout);
+				} catch (InterruptedException ex) {
+					isRunning = false;
 				} catch (Exception e) {
 					System.out.println("wups");
 					e.printStackTrace();
@@ -181,6 +190,5 @@ public class Algorithm implements Runnable {
 		for (Observer obst : observers)
 			obst.update();
 	}
-
 
 }

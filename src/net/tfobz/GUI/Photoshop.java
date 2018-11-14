@@ -33,7 +33,7 @@ public class Photoshop extends JFrame {
 	private MyButton newFile, openFile, options, exit, stop, run;
 	private JPanel colorPicker;
 	private DisplayPanel mapDisplayer;
-	private int time = 50;
+	private int stepTimeout = 50;
 	private boolean mode = true;
 
 	// Colorpicker
@@ -133,10 +133,10 @@ public class Photoshop extends JFrame {
 					OptionDialog nd = new OptionDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 150,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75,
-							Photoshop.this.mode, Photoshop.this.time);
+							Photoshop.this.mode, Photoshop.this.stepTimeout);
 					Photoshop.this.mode = nd.getSelection();
 					//DO HOSH DI ZEIT :)
-					Photoshop.this.time = nd.getTime();
+					Photoshop.this.stepTimeout = nd.getTime();
 					nd.dispose();
 				} else if (e.getSource() == exit) {
 					new ClosingDialog(
@@ -161,11 +161,17 @@ public class Photoshop extends JFrame {
 						state = State.CURRENTLY_CALCULATING;
 						colorPicker.setVisible(false);
 						
-						mapDisplayer.startAlg(converter.getMapFromImage(), mode, Photoshop.this);
+						mapDisplayer.startAlg(converter.getMapFromImage(), mode, Photoshop.this, stepTimeout);
 					} catch (Exception ex) {
 						ErrorHandling.showErrorMessage(ex);
 					}
-
+				} else if (e.getSource() == stop) {
+					try {
+						mapDisplayer.stopTheAlgorithm();
+						state = State.AVAILABLE;
+					} catch (Exception e2) {
+						ErrorHandling.showErrorMessage(e2);
+					}
 				}
 			}
 		};

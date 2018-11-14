@@ -25,6 +25,8 @@ public class DisplayPanel extends JPanel implements Observer {
 	private Map map = null;
 	private boolean gridOn = false;
 	private Algorithm alg;
+	
+	private Thread algThread;
 
 	/**
 	 * Initialisert ein neues DisplayPanel, das mit gedrückter maustaste beweglich ist
@@ -184,11 +186,11 @@ public class DisplayPanel extends JPanel implements Observer {
 
 	}
 
-	public void startAlg(Map map, boolean isStepByStep, Photoshop ph) {
-		alg = new Algorithm(map, isStepByStep, ph);
+	public void startAlg(Map map, boolean isStepByStep, Photoshop ph, int stepTimeout) {
+		alg = new Algorithm(map, isStepByStep, ph, stepTimeout);
 		alg.attach(this);
 
-		Thread algThread = new Thread(alg);
+		algThread = new Thread(alg);
 
 		algThread.start();
 	}
@@ -197,6 +199,11 @@ public class DisplayPanel extends JPanel implements Observer {
 	public void update() {
 		map = alg.getMap();
 		repaint();
+	}
+	
+	public void stopTheAlgorithm() {
+		if (algThread.isAlive())
+			algThread.interrupt();
 	}
 
 }
