@@ -12,6 +12,7 @@ import net.tfobz.Utilities.ErrorHandling;
 import net.tfobz.Utilities.IllegalColorException;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Color;
@@ -22,16 +23,17 @@ import java.io.IOException;
 import java.awt.Dimension;
 
 /**
- * Die Haupt UI Klasse, die Leider viel zu unübersichtlich geworden ist,
+ * Die Haupt UI Klasse, die Leider viel zu unï¿½bersichtlich geworden ist,
  * behandelt das meiste vom UserInput
  * @author Tschager, Thomaser
  *
  */
 public class Photoshop extends JFrame {
 	private JMenuBar menuBar;
-	private MyButton newFile, openFile, options, exit, run;
+	private MyButton newFile, openFile, options, exit, stop, run;
 	private JPanel colorPicker;
 	private DisplayPanel mapDisplayer;
+	private int time = 50;
 	private boolean mode = true;
 
 	// Colorpicker
@@ -48,9 +50,9 @@ public class Photoshop extends JFrame {
 	private Map map = null;
 
 	/**
-	 * Ermöglicht das verhindern des Starten von weiteren Berechnungen
+	 * Ermï¿½glicht das verhindern des Starten von weiteren Berechnungen
 	 * und zeigen/verstecken des ColorPicker panels um das Malen
-	 * während der Berechnung zu verhindern
+	 * wï¿½hrend der Berechnung zu verhindern
 	 */
 	private State state = State.AVAILABLE;
 	
@@ -131,8 +133,10 @@ public class Photoshop extends JFrame {
 					OptionDialog nd = new OptionDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 150,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75,
-							Photoshop.this.mode);
+							Photoshop.this.mode, Photoshop.this.time);
 					Photoshop.this.mode = nd.getSelection();
+					//DO HOSH DI ZEIT :)
+					Photoshop.this.time = nd.getTime();
 					nd.dispose();
 				} else if (e.getSource() == exit) {
 					new ClosingDialog(
@@ -141,7 +145,7 @@ public class Photoshop extends JFrame {
 
 				} else if (e.getSource() == run) {
 					if (map == null) {
-						ErrorHandling.showWarning("Bitte neue Datei erstellen oder öffnen!");
+						ErrorHandling.showWarning("Bitte neue Datei erstellen oder ï¿½ffnen!");
 						return;
 					}
 					
@@ -414,6 +418,13 @@ public class Photoshop extends JFrame {
 		exit.addMouseListener(myListener);
 		menuBar.add(exit);
 
+		
+		stop = new MyButton(0, 0, 40, 40, "Stop");
+		stop.setBackground(new Color(0x343434));
+		stop.setLabelColor(Color.WHITE);
+		stop.setLabelFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		stop.addMouseListener(myListener);
+		
 		run = new MyButton(0, 0, 40, 40, "Run");
 		run.setBackground(new Color(0x343434));
 		run.setLabelColor(Color.WHITE);
@@ -422,8 +433,18 @@ public class Photoshop extends JFrame {
 
 		horizontalStrut_1 = Box.createHorizontalStrut(573);
 		menuBar.add(horizontalStrut_1);
+		menuBar.add(stop);
 		menuBar.add(run);
 		setBackground(new Color(75, 75, 75));
+		
+		mapDisplayer.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+			}
+			public void mouseExited(MouseEvent e) {
+				setCursor(Cursor.getDefaultCursor());
+			}
+		});
 		setVisible(true);
 
 		try {

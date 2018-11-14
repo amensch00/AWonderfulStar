@@ -2,6 +2,7 @@ package net.tfobz.GUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -22,6 +23,7 @@ import javax.swing.GroupLayout.Alignment;
  */
 public class MyButton extends JPanel {
 	private JLabel jLabel = new JLabel();
+	private Color color = new Color(255, 255, 255);
 
 	public MyButton(int x, int y, int width, int height) {
 		jLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -47,6 +49,7 @@ public class MyButton extends JPanel {
 	}
 
 	public void setLabelColor(Color color) {
+		this.color = color;
 		jLabel.setForeground(color);
 	}
 
@@ -64,11 +67,14 @@ public class MyButton extends JPanel {
 
 	private class buttonHoverListener extends MouseAdapter {
 		public void mouseEntered(MouseEvent e) {
-			jLabel.setForeground(new Color(180, 180, 180));
+			if (color == Color.WHITE)
+				jLabel.setForeground(new Color(180, 180, 180));
+			else
+				jLabel.setForeground(new Color(color.getRed() - 20, color.getGreen() - 20, color.getBlue() - 20));
 		}
 
 		public void mouseExited(MouseEvent e) {
-			jLabel.setForeground(Color.WHITE);
+			jLabel.setForeground(color);
 		}
 	}
 
