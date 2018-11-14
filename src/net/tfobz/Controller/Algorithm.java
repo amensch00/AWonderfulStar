@@ -69,19 +69,25 @@ public class Algorithm implements Runnable {
 
 	@Override
 	public void run() {
-		printDaWe(solve());
-		notifyAllObservers();
+		TileNode t = null;
+		
+		try {
+			t = solve();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			printDaWe(t);
+			notifyAllObservers();
+		}
 	}
 
 	private void printDaWe(TileNode tn) {
-
-		if (tn == null || tn.getPrevious() == null)
-			ph.setStateAndColorPickerVisibility(State.AVAILABLE, true);
-		else {
-			// System.out.println(tn.toString());
+		if (tn != null && tn.getPrevious() != null) {
 			map.setTileAt(tn.getX(), tn.getY(), TileType.STREET, TileOverlay.DAWE);
 			printDaWe(tn.getPrevious());
 		}
+		
+		ph.setStateAndColorPickerVisibility(State.AVAILABLE, true);
 	}
 
 	public void dissolveNode(TileNode node) {
@@ -92,13 +98,13 @@ public class Algorithm implements Runnable {
 		// System.out.println();System.out.println();
 
 		checkNeighbour(node, 0, 1);
-		checkNeighbour(node, 1, 0);
-		checkNeighbour(node, 1, 1);
 		checkNeighbour(node, 0, -1);
+		checkNeighbour(node, 1, 0);
 		checkNeighbour(node, -1, 0);
-		checkNeighbour(node, -1, -1);
+		checkNeighbour(node, 1, 1);
 		checkNeighbour(node, 1, -1);
 		checkNeighbour(node, -1, 1);
+		checkNeighbour(node, -1, -1);
 
 		notifyAllObservers();
 
@@ -121,20 +127,20 @@ public class Algorithm implements Runnable {
 		// T2 Z
 		// checked ob T1 ODER T2 mauer sind,
 		// wenn ja, dann returned die methode
-		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL
-				|| map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
+		if (map.getTileAt(node.getX(), node.getY() + y).getType() == TileType.WALL || map.getTileAt(node.getX() + x, node.getY()).getType() == TileType.WALL)
 			return;
 
 		// Distanz von Start zu nachbar
-		double currScore = node.getDistance()
-				+ node.calculateDistanceTo(map.getTileAt(node.getX() + x, node.getY() + y));
+		double currScore = node.getDistance() + node.calculateDistanceTo(map.getTileAt(node.getX() + x, node.getY() + y));
 
-		if (!openlist.contains(map.getTileAt(node.getX() + y, node.getY() + y)))
+		if (!openlist.contains(map.getTileAt(node.getX() + x, node.getY() + y)))
 			openlist.add(map.getTileAt(node.getX() + x, node.getY() + y));
 		else if (currScore >= map.getTileAt(node.getX() + x, node.getY() + y).getDistance())
 			return;
 
 		map.setPreviousOfTileAt(node.getX() + x, node.getY() + y, node);
+//		map.getTileAt(node.getX() + x, node.getY() + y).setDistanz(currScore);
+//		map.getTileAt(node.getX() + x, node.getY() + y).setTotaleEntfernung(currScore + map.getTileAt(node.getX() + x, node.getY() + y).calculateLuftlinie());
 	}
 
 	public void attach(Observer obst) {

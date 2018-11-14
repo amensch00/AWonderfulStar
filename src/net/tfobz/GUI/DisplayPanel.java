@@ -17,7 +17,7 @@ import net.tfobz.Controller.TileType;
 import net.tfobz.Utilities.ColorPalette;
 
 public class DisplayPanel extends JPanel implements Observer {
-	public final int MAX_TILE_SIZE = 50;
+	public final int MAX_TILE_SIZE = 20;
 
 	private Map map = null;
 	private boolean gridOn = false;

@@ -79,9 +79,9 @@ public class Photoshop extends JFrame {
 						try {
 							img = ImageIO.read(new File(j.getSelectedFile().getPath()));
 							IMGProcessor converter = new IMGProcessor(img);
-							map = converter.convertToMap();
+							map = converter.getMap();
 
-							mapDisplayer.setMap(converter.convertToMap());
+							mapDisplayer.setMap(converter.getMap());
 							System.out.println("DONE");
 							mapDisplayer.repaint();
 						} catch (IOException ex) {
