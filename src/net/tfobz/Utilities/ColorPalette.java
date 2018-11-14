@@ -16,5 +16,5 @@ public class ColorPalette {
 	//Farben für Feld-Overlays
 	public static final Color INOPEN = new Color(69, 69, 69);
 	public static final Color INCLOSED = new Color(88, 14, 88);
-	public static final Color DAWE = new Color(0, 0, 0);
+	public static final Color DAWE = new Color(255,255,255);
 }
