@@ -18,6 +18,7 @@ public class OptionDialog extends JDialog {
 	private MyButton normal;
 	private JLabel question;
 	private boolean selection;
+	
 
 	public OptionDialog(int x, int y, boolean currentMode) {
 		this.getContentPane().setBackground(Color.DARK_GRAY);

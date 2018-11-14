@@ -8,6 +8,7 @@ import net.tfobz.Controller.State;
 import net.tfobz.Controller.TileType;
 import net.tfobz.Daten.IMGProcessor;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.ScrollPane;
@@ -21,7 +22,7 @@ import java.awt.Dimension;
 
 public class Photoshop extends JFrame {
 	private JMenuBar menuBar;
-	private MyButton newFile, openFile, options, exit, run;
+	private MyButton newFile, openFile, options, exit, stop, run;
 	private JPanel colorPicker;
 	private DisplayPanel mapDisplayer;
 	private boolean mode = true;
@@ -102,7 +103,7 @@ public class Photoshop extends JFrame {
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 
 				} else if (e.getSource() == run) {
-					
+
 					try {
 						map.clearOverlay();
 						state = State.CURRENTLY_CALCULATING;
@@ -364,6 +365,13 @@ public class Photoshop extends JFrame {
 		exit.addMouseListener(myListener);
 		menuBar.add(exit);
 
+		
+		stop = new MyButton(0, 0, 40, 40, "Stop");
+		stop.setBackground(new Color(0x343434));
+		stop.setLabelColor(Color.WHITE);
+		stop.setLabelFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+		stop.addMouseListener(myListener);
+		
 		run = new MyButton(0, 0, 40, 40, "Run");
 		run.setBackground(new Color(0x343434));
 		run.setLabelColor(Color.WHITE);
@@ -372,8 +380,18 @@ public class Photoshop extends JFrame {
 
 		horizontalStrut_1 = Box.createHorizontalStrut(573);
 		menuBar.add(horizontalStrut_1);
+		menuBar.add(stop);
 		menuBar.add(run);
 		setBackground(new Color(75, 75, 75));
+		
+		mapDisplayer.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+			}
+			public void mouseExited(MouseEvent e) {
+				setCursor(Cursor.getDefaultCursor());
+			}
+		});
 		setVisible(true);
 
 		try {
