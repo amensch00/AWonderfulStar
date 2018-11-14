@@ -35,6 +35,9 @@ public class IMGProcessor {
 	 * @return Bild als Map objekt
 	 */
 	public Map getMap() {
+		if (!isImageValid(img))
+			throw new IllegalArgumentException("img ist nicht valide");
+		
 		Map ret = new Map(img.getHeight(),img.getWidth());
 
 		for (int x = 0; x < img.getWidth(); x++) {

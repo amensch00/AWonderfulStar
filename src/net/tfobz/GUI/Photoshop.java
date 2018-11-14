@@ -8,6 +8,9 @@ import net.tfobz.BackEnd.Map;
 import net.tfobz.BackEnd.State;
 import net.tfobz.BackEnd.TileType;
 import net.tfobz.Daten.IMGProcessor;
+import net.tfobz.Utilities.ErrorHandling;
+import net.tfobz.Utilities.IllegalColorException;
+
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
@@ -85,8 +88,8 @@ public class Photoshop extends JFrame {
 							mapDisplayer.setMap(converter.getMap());
 							System.out.println("DONE");
 							mapDisplayer.repaint();
-						} catch (IOException ex) {
-							System.err.println("IO FEHLER");
+						} catch (IOException | IllegalColorException ex) {
+							ErrorHandling.showErrorMessage(ex);
 						}
 					}
 
