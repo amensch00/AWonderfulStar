@@ -4,10 +4,14 @@ package net.tfobz.GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -55,14 +59,7 @@ public class OptionDialog extends JDialog {
 		jtTime.setBackground(Color.DARK_GRAY);
 		jtTime.setSelectionColor(new Color(230, 126, 34));
 		jtTime.setCaretColor(Color.WHITE);
-		jtTime.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		jtTime.addKeyListener(new KeyAdapter() {
-		
-			public void keyReleased(KeyEvent e) {
-				if (jtTime.getText().length() > 0 && (e.getKeyChar() < 48 || e.getKeyChar() > 57))
-					jtTime.setText(jtTime.getText().substring(0, jtTime.getText().length() - 1));
-			}
-		});
+		jtTime.setBorder(javax.swing.BorderFactory.createEmptyBorder());		
 		add(jtTime);
 		
 		step = new MyButton(25, 100, 140, 40, "Step-by-step");
@@ -103,6 +100,9 @@ public class OptionDialog extends JDialog {
 	}
 	
 	public int getTime() {
+		if (!jtTime.getText().isEmpty()) {
+			return Integer.parseInt(jtTime.getText());
+		}
 		return timeMs;
 	}
 }
