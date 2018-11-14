@@ -22,39 +22,6 @@ public class Map {
 		allTNs = new TileNode[mapWidth * mapHeight];
 	}
 
-	public void setTileAt(int x, int y, TileType type) {
-		if (allTNs[y * mapWidth + x] == null)
-			allTNs[y * mapWidth + x] = new TileNode(x, y);
-
-		allTNs[y * mapWidth + x].setXPos(x);
-		allTNs[y * mapWidth + x].setYPos(y);
-		
-		if (type == TileType.START) {
-			allTNs[y * mapWidth + x].setDistanz(0);
-			allTNs[y * mapWidth + x].setLuftlinie(0);
-		}
-
-		allTNs[y * mapWidth + x].setTileType(type);
-		allTNs[y * mapWidth + x].setMap(this);
-	}
-
-	public void setTileAt(int x, int y, TileType type, TileOverlay overlay) {
-		if (allTNs[y * mapWidth + x] == null)
-			allTNs[y * mapWidth + x] = new TileNode(x, y);
-
-		allTNs[y * mapWidth + x].setXPos(x);
-		allTNs[y * mapWidth + x].setYPos(y);
-		
-		if (type == TileType.START) {
-			allTNs[y * mapWidth + x].setDistanz(0);
-			allTNs[y * mapWidth + x].setLuftlinie(0);
-		}
-
-		allTNs[y * mapWidth + x].setTileType(type);
-		allTNs[y * mapWidth + x].setOverlay(overlay);
-		allTNs[y * mapWidth + x].setMap(this);
-	}
-
 	public TileNode[] getAllTNs() {
 		return this.allTNs;
 	}
@@ -75,6 +42,10 @@ public class Map {
 		return mapHeight;
 	}
 
+	public TileNode getTileAt(int x, int y) {
+		return allTNs[y * mapWidth + x];
+	}
+
 	public void setStart(Point start) {
 		this.start = start;
 	}
@@ -83,14 +54,41 @@ public class Map {
 		this.ziel = ziel;
 	}
 
-	public TileNode getTileAt(int x, int y) {
-		return allTNs[y * mapWidth + x];
+	public void setTileAt(int x, int y, TileType type) {
+		if (allTNs[y * mapWidth + x] == null)
+			allTNs[y * mapWidth + x] = new TileNode(x, y);
+	
+		allTNs[y * mapWidth + x].setXPos(x);
+		allTNs[y * mapWidth + x].setYPos(y);
+		
+		if (type == TileType.START) {
+			allTNs[y * mapWidth + x].setDistanz(0);
+		}
+	
+		allTNs[y * mapWidth + x].setTileType(type);
+		allTNs[y * mapWidth + x].setMap(this);
+	}
+
+	public void setTileAt(int x, int y, TileType type, TileOverlay overlay) {
+		if (allTNs[y * mapWidth + x] == null)
+			allTNs[y * mapWidth + x] = new TileNode(x, y);
+	
+		allTNs[y * mapWidth + x].setXPos(x);
+		allTNs[y * mapWidth + x].setYPos(y);
+		
+		if (type == TileType.START) {
+			allTNs[y * mapWidth + x].setDistanz(0);
+		}
+	
+		allTNs[y * mapWidth + x].setTileType(type);
+		allTNs[y * mapWidth + x].setOverlay(overlay);
+		allTNs[y * mapWidth + x].setMap(this);
 	}
 
 	public void setPreviousOfTileAt(int x, int y, TileNode previous) {
 		if (previous == null)
 			throw new NullPointerException("previous darf nicht null sein");
-
+	
 		allTNs[y * mapWidth + x].setPrevious(previous);
 	}
 

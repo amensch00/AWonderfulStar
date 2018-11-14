@@ -23,15 +23,6 @@ public class IMGProcessor {
 
 	public Map getMap() {
 		Map ret = new Map(img.getHeight(),img.getWidth());
-		
-		for (int x = 0; x < img.getWidth(); x++)
-			for (int y = 0; y < img.getHeight(); y++) {
-				if (img.getRGB(x, y) == RSTART)
-					ret.setStart(new Point(x, y));
-				else if (img.getRGB(x, y) == RZIEL)
-					ret.setZiel(new Point(x, y));
-			}
-		
 
 		for (int x = 0; x < img.getWidth(); x++) {
 			for (int y = 0; y < img.getHeight(); y++) {
@@ -39,13 +30,14 @@ public class IMGProcessor {
 					ret.setTileAt(y, x, TileType.STREET);
 				else if (img.getRGB(x, y) == RSTART) {
 					ret.setTileAt(y, x, TileType.START);
+					ret.setStart(new Point(y, x));
 				} else if (img.getRGB(x, y) == RZIEL) {
 					ret.setTileAt(y, x, TileType.ZIEL);
+					ret.setZiel(new Point(y, x));
 				} else
 					ret.setTileAt(y, x, TileType.WALL);
 			}
 		}
-		
 		return ret;
 	}
 	
