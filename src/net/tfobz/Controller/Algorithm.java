@@ -159,7 +159,8 @@ public class Algorithm implements Runnable {
 	 */
 	private void backtrackAndPrintTakenPath(TileNode tn) {
 		if (tn != null && tn.getPrevious() != null) {
-			map.setTileAt(tn.getX(), tn.getY(), TileType.STREET, TileOverlay.DAWE);
+			map.setOverlayAt(tn.getX(), tn.getY(), TileOverlay.DAWE);
+			
 			backtrackAndPrintTakenPath(tn.getPrevious());
 		}
 		

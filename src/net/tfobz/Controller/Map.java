@@ -84,6 +84,10 @@ public class Map {
 		allTNs[y * mapWidth + x].setOverlay(overlay);
 		allTNs[y * mapWidth + x].setMap(this);
 	}
+	
+	public void setOverlayAt(int x, int y, TileOverlay overlay) {
+		allTNs[y * mapWidth + x].setOverlay(overlay);
+	}
 
 	public void setPreviousOfTileAt(int x, int y, TileNode previous) {
 		if (previous == null)

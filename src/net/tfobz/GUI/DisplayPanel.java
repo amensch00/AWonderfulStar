@@ -73,7 +73,7 @@ public class DisplayPanel extends JPanel implements Observer {
 		this.setLocation(90, 0);
 	}
 
-	public void setMapAt(int y, int x, TileType type) {
+	public void setTileTypeOfTileAt(int y, int x, TileType type) {
 		if (y >= 0 && y < map.getMapHeight() && x >= 0 && x < map.getMapWidth()) {
 			if (type == TileType.START || type == TileType.ZIEL || type == TileType.STREET || type == TileType.WALL)
 				map.setTileAt(x, y, type);
@@ -130,8 +130,6 @@ public class DisplayPanel extends JPanel implements Observer {
 						break;
 					}
 					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
-
-					// TODO x y schun widr verkehrt
 
 					switch (map.getTileAt(x, y).getOverlay()) {
 					case NOTHING:

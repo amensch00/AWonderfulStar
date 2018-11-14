@@ -212,18 +212,18 @@ public class Photoshop extends JFrame {
 
 					switch (currentColorSelection) {
 					case 1:
-						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.START);
+						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.START);
 						map.setStart(new Point(col - 1, row - 1));
 						break;
 					case 2:
-						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.ZIEL);
+						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.ZIEL);
 						map.setZiel(new Point(col - 1, row - 1));
 						break;
 					case 3:
-						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.WALL);
+						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.WALL);
 						break;
 					case 4:
-						((DisplayPanel) e.getSource()).setMapAt(row - 1, col - 1, TileType.STREET);
+						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.STREET);
 						break;
 					}
 
