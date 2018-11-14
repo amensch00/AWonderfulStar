@@ -3,10 +3,15 @@ package net.tfobz.Daten;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import net.tfobz.BackEnd.Map;
 import net.tfobz.BackEnd.TileNode;
 import net.tfobz.BackEnd.TileType;
+import net.tfobz.Utilities.ErrorHandling;
 import net.tfobz.Utilities.IllegalColorException;
 
 public class IMGProcessor {
@@ -29,14 +34,18 @@ public class IMGProcessor {
 		this.img = img;
 	}
 
+	public BufferedImage getImg() {
+		return img;
+	}
+	
 	/**
 	 * Gibt das im Konstruktor übergebene Bild als <code>Map</code> Objekt zurück
 	 * und setzt den Start und Ziel punkt in der Map
 	 * @return Bild als Map objekt
 	 */
-	public Map getMap() {
+	public Map getMapFromImage() {
 		if (!isImageValid(img))
-			throw new IllegalArgumentException("img ist nicht valide");
+			ErrorHandling.showWarning("Bild ist nicht Valide, ausführen wird nicht möglich sein!");
 		
 		Map ret = new Map(img.getHeight(),img.getWidth());
 
@@ -62,12 +71,12 @@ public class IMGProcessor {
 	 * @param <code>BufferedImage</code> image
 	 * @return <code>true</code> wenn das BufferedImage verwendbar ist, sonst <code>false</code>
 	 */
-	public boolean isImageValid(BufferedImage image) {
+	public static boolean isImageValid(BufferedImage image) {
 		int startCounter = 0, zielCounter = 0;
 		
 		for (int x = 0; x < image.getWidth(); x++) {
 			for (int y = 0; y < image.getHeight(); y++) {
-				if (img.getRGB(x, y) != RSTREET || img.getRGB(x, y) != RSTART || img.getRGB(x, y) != RWALL || img.getRGB(x, y) != RZIEL)
+				if (image.getRGB(x, y) != RSTREET && image.getRGB(x, y) != RSTART && image.getRGB(x, y) != RWALL && image.getRGB(x, y) != RZIEL)
 					throw new IllegalColorException("Bild enthält nicht verwendbare farben");
 				
 				if (image.getRGB(x, y) == RSTART)
@@ -79,6 +88,9 @@ public class IMGProcessor {
 					return false;
 			}
 		}
+		if (startCounter != 1 || zielCounter != 1)
+			return false;
+		
 		return true;
 	}
 	
@@ -87,7 +99,7 @@ public class IMGProcessor {
 	 * @param <code>Map</code> map
 	 * @return <code>true</code> wenn die map verwendbar ist, sonst <code>false</code>
 	 */
-	public boolean isMapValid(Map map) {
+	public static boolean isMapValid(Map map) {
 		int startCounter = 0, zielCounter = 0;
 		
 		for (TileNode tn : map.getAllTNs()) {
@@ -99,7 +111,41 @@ public class IMGProcessor {
 				if (startCounter > 1 || zielCounter > 1)
 					return false;
 		}
+		if (startCounter != 1 || zielCounter != 1)
+			return false;
+		
 		return true;
 	}
+	
+	/**
+	 * Speichert eine Map in eine Datei ab,
+	 * überprüft davor aber ob die Map valide ist
+	 * @param map die gepeichert werden soll
+	 * @param outFilePath der Dateipfad
+	 */
+	public void saveMapToImage(Map map, String outFilePath) {
+		if (!isMapValid(map))
+			throw new IllegalArgumentException("Diese Map ist nicht Valide! Zuviele Start/Ziele ?");
+		
+		BufferedImage out = new BufferedImage(map.getMapHeight(), map.getMapWidth(), img.getType());
+		
+		for (TileNode tn : map.getAllTNs()) {
+			if (tn.getType() == TileType.START)
+				out.setRGB(tn.getY(), tn.getX(), RSTART);
+			else if (tn.getType() == TileType.ZIEL)
+				out.setRGB(tn.getY(), tn.getX(), RZIEL);
+			else if (tn.getType() == TileType.STREET)
+				out.setRGB(tn.getY(), tn.getX(), RSTREET);
+			else
+				out.setRGB(tn.getY(), tn.getX(), RWALL);
+		}
+		
+		try {
+			ImageIO.write(out, "png", new File(outFilePath));
+		} catch (IOException e) {
+			ErrorHandling.showErrorMessage(e);
+		}
+	}
+	
 	
 }

@@ -15,6 +15,10 @@ public class Map {
 	private int mapWidth;
 	private int mapHeight;
 
+	/** 
+	 * @param mapWidth
+	 * @param mapHeight
+	 */
 	public Map(int mapWidth, int mapHeight) {
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;

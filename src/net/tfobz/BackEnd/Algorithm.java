@@ -3,11 +3,12 @@ package net.tfobz.BackEnd;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import net.tfobz.GUI.Photoshop;
+import net.tfobz.Utilities.ErrorHandling;
 
 /**
  * A* Algorithmus den man als Thread starten kann.<br><br>
  * <b>Nicht thread sicher.</b>
- * @author Elias Thomaser
+ * @author Elias Thomaser, Tschager
  *
  */
 public class Algorithm implements Runnable {
@@ -67,6 +68,12 @@ public class Algorithm implements Runnable {
 		TileNode currentNode;
 		while ( true ) {	
 			currentNode = openlist.poll();
+			
+			// Kein Weg gefunden
+			if (currentNode == null) {
+				ErrorHandling.showWarning("Kein Weg gefunden!");
+				return null;
+			}
 	
 			// Schaut ob die Aktuelle TileNode das Ziel ist
 			// Wenn ja, hat man den Weg gefunden

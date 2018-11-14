@@ -17,13 +17,20 @@ import net.tfobz.BackEnd.TileType;
 import net.tfobz.Utilities.ColorPalette;
 
 public class DisplayPanel extends JPanel implements Observer {
-	public final int MAX_TILE_SIZE = 20;
+	/**
+	 * Die Minimale Seitenlänge eines gemalten Rectangle
+	 */
+	public final int MIN_TILE_SIZE = 20;
 
 	private Map map = null;
 	private boolean gridOn = false;
 	private Algorithm alg;
 
-
+	/**
+	 * Initialisert ein neues DisplayPanel, das mit gedrückter maustaste beweglich ist
+	 * @param map : Map
+	 * @param gridOn : boolean
+	 */
 	public DisplayPanel(final Map map, boolean gridOn) {
 		setLayout(null);
 		this.map = map;
@@ -83,6 +90,11 @@ public class DisplayPanel extends JPanel implements Observer {
 		
 	}
 
+	/**
+	 * Gibt die gebrauchte Seitenlänge eines Rectangle zurück,<br>
+	 * sollte er unter <code>MIN_TILE_SIZE</code> liegen, wird <code>MIN_TILE_SIZE</code> zurückgegeben
+	 * @return
+	 */
 	public int getLength() {
 		int tileNumber = 0;
 		if (map.getMapHeight() < map.getMapWidth())
@@ -90,10 +102,10 @@ public class DisplayPanel extends JPanel implements Observer {
 		else
 			tileNumber = map.getMapHeight();
 
-		if ((int) Math.floor(761 / tileNumber) < MAX_TILE_SIZE) {
+		if ((int) Math.floor(761 / tileNumber) < MIN_TILE_SIZE) {
 			
-			this.setSize(MAX_TILE_SIZE * map.getMapHeight(), MAX_TILE_SIZE * map.getMapWidth());
-			return MAX_TILE_SIZE;
+			this.setSize(MIN_TILE_SIZE * map.getMapHeight(), MIN_TILE_SIZE * map.getMapWidth());
+			return MIN_TILE_SIZE;
 		}
 
 		this.setSize((int) Math.floor(761 / tileNumber) * map.getMapHeight(),
@@ -113,6 +125,7 @@ public class DisplayPanel extends JPanel implements Observer {
 
 			for (int y = 0; y < map.getMapHeight(); y++) {
 				for (int x = 0; x < map.getMapWidth(); x++) {
+					// Malt die jeweiligen Tiles 
 					switch (map.getTileAt(x, y).getType()) {
 					case START:
 						g.setColor(ColorPalette.BLAU);
@@ -131,6 +144,7 @@ public class DisplayPanel extends JPanel implements Observer {
 					}
 					g.fillRect(y * length, x * length + this.getInsets().top, length, length);
 
+					// Malt das Overlay
 					switch (map.getTileAt(x, y).getOverlay()) {
 					case NOTHING:
 						break;
@@ -151,6 +165,7 @@ public class DisplayPanel extends JPanel implements Observer {
 				}
 			}
 
+			// Zeichnet das Grid, wenn die Option ausgewählt ist
 			if (gridOn) {
 				g.setColor(new Color(255, 255, 255));
 				int height = length * map.getMapWidth() - 1;

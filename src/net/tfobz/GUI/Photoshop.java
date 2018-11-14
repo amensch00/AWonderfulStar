@@ -14,8 +14,6 @@ import net.tfobz.Utilities.IllegalColorException;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.ScrollPane;
-import java.awt.Scrollbar;
 import java.awt.Color;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -23,6 +21,12 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Dimension;
 
+/**
+ * Die Haupt UI Klasse, die Leider viel zu unübersichtlich geworden ist,
+ * behandelt das meiste vom UserInput
+ * @author Tschager, Thomaser
+ *
+ */
 public class Photoshop extends JFrame {
 	private JMenuBar menuBar;
 	private MyButton newFile, openFile, options, exit, run;
@@ -36,26 +40,46 @@ public class Photoshop extends JFrame {
 	private JLabel lblstart, lblend, lblstreet, lblwall;
 	private Component horizontalStrut_1;
 
-	// 1 = start; 2 = end; 3 = wall; 4 = street
+	/**
+	 *  1 = start<br>2 = end<br>3 = wall<br>4 = street
+	 */
 	private int currentColorSelection = 1;
 
 	private Map map = null;
 
+	/**
+	 * Ermöglicht das verhindern des Starten von weiteren Berechnungen
+	 * und zeigen/verstecken des ColorPicker panels um das Malen
+	 * während der Berechnung zu verhindern
+	 */
 	private State state = State.AVAILABLE;
+	
+	private IMGProcessor converter = null;
+	private String pathToOpenedFile = "";
 
+	/**
+	 * Initialisiert, startet und macht das neue "Photoshop" Fenster sichtbart
+	 */
 	public Photoshop() {
 		setLocation(400, 150);
 		setSize(1024, 800);
+
 		setUndecorated(true);
 		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 		setLayout(null);
-		this.getContentPane().setBackground(new Color(75, 75, 75));
 		setVisible(true);
+		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.getContentPane().setBackground(new Color(75, 75, 75));
+		
 		// Fï¿½r Menï¿½-Leiste zustï¿½ndig
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == newFile) {
+					if (state == State.CURRENTLY_CALCULATING)
+						return;
+					
 					NewDialog nd = new NewDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 100,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
@@ -71,9 +95,14 @@ public class Photoshop extends JFrame {
 						mapDisplayer.setBackground(new Color(75, 75, 75));
 						mapDisplayer.setLayout(null);
 						mapDisplayer.repaint();
+						
+						converter = new IMGProcessor(new BufferedImage(map.getMapHeight(), map.getMapWidth(), BufferedImage.TYPE_INT_RGB));
 					}
 
 				} else if (e.getSource() == openFile) {
+					if (state == State.CURRENTLY_CALCULATING)
+						return;
+					
 					JFileChooser j = new JFileChooser();
 					j.setDialogTitle("Bild Datei auswï¿½hlen");
 					j.setFileFilter(new FileNameExtensionFilter("PNG Dateien", "png"));
@@ -81,11 +110,13 @@ public class Photoshop extends JFrame {
 					if (j.showOpenDialog(Photoshop.this) == JFileChooser.APPROVE_OPTION) {
 						BufferedImage img = null;
 						try {
-							img = ImageIO.read(new File(j.getSelectedFile().getPath()));
-							IMGProcessor converter = new IMGProcessor(img);
-							map = converter.getMap();
+							pathToOpenedFile = j.getSelectedFile().getAbsolutePath();
+							img = ImageIO.read(new File(pathToOpenedFile));
+							
+							converter = new IMGProcessor(img);
+							map = converter.getMapFromImage();
 
-							mapDisplayer.setMap(converter.getMap());
+							mapDisplayer.setMap(converter.getMapFromImage());
 							System.out.println("DONE");
 							mapDisplayer.repaint();
 						} catch (IOException | IllegalColorException ex) {
@@ -94,6 +125,9 @@ public class Photoshop extends JFrame {
 					}
 
 				} else if (e.getSource() == options) {
+					if (state == State.CURRENTLY_CALCULATING)
+						return;
+					
 					OptionDialog nd = new OptionDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 150,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75,
@@ -101,19 +135,31 @@ public class Photoshop extends JFrame {
 					Photoshop.this.mode = nd.getSelection();
 					nd.dispose();
 				} else if (e.getSource() == exit) {
-					ClosingDialog c = new ClosingDialog(
+					new ClosingDialog(
 							(int) (Photoshop.this.getLocation().getX() + Photoshop.this.getWidth() / 2) - 100,
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 
 				} else if (e.getSource() == run) {
+					if (map == null) {
+						ErrorHandling.showWarning("Bitte neue Datei erstellen oder öffnen!");
+						return;
+					}
 					
 					try {
 						map.clearOverlay();
+						
+						if (pathToOpenedFile.isEmpty())
+							pathToOpenedFile = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory() + "file";
+						
+						converter.saveMapToImage(mapDisplayer.getMap(), pathToOpenedFile);
+						converter = new IMGProcessor(ImageIO.read(new File(pathToOpenedFile)));
+						
 						state = State.CURRENTLY_CALCULATING;
 						colorPicker.setVisible(false);
-						mapDisplayer.startAlg(map, mode, Photoshop.this);
+						
+						mapDisplayer.startAlg(converter.getMapFromImage(), mode, Photoshop.this);
 					} catch (Exception ex) {
-						System.out.println("Keine Map!");
+						ErrorHandling.showErrorMessage(ex);
 					}
 
 				}
@@ -217,11 +263,11 @@ public class Photoshop extends JFrame {
 					switch (currentColorSelection) {
 					case 1:
 						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.START);
-						map.setStart(new Point(col - 1, row - 1));
+						((DisplayPanel) e.getSource()).getMap().setStart(new Point(col - 1, row - 1));
 						break;
 					case 2:
 						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.ZIEL);
-						map.setZiel(new Point(col - 1, row - 1));
+						((DisplayPanel) e.getSource()).getMap().setZiel(new Point(col - 1, row - 1));
 						break;
 					case 3:
 						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.WALL);
