@@ -1,4 +1,4 @@
-package net.tfobz.Controller;
+package net.tfobz.BackEnd;
 
 /**
  * Verschiedene Node-Typen, welche auf der Map verkommen können, definiert in

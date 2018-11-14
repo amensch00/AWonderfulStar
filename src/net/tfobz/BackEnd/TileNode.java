@@ -1,4 +1,4 @@
-package net.tfobz.Controller;
+package net.tfobz.BackEnd;
 
 /**
  * Nodes, welche benutzt werden, um die Map aufzubauen. Sie enthalten

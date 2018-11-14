@@ -1,4 +1,4 @@
-package net.tfobz.Controller;
+package net.tfobz.BackEnd;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -65,28 +65,29 @@ public class Algorithm implements Runnable {
 		openlist.add(map.getStart());
 	
 		TileNode currentNode;
-		while (true) {
-	
-			// for (TileNode t : openlist) {
-			// System.out.print(t.toString() + "\t");
-			// }
-	
+		while ( true ) {	
 			currentNode = openlist.poll();
 	
-			if (currentNode == null)
-				break; // Madonna wos ischn do passiert
-	
+			// Schaut ob die Aktuelle TileNode das Ziel ist
+			// Wenn ja, hat man den Weg gefunden
 			if (currentNode.equals(map.getZiel()))
 				return map.getTileAt(currentNode.getX(), currentNode.getY());
 	
+			// Entfernt die derzeitige Node von der OpenList und
+			// zugleich fügt sie sie zur closedList hinzu
 			openlist.remove(currentNode);
 			closed[currentNode.getX()][currentNode.getY()] = true;
 	
+			// Löst die currentNode auf
 			dissolveNode(currentNode);
 	
+			// Aktualisert die Darstellung der TileNodes in der closedList
 			map.setTileAt(currentNode.getX(), currentNode.getY(), currentNode.getType(), TileOverlay.INCLOSED);
-	
 			notifyAllObservers();
+			
+			
+			// Wenn step by step true ist, wird eine kleine Verzögerung eingebaut um die
+			// einzelnen Schritte zu sehen
 			if (isStepByStep)
 				try {
 					Thread.sleep(20);
@@ -95,26 +96,25 @@ public class Algorithm implements Runnable {
 					e.printStackTrace();
 				}
 		}
-	
-		return null;
 	}
 
+	/**
+	 * Geht alle Nachbarn der <code>node</code> durch und löst sie wenn möglich auf
+	 */
 	private void dissolveNode(TileNode node) {
-	
-		// System.out.println("Current Node: [" + node.getX() + "||" + node.getY() +
-		// "]");
-	
-		// System.out.println();System.out.println();
-		
+		// Nicht diagonale Nachbarn
 		checkNeighbour(node, 0, 1);
 		checkNeighbour(node, 0, -1);
 		checkNeighbour(node, 1, 0);
 		checkNeighbour(node, -1, 0);
+		
+		// Diagonale Nachbarn
 		checkNeighbour(node, 1, 1);
 		checkNeighbour(node, 1, -1);
 		checkNeighbour(node, -1, 1);
 		checkNeighbour(node, -1, -1);
-	
+		
+		// Teilt allen Observern mit, dass die Daten sich geändert haben
 		notifyAllObservers();
 	}
 
@@ -152,10 +152,9 @@ public class Algorithm implements Runnable {
 	}
 
 	/**
-	 * Takes the final node and backtracks it to the start
-	 * and sets the TileType of all the tile in the path
-	 * to DAWE (The Way), making for a visually more appeasing
-	 * look.
+	 * Takes the final node and backtracks it to the start and sets the TileOverlay
+	 * of all the tile in the path to DAWE (The Way), making it easier to spot the
+	 * path that was taken.
 	 */
 	private void backtrackAndPrintTakenPath(TileNode tn) {
 		if (tn != null && tn.getPrevious() != null) {

@@ -3,9 +3,10 @@ package net.tfobz.GUI;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import net.tfobz.Controller.Map;
-import net.tfobz.Controller.State;
-import net.tfobz.Controller.TileType;
+
+import net.tfobz.BackEnd.Map;
+import net.tfobz.BackEnd.State;
+import net.tfobz.BackEnd.TileType;
 import net.tfobz.Daten.IMGProcessor;
 import java.awt.Component;
 import java.awt.Font;

@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
-import net.tfobz.Controller.Map;
-import net.tfobz.Controller.TileNode;
-import net.tfobz.Controller.TileType;
+import net.tfobz.BackEnd.Map;
+import net.tfobz.BackEnd.TileNode;
+import net.tfobz.BackEnd.TileType;
 import net.tfobz.Utilities.ColorPalette;
 
 public class IMGProcessor {

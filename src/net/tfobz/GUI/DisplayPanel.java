@@ -10,10 +10,10 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JPanel;
 
-import net.tfobz.Controller.Algorithm;
-import net.tfobz.Controller.Map;
-import net.tfobz.Controller.Observer;
-import net.tfobz.Controller.TileType;
+import net.tfobz.BackEnd.Algorithm;
+import net.tfobz.BackEnd.Map;
+import net.tfobz.BackEnd.Observer;
+import net.tfobz.BackEnd.TileType;
 import net.tfobz.Utilities.ColorPalette;
 
 public class DisplayPanel extends JPanel implements Observer {
