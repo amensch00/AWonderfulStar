@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import net.tfobz.Utilities.ColorPalette;
+import net.tfobz.Utilities.ErrorHandling;
 
 /**
  * Ein Eigenerstellter Costum Dialog um Optionen behandeln und entgegennemen zu können
@@ -117,7 +118,11 @@ public class OptionDialog extends JDialog {
 	 */
 	public int getTime() {
 		if (!jtTime.getText().isEmpty()) {
-			return Integer.parseInt(jtTime.getText());
+			try {
+				timeMs =  Integer.parseInt(jtTime.getText());
+			} catch (Exception e) {
+				ErrorHandling.showWarning("Nur Ganzzahlen erlaubt!");
+			}
 		}
 		return timeMs;
 	}

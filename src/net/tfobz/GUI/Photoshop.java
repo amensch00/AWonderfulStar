@@ -159,6 +159,9 @@ public class Photoshop extends JFrame {
 						return;
 					}
 					
+					if (state == State.CURRENTLY_CALCULATING)
+						return;
+					
 					try {
 						map.clearOverlay();
 						

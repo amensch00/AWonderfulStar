@@ -11,9 +11,12 @@ import java.awt.event.MouseEvent;
 import java.lang.Character.Subset;
 
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import net.tfobz.Utilities.ErrorHandling;
 
 /**
  * Dieses PopUp-Fenster wird geöffnet, sobald der User eine neue Eingabe-Map
@@ -27,8 +30,7 @@ public class NewDialog extends JDialog {
 	private MyButton yes;
 	private MyButton cancel;
 	private JLabel newFile;
-	private JTextField width;
-	private JTextField height;
+	private JFormattedTextField width, height;
 	private boolean wasYesPressed = false;
 
 	/**
@@ -66,7 +68,7 @@ public class NewDialog extends JDialog {
 		add(cancel);
 		
 		//Feld - zur Eingabe von Breite der Testmap
-		width = new JTextField("width..");
+		width = new JFormattedTextField("width..");
 		width.setHorizontalAlignment(SwingConstants.CENTER);
 		width.setBounds(25, 80, 80, 40);
 		width.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
@@ -77,7 +79,7 @@ public class NewDialog extends JDialog {
 		width.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		add(width);
 		//Feld - zur Eingabe von Höhe der Testmap
-		height = new JTextField("height..");
+		height = new JFormattedTextField("height..");
 		height.setHorizontalAlignment(SwingConstants.CENTER);
 		height.setBounds(130, 80, 80, 40);
 		height.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
@@ -106,14 +108,22 @@ public class NewDialog extends JDialog {
 		height.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (height.getText().contains("height..")) {
-					height.setText("");
+					try {
+						height.setText("");
+					} catch (Exception e1) {
+						ErrorHandling.showWarning("Eingabe nicht korrekt");
+					}
 					height.setForeground(Color.WHITE);
 				}
 			}
 
 			public void keyReleased(KeyEvent e) {
 				if (height.getText().length() > 0 && (e.getKeyChar() < 48 || e.getKeyChar() > 57))
-					height.setText(width.getText().substring(0, height.getText().length() - 1));
+					try {
+						height.setText(width.getText().substring(0, height.getText().length() - 1));
+					} catch (Exception e1) {
+						ErrorHandling.showWarning("Eingabe nicht korrekt");
+					}
 			}
 		});
 		//Überprüft-Eingabe

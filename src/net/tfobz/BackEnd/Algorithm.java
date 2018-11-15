@@ -95,9 +95,12 @@ public class Algorithm implements Runnable {
 			// Löst die currentNode auf
 			dissolveNode(currentNode);
 	
+			
 			// Aktualisert die Darstellung der TileNodes in der closedList
 			map.setTileAt(currentNode.getX(), currentNode.getY(), currentNode.getType(), TileOverlay.INCLOSED);
-			notifyAllObservers();
+			
+			if (isStepByStep)
+				notifyAllObservers();
 			
 			if (!isRunning)
 				return null;

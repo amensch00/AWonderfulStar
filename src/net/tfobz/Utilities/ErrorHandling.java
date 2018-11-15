@@ -12,13 +12,13 @@ public class ErrorHandling {
 	 * Zeigt einen Error Dialog mit der nachricht der Exception
 	 */
 	public static void showErrorMessage(Exception e) {
-		JOptionPane.showConfirmDialog(null, e.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, e.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	/**
 	 * Ermöglicht es dem Benutzer einen Hinweis zu zeigen
 	 */
 	public static void showWarning(String msg) {
-		JOptionPane.showConfirmDialog(null, msg, "Hinweis", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg, "Fehler", JOptionPane.ERROR_MESSAGE);
 	}
 }
