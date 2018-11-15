@@ -16,8 +16,9 @@ public class Map {
 	private int mapHeight;
 
 	/** 
-	 * @param mapWidth
-	 * @param mapHeight
+	 * Konstruktor einer Map, nimmt die Breite und Höhe einer Map
+	 * @param mapWidth : Breite
+	 * @param mapHeight : Höhe
 	 */
 	public Map(int mapWidth, int mapHeight) {
 		this.mapWidth = mapWidth;

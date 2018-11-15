@@ -31,6 +31,12 @@ public class NewDialog extends JDialog {
 	private JTextField height;
 	private boolean wasYesPressed = false;
 
+	/**
+	 * NewDialog Konstruktor der X bzw. Y Position des neuen Dialoges entgegennimmt,
+	 * und daraufhin den Dialog initialisiert
+	 * @param x : int
+	 * @param y : int
+	 */
 	public NewDialog(int x, int y) {
 		// Frame-Einstellungen
 		this.getContentPane().setBackground(Color.DARK_GRAY);

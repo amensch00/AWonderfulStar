@@ -186,6 +186,15 @@ public class DisplayPanel extends JPanel implements Observer {
 
 	}
 
+	/**
+	 * Startet einen neuen Thread, in welchen der Algorithmus ausgefürht wird.
+	 * Mehrere Threads vom Algorithmus werden nicht laufen, da der Caller
+	 * dieser Methode darauf achtet ob bereits gerechnet wir oder nicht
+	 * @param map : Map
+	 * @param isStepByStep : boolean
+	 * @param ph : Photoshop
+	 * @param stepTimeout : int
+	 */
 	public void startAlg(Map map, boolean isStepByStep, Photoshop ph, int stepTimeout) {
 		alg = new Algorithm(map, isStepByStep, ph, stepTimeout);
 		alg.attach(this);
@@ -201,6 +210,9 @@ public class DisplayPanel extends JPanel implements Observer {
 		repaint();
 	}
 	
+	/**
+	 * Versucht den Algorithmus-Thread zu stoppen
+	 */
 	public void stopTheAlgorithm() {
 		if (algThread.isAlive())
 			algThread.interrupt();

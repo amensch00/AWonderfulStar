@@ -25,6 +25,14 @@ public class MyButton extends JPanel {
 	private JLabel jLabel = new JLabel();
 	private Color color = new Color(255, 255, 255);
 
+	/**
+	 * MyButton Konstruktor der die X, Y Position, bzw. die Breite und Höhe des
+	 * Buttons entgegen nimmt, und den Button darauf hin initialisiert
+	 * @param x : int
+	 * @param y : int
+	 * @param width : int 
+	 * @param height : int
+	 */
 	public MyButton(int x, int y, int width, int height) {
 		jLabel.setHorizontalAlignment(JLabel.CENTER);
 		jLabel.setBounds(x, y, width, height);
@@ -34,6 +42,16 @@ public class MyButton extends JPanel {
 		add(Box.createHorizontalGlue());
 	}
 
+	/**
+	 * MyButton Konstruktor der die X, Y Position, bzw. die Breite und Höhe des
+	 * Buttons entgegen nimmt, und den Button darauf hin initialisiert
+	 * Zusätzlich wird bei diesem Konstruktor auch der dargestellte Text übergeben
+	 * @param x : int
+	 * @param y : int
+	 * @param width : int 
+	 * @param height : int
+	 * @param text : String
+	 */
 	public MyButton(int x, int y, int width, int height, String text) {
 		super();
 		this.setBounds(x, y, width, height);
@@ -65,6 +83,9 @@ public class MyButton extends JPanel {
 		return jLabel.getText();
 	}
 
+	/**
+	 * Ein ButtonHoverListener um die Vordergrundfarbe des Buttons beim Hovern zu verändern
+	 */
 	private class buttonHoverListener extends MouseAdapter {
 		public void mouseEntered(MouseEvent e) {
 			if (color == Color.WHITE)

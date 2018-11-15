@@ -21,8 +21,10 @@ public class Algorithm implements Runnable {
 	private boolean[][] closed;
 	private boolean isStepByStep;
 	
+	// Macht es möglich den Trhead zu stoppen
 	private boolean isRunning = true;
 	
+	// timeOut zwischen einzelenen Steps im stepByStep modus
 	private int stepTimeout = 50;
 	
 	public Algorithm(Map map, boolean isStepByStep, Photoshop ph, int stepTimeout) {

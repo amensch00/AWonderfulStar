@@ -78,6 +78,8 @@ public class Photoshop extends JFrame {
 		// Fï¿½r Menï¿½-Leiste zustï¿½ndig
 		MouseListener myListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				
+				// Kreiert eine neue Map und füllt sie nur mit straßen
 				if (e.getSource() == newFile) {
 					if (state == State.CURRENTLY_CALCULATING)
 						return;
@@ -102,6 +104,7 @@ public class Photoshop extends JFrame {
 					}
 
 				} else if (e.getSource() == openFile) {
+					// Öffnet eine Datei und wandelt sie zu eineer Map um
 					if (state == State.CURRENTLY_CALCULATING)
 						return;
 					
@@ -127,6 +130,11 @@ public class Photoshop extends JFrame {
 					}
 
 				} else if (e.getSource() == options) {
+					// Optionen werden geöffnet
+					// stepTimeout auswählen
+					// oder
+					// der Modus in dem der Weg gesucht wird
+					
 					if (state == State.CURRENTLY_CALCULATING)
 						return;
 					
@@ -144,6 +152,8 @@ public class Photoshop extends JFrame {
 							(int) (Photoshop.this.getLocation().getY() + Photoshop.this.getHeight() / 2) - 75);
 
 				} else if (e.getSource() == run) {
+					// Startet einen neuen Thread der den Weg berechnet
+					
 					if (map == null) {
 						ErrorHandling.showWarning("Bitte neue Datei erstellen oder ï¿½ffnen!");
 						return;
@@ -166,6 +176,10 @@ public class Photoshop extends JFrame {
 						ErrorHandling.showErrorMessage(ex);
 					}
 				} else if (e.getSource() == stop) {
+					if (state == State.AVAILABLE)
+						return;
+					
+					// Versucht den algorithmus thread zu interuppten
 					try {
 						mapDisplayer.stopTheAlgorithm();
 						state = State.AVAILABLE;
@@ -176,6 +190,7 @@ public class Photoshop extends JFrame {
 			}
 		};
 
+		// Macht den ColorPicker benutzbar
 		ActionListener myColorListener = new ActionListener() {
 
 			@Override
@@ -212,6 +227,8 @@ public class Photoshop extends JFrame {
 		menuBar.setBorderPainted(false);
 		setJMenuBar(menuBar);
 
+		
+		// -- Macht das Fenster bewegbar
 		Point point = new Point();
 		menuBar.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -229,6 +246,7 @@ public class Photoshop extends JFrame {
 				}
 			}
 		});
+		// --
 
 		colorPicker = new JPanel();
 
@@ -268,8 +286,10 @@ public class Photoshop extends JFrame {
 						if (row * x < e.getX())
 							row += 1;
 
+					// Benötigt, da sonst der ColorPicker übermahlt weren würde wenn man klickt
 					colorPicker.setVisible(false);
 
+					// Setzt die richtige TileNode in der map des displayPanels auf den richtigen TileType
 					switch (currentColorSelection) {
 					case 1:
 						((DisplayPanel) e.getSource()).setTileTypeOfTileAt(row - 1, col - 1, TileType.START);
@@ -291,6 +311,8 @@ public class Photoshop extends JFrame {
 				}
 			}
 		});
+		
+		// Beginn der meisten UI Initialisierung
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -393,8 +415,6 @@ public class Photoshop extends JFrame {
 		lblwall.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		colorPicker.add(lblwall);
 
-		// highlighter = new Rectangle(start.getBounds());
-
 		newFile = new MyButton(0, 0, 40, 40, "New file");
 		newFile.setMinimumSize(new Dimension(20, 24));
 		newFile.setBackground(new Color(0x343434));
@@ -467,44 +487,3 @@ public class Photoshop extends JFrame {
 	}
 
 }
-
-// mapDisplayer.addMouseListener(new MouseAdapter() {
-// public void mouseEntered(MouseEvent e) {
-// Toolkit toolkit = Toolkit.getDefaultToolkit();
-// Image cursorimg = null;
-// Point cursorHotSpot = new Point(0, 31);
-//
-//// try {
-//// switch (currentColorSelection) {
-////
-//// case 1:
-//// cursorimg =
-// toolkit.getImage(getClass().getResource("CursorStart.png").getPath());
-//// break;
-//// case 2:
-//// cursorimg =
-// toolkit.getImage(getClass().getResource("CursorEnd.png").getPath());
-//// break;
-//// case 3:
-//// cursorimg =
-// toolkit.getImage(getClass().getResource("CursorWall.png").getPath());
-//// break;
-//// case 4:
-//// cursorimg =
-// toolkit.getImage(getClass().getResource("CursorStreet.png").getPath());
-//// break;
-//// }
-//// setCursor(toolkit.createCustomCursor(cursorimg, cursorHotSpot, "CCursor"));
-////
-//// } catch (Exception ex) {
-//// System.out.println("Cursor nicht gefunden!");
-//// setCursor(Cursor.getDefaultCursor());
-//// }
-//// setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-//
-// }
-//
-// public void mouseExited(MouseEvent e) {
-// setCursor(Cursor.getDefaultCursor());
-// }
-// });

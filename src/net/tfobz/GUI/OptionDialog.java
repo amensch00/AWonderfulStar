@@ -20,6 +20,11 @@ import javax.swing.SwingConstants;
 
 import net.tfobz.Utilities.ColorPalette;
 
+/**
+ * Ein Eigenerstellter Costum Dialog um Optionen behandeln und entgegennemen zu können
+ * @author Tschager, Thomaser
+ *
+ */
 public class OptionDialog extends JDialog {
 
 	private MyButton step;
@@ -31,6 +36,13 @@ public class OptionDialog extends JDialog {
 	private boolean selection;
 	
 
+	/**
+	 * OptionDialog Konstruktor der X/Y Position, ob der Modus StepByStep ist bzw. die default stepTimeout zeit entgegennimmt
+	 * @param x : int 
+	 * @param y : int
+	 * @param currentMode : boolean
+	 * @param timeMs : int
+	 */
 	public OptionDialog(int x, int y, boolean currentMode, int timeMs) {
 		this.timeMs = timeMs;
 		this.getContentPane().setBackground(Color.DARK_GRAY);
@@ -99,6 +111,10 @@ public class OptionDialog extends JDialog {
 		return selection;
 	}
 	
+	/**
+	 * Parsed den Text im TextFeld und gibt in dann als int zurück
+	 * @return das stepTimeout in ms
+	 */
 	public int getTime() {
 		if (!jtTime.getText().isEmpty()) {
 			return Integer.parseInt(jtTime.getText());

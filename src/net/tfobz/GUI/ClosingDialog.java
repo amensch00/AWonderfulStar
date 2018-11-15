@@ -22,6 +22,11 @@ public class ClosingDialog extends JDialog {
 	private MyButton cancel;
 	private JLabel leave;
 
+	/**
+	 * ClosingDialog Konstruktor der die X bzw. Y Postition des ClosingDialogs nimmt
+	 * @param x : int
+	 * @param y : int
+	 */
 	public ClosingDialog(int x, int y) {
 		this.getContentPane().setBackground(Color.DARK_GRAY);
 		setModal(true);
@@ -50,6 +55,7 @@ public class ClosingDialog extends JDialog {
 
 		add(yes);
 		add(cancel);
+		
 		// Beendet das Programm
 		yes.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -58,6 +64,7 @@ public class ClosingDialog extends JDialog {
 
 			}
 		});
+		
 		// Schlieﬂt Popup-Fenster
 		cancel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
